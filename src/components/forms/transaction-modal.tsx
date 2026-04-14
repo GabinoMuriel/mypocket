@@ -10,26 +10,22 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import FormInput from "./form-input";
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/utils/categories";
 import { z } from "zod";
 import { CategorySelect } from "./category-select";
 
 const transactionSchema = z.object({
     type: z.enum(["income", "expense"]),
     description: z.string().min(1, "Obligatorio"),
-    amount: z.coerce.number().positive("Debe ser mayor a 0"), // Coerce is key here
+    amount: z.number().positive("Debe ser mayor a 0"),
     date: z.string().min(1, "Obligatorio"),
-    category: z.string().min(1, "Obligatorio"),
+    categoryId: z.string().uuid("Categoría inválida"), // Updated to match userId/categoryId style
 });
 
-// 1. Infer the types correctly from the schema
-export type TransactionSchemaType = z.infer<typeof transactionSchema>;
+type TransactionFormValues = z.infer<typeof transactionSchema>;
 
 export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
     const [open, setOpen] = useState(false);
 
-    // 2. Pass BOTH the schema type and the internal form type to useForm
-    // Format: useForm<SchemaType>()
     const {
         register,
         handleSubmit,
@@ -37,40 +33,42 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
         watch,
         reset,
         formState: { errors },
-    } = useForm<TransactionSchemaType>({
-        // 3. Explicitly type the zodResolver to match the schema
-        resolver: zodResolver(transactionSchema) as any,
+    } = useForm<TransactionFormValues>({
+        resolver: zodResolver(transactionSchema),
         defaultValues: {
             type: "income",
             amount: 0,
-            description: "", // Explicitly add empty strings for strings
+            description: "",
             date: new Date().toISOString().split("T")[0],
-            category: "inc-4",
+            categoryId: "11111111-1111-1111-1111-111111111111", // Use a real UUID mock
         },
     });
 
     const currentType = watch("type");
 
+    // Logic to switch default categories based on type
     useEffect(() => {
-        const otherId = currentType === "income" ? "inc-4" : "exp-7";
-        setValue("category", otherId);
+        const defaultCategory = currentType === "income"
+            ? "11111111-1111-1111-1111-111111111111" // Mock Income UUID
+            : "22222222-2222-2222-2222-222222222222"; // Mock Expense UUID
+        setValue("categoryId", defaultCategory);
     }, [currentType, setValue]);
 
-    // 4. Update the handler type to match the Schema output
-    const onSubmit = (data: TransactionSchemaType) => {
-        console.log("Transacción guardada:", data);
+    const onSubmit = (data: TransactionFormValues) => {
+        console.log("Transacción lista para Supabase:", data);
+        // Here you would call your repository: userRepository.createTransaction(data)
         setOpen(false);
         reset();
     };
-
-    const categories = currentType === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-center">Nueva Transacción</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold text-center">
+                        Nueva Transacción
+                    </DialogTitle>
                 </DialogHeader>
 
                 <div className="flex p-1 bg-muted rounded-lg gap-1">
@@ -92,7 +90,6 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
                     </Button>
                 </div>
 
-                {/* 5. Wrap handleSubmit correctly */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
                     <FormInput
                         label="Descripción"
@@ -106,7 +103,7 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
                         type="number"
                         step="0.01"
                         placeholder="0.00"
-                        {...register("amount")}
+                        {...register("amount", { valueAsNumber: true })}
                         error={errors.amount?.message}
                     />
 
@@ -120,11 +117,11 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
                     <div className="space-y-2">
                         <CategorySelect
                             type={currentType}
-                            value={watch("category")}
-                            onChange={(val) => setValue("category", val, { shouldValidate: true })}
+                            value={watch("categoryId")}
+                            onChange={(val) => setValue("categoryId", val, { shouldValidate: true })}
                         />
-                        {errors.category && (
-                            <p className="text-destructive text-xs">{errors.category.message}</p>
+                        {errors.categoryId && (
+                            <p className="text-destructive text-xs">{errors.categoryId.message}</p>
                         )}
                     </div>
 

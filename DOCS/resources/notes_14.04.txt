@@ -1,0 +1,62 @@
+🚀 Project Status: MyPocket (Personal Finance Tracker)
+1. Context & Architecture
+Framework: React 19 + Vite 8 + TypeScript 6.
+
+Styling: Tailwind CSS v4 + shadcn/ui.
+
+Backend: Supabase (Auth, DB, Storage).
+
+State Management: Zustand with persist middleware.
+
+Folder Structure: Service-oriented architecture (src/services, src/lib, src/store).
+
+Linguistic Rule: English for code/logic, Spanish for UI/messages/validation.
+
+2. Completed (Done ✅)
+Documentation: Comprehensive Master MD guide generated and stored.
+
+Validation Schemas: * profileSchema: Handles extended user data (DNI, phone, birthdate, etc.) using .refine() for strict TS 6 compatibility.
+
+transactionSchema: Validates Income/Expense with 2-decimal precision logic.
+
+State Management: * useAuthStore: Persisted Zustand store handling user, session, and role.
+
+Includes computed logic for isLogged() and isAdmin().
+
+Infrastructure: * src/lib/supabase.ts: Initialized Supabase client.
+
+src/services/auth.service.ts: Logic to fetch user profiles joined with roles.
+
+src/App.tsx: Established the global Auth Listener (onAuthStateChange) to sync Supabase with Zustand.
+
+3. Database Schema Design (Defined 📋)
+Tables: profiles, roles, categories, transactions.
+
+Access Control: Role-Based Access Control (RBAC) via role_id in the profiles table.
+
+4. Pending / Next Steps (To-Do 🛠️)
+Phase 1: Database Setup
+[ ] Execute SQL in Supabase to create roles, profiles, and categories.
+
+[ ] Set up Row Level Security (RLS) policies.
+
+Phase 2: Routing & Layout
+[ ] Install react-router-dom.
+
+[ ] Create ProtectedRoute and PublicRoute wrappers.
+
+[ ] Design the Main Layout (Navbar/Sidebar) using shadcn/ui.
+
+Phase 3: Features
+[ ] Authentication: Build the Login and Signup pages (Spanish UI).
+
+[ ] Categories Store: Build useTransactionStore to hydrate categories from the DB.
+
+[ ] Transactions: Create the "Add Movement" form and the history list.
+
+Phase 4: Optimization
+[ ] Setup useConfigStore for Theme (Dark/Light) and Currency preferences.
+
+Current Focus: Moving from architectural setup to UI implementation.
+
+Instruction for AI: "Use the Master MD guide for coding standards. We are ready to begin Phase 1 (SQL/DB Setup) or Phase 2 (Routing)."
