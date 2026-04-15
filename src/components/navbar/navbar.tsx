@@ -5,27 +5,17 @@ import { UserAccountMenu } from "./UserAccountMenu";
 import { MobileNav } from "./MobileNav";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
-import { AuthModal } from "../forms/auth-modal";
-
-const Link = ({ href, children, className, ...props }: any) => (
-  <a href={href} className={className} {...props}>
-    {children}
-  </a>
-);
-
-const Logo = () => {
-  return (
-    <Link href="#" className="flex items-center space-x-2">
-      <img src="/assets/logos/logo_small_ts.png" className="size-8 dark:invert" alt="bundui logo" />
-      <span className="text-2xl font-bold">MyPocket</span>
-    </Link>
-  );
-};
+import { AuthModal } from "../forms/AuthModal";
+import { Logo } from "@/components/Logo";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Navbar() {
+  // Pull user and role from the Zustand store
+  const { user, role } = useAuthStore();
 
-  const isLogged = true;
-  const isAdmin = false;
+  // Compute the boolean values based on the exact AuthState interface
+  const isLogged = !!user;
+  const isAdmin = role === 'admin';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -35,7 +25,7 @@ export default function Navbar() {
           <MobileNav isLogged={isLogged} isAdmin={isAdmin} />
           <Logo />
           <nav className="hidden lg:flex ml-4">
-            {isLogged ? (isAdmin ? <NavAdmin /> : <NavUser />) : ''}
+            {isLogged ? (isAdmin ? <NavAdmin /> : <NavUser />) : null}
           </nav>
         </div>
 
@@ -51,13 +41,13 @@ export default function Navbar() {
           ) : (
             <div className="flex items-center gap-2">
               {/* MODAL PARA LOGIN */}
-              <AuthModal 
+              <AuthModal
                 defaultView="login"
                 trigger={<Button variant="ghost" size="sm">Entrar</Button>}
               />
-              
+
               {/* MODAL PARA REGISTRO */}
-              <AuthModal 
+              <AuthModal
                 defaultView="signup"
                 trigger={<Button size="sm">Registro</Button>}
               />

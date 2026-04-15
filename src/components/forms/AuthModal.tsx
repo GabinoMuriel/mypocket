@@ -6,8 +6,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import LoginForm from "./login-form";
-import SignupForm from "./signup-form";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
 
 interface AuthModalProps {
     defaultView?: "login" | "signup";

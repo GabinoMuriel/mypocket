@@ -9,9 +9,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import FormInput from "./form-input";
+import FormInput from "./FormInput";
 import { z } from "zod";
-import { CategorySelect } from "./category-select";
+import { CategorySelect } from "./CategorySelect";
 
 const transactionSchema = z.object({
     type: z.enum(["income", "expense"]),

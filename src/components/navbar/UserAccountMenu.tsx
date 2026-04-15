@@ -19,6 +19,7 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { authService } from "@/services/auth.service";
 
 export function UserAccountMenu() {
     return (
@@ -55,7 +56,7 @@ export function UserAccountMenu() {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600 focus:text-red-600">
+                <DropdownMenuItem className="text-red-600 focus:text-red-600" onClick={authService.signOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Cerrar sesión</span>
                 </DropdownMenuItem>

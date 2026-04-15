@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store/useAuthStore";
 import { authService } from "@/services/auth.service";
+import { AppRouter } from "@/routes/AppRouter"; // <-- Import your router
 
-function App() {
+export default function App() {
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearAuth = useAuthStore((state) => state.clearAuth);
 
@@ -30,11 +31,11 @@ function App() {
       const user = session.user;
       // Fetch the role from our custom profiles table
       const profile = await authService.getUserProfile(user.id);
-      
+
       // Update our Zustand store
       // We assume the profile query returns { roles: { name: 'admin' } }
       const roleName = profile?.roles?.name || 'user';
-      
+
       setAuth(session, user, roleName);
     }
 
@@ -43,12 +44,6 @@ function App() {
     };
   }, [setAuth, clearAuth]);
 
-  return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Your Router/Pages will go here */}
-      <h1 className="p-10 text-2xl font-bold text-center">¡Bienvenido a MyPocket!</h1>
-    </div>
-  );
+  // 3. Render the application router
+  return <AppRouter />;
 }
-
-export default App;
