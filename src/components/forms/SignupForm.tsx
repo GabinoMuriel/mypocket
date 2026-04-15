@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
+import { authService } from "@/services/auth.service";
 
 // Keys in English to match the DB, Messages in Spanish [3]
 export const signupSchema = z.object({
@@ -20,7 +21,8 @@ export const signupSchema = z.object({
     phone: z
         .string()
         .optional()
-        .refine((val) => !val || /^[1-8, 10]{9}$/.test(val), "Deben ser 9 números"),
+        .refine((val) => !val || /^\d{9}$/.test(val), "Deben ser 9 números"),
+
     birthdate: z.string().min(1, "La fecha es obligatoria"),
     address: z.string().optional(),
     city: z.string().optional(),
@@ -28,7 +30,7 @@ export const signupSchema = z.object({
     postalCode: z
         .string()
         .optional()
-        .refine((val) => !val || /^[1-9]{5}$/.test(val), "Deben ser 5 números"),
+        .refine((val) => !val || /^\d{5}$/.test(val), "Deben ser 5 números"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],
@@ -46,8 +48,14 @@ export default function SignupForm() {
     });
 
     const onSubmit = async (data: SignupFormValues) => {
-        console.log("Form Data Submitted:", data);
-        // Ready to be passed to auth.service.ts
+        try {
+            await authService.signup(data);
+            // Success! Close modal or redirect here
+            alert("¡Cuenta creada con éxito! Ya puedes iniciar sesión.");
+        } catch (error: any) {
+            console.error(error);
+            alert("Hubo un error al crear la cuenta: " + error.message);
+        }
     };
 
     return (
