@@ -50,11 +50,18 @@ export default function SignupForm() {
     const onSubmit = async (data: SignupFormValues) => {
         try {
             await authService.signup(data);
-            // Success! Close modal or redirect here
             alert("¡Cuenta creada con éxito! Ya puedes iniciar sesión.");
+            // TODO: Close your auth modal here
+
         } catch (error: any) {
             console.error(error);
-            alert("Hubo un error al crear la cuenta: " + error.message);
+
+            // Check if Supabase returned the specific "User already registered" error
+            if (error.message?.includes("User already registered") || error.status === 422) {
+                alert("Este correo electrónico ya está registrado. Por favor, inicia sesión.");
+            } else {
+                alert("Hubo un error al crear la cuenta: " + error.message);
+            }
         }
     };
 
