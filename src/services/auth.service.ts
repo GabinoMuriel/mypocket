@@ -1,5 +1,6 @@
 import type { SignupFormValues } from "@/components/app/forms/SignupForm";
 import { supabase } from "@/lib/supabase";
+import type { ProfileFormValues } from "@/types/profile.schema";
 
 export const authService = {
   /**
@@ -52,5 +53,42 @@ export const authService = {
 
     // Profile UPDATE removed to respect RLS constraints before email verification
     return authData;
+  },
+
+  async updateProfile(userId: string, data: Partial<ProfileFormValues>) {
+    const { error } = await supabase
+      .from("profiles")
+      .update(data)
+      .eq("id", userId);
+
+    if (error) throw error;
+
+    return this.getUserProfile(userId);
+  },
+
+  async updatePassword(password: string) {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw error;
+  },
+
+  async uploadAvatar(userId: string, file: File) {
+    const fileExt = file.name.split('.').pop();
+    // Unique file name to avoid caching issues when replacing avatars
+    const filePath = `${userId}/avatar-${Math.random()}.${fileExt}`;
+
+    // 1. Upload to the 'avatars' bucket
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    // 2. Get the public URL of the uploaded image
+    const { data: publicUrlData } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    // 3. Update the profile with the new URL
+    return this.updateProfile(userId, { avatar_url: publicUrlData.publicUrl } as any);
   },
 };

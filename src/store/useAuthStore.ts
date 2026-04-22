@@ -13,14 +13,14 @@ export interface Profile {
     postal_code: string | null;
     birthdate: string | null;
     role_id: string | null;
-    // avatar_url: string | null; // <-- Ready for your future avatar feature!
+    avatar_url: string | null; // <-- Ready for your future avatar feature!
 }
 
 interface AuthState {
     user: User | null;
     session: Session | null;
     role: string | null;
-    profile: Profile | null; // Added your extended profile data
+    profile: Profile | null;
     isLoading: boolean;
 
     // Actions updated to accept the profile
@@ -29,6 +29,8 @@ interface AuthState {
 
     // Handy action for when a user edits their profile via your UI
     updateProfileState: (updates: Partial<Profile>) => void;
+
+    setProfile: (profile: Profile | null) => void; 
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -54,18 +56,19 @@ export const useAuthStore = create<AuthState>()(
                     session: null,
                     user: null,
                     role: null,
-                    profile: null, // Clear profile on logout
+                    profile: null,
                     isLoading: false
                 }),
 
             updateProfileState: (updates) => set((state) => ({
                 profile: state.profile ? { ...state.profile, ...updates } : null
             })),
+
+            setProfile: (profile) => set({ profile }), 
         }),
         {
             name: 'mypocket-auth-storage',
             storage: createJSONStorage(() => localStorage),
-            // Cache the profile alongside session and role so it survives page reloads
             partialize: (state) => ({
                 session: state.session,
                 user: state.user,
