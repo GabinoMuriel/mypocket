@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
+import { Check } from "lucide-react";
+import CheckEmailView from "./CheckEmailView";
 
 interface AuthModalProps {
     defaultView?: "login" | "signup";
@@ -15,7 +17,7 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ defaultView = "login", trigger }: AuthModalProps) {
-    const [view, setView] = useState<"login" | "signup">(defaultView);
+    const [view, setView] = useState<"login" | "signup" | "check-email">(defaultView);
 
     return (
         <Dialog onOpenChange={() => setView(defaultView)}>
@@ -24,22 +26,14 @@ export function AuthModal({ defaultView = "login", trigger }: AuthModalProps) {
             </DialogTrigger>
             <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-center text-2xl font-bold">
-                        {view === "login" ? (<div className="space-y-2 text-center">
-                            <h1 className="text-2xl font-bold tracking-tight">Iniciar Sesión</h1>
-                            <p className="text-sm text-muted-foreground">
-                                Introduce tus credenciales para acceder
-                            </p>
-                        </div>) : (<div className="space-y-2 text-center">
-                            <h1 className="text-2xl font-bold tracking-tight">Crear cuenta</h1>
-                            <p className="text-sm text-muted-foreground">
-                                Introduce tus credenciales para registrarte
-                            </p>
-                        </div>)}
+                    <DialogTitle>
+                        {view === "login" && "Iniciar sesión"}
+                        {view === "signup" && "Crear cuenta"}
+                        {view === "check-email" && "Verificación requerida"}
                     </DialogTitle>
                 </DialogHeader>
 
-                {view === "login" ? (
+                {view === "login" && (
                     <div className="space-y-4">
                         <LoginForm />
                         <p className="text-center text-sm">
@@ -52,9 +46,11 @@ export function AuthModal({ defaultView = "login", trigger }: AuthModalProps) {
                             </button>
                         </p>
                     </div>
-                ) : (
+                )}
+
+                {view == "signup" && (
                     <div className="space-y-4">
-                        <SignupForm />
+                        <SignupForm onSuccess={() => setView("check-email")} />
                         <p className="text-center text-sm">
                             ¿Ya tienes cuenta?{" "}
                             <button
@@ -64,6 +60,12 @@ export function AuthModal({ defaultView = "login", trigger }: AuthModalProps) {
                                 Inicia sesión
                             </button>
                         </p>
+                    </div>
+                )}
+
+                {view == "check-email" && (
+                    <div className="space-y-4">
+                        <CheckEmailView onLoginClick={() => setView("login")} />
                     </div>
                 )}
             </DialogContent>

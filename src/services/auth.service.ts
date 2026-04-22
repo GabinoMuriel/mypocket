@@ -42,30 +42,15 @@ export const authService = {
   },
 
   async signup(data: SignupFormValues) {
-    // 1. Create the user in auth.users
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
     });
 
     if (authError) throw authError;
-    if (!authData.user) throw new Error("Error al crear el usuario.");
+    if (!authData.user) throw new Error("No se pudo crear el usuario");
 
-    const { error: profileError } = await supabase
-      .from("profiles")
-      .update({
-        first_name: data.firstName,
-        last_name: data.lastName,
-        phone: data.phone || null,
-        city: data.city || null,
-        postal_code: data.postalCode || null,
-        address: data.address || null,
-        birthdate: data.birthdate || null,
-      })
-      .eq("id", authData.user.id);
-
-    if (profileError) throw profileError;
-
+    // Profile UPDATE removed to respect RLS constraints before email verification
     return authData;
   },
 };
