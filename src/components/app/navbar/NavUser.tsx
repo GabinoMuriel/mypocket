@@ -5,10 +5,8 @@ import {
     CalendarRange,
     CalendarCheck
 } from "lucide-react";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "../ui/navigation-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "../../ui/navigation-menu";
 import { TransactionModal } from "../forms/TransactionModal";
-import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
 
 export function NavUser() {
     return (

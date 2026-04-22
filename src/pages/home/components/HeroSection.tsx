@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AuthModal } from "@/components/forms/AuthModal";
+import { AuthModal } from "@/components/app/forms/AuthModal";
 
 
 export default function HeroSection() {

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
-import Navbar from '@/components/navbar/Navbar';
+import Navbar from '@/components/app/navbar/Navbar';
 
 // Updated Page Imports reflecting the new folder architecture
 

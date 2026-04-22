@@ -1,0 +1,184 @@
+-- ==========================================
+-- ENUMS & TYPES
+-- ==========================================
+CREATE TYPE public.transaction_type AS ENUM ('income', 'expense');
+
+-- ==========================================
+-- TABLES
+-- ==========================================
+
+-- ROLES TABLE (RBAC System)
+CREATE TABLE public.roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE
+);
+
+-- Insert default roles
+INSERT INTO public.roles (name) VALUES ('user'), ('admin');
+
+-- PROFILES TABLE (Extended User Data)
+CREATE TABLE public.profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    first_name TEXT,
+    last_name TEXT,
+    phone TEXT,
+    address TEXT,
+    city TEXT,
+    postal_code TEXT,
+    birthdate DATE,
+    role_id UUID REFERENCES public.roles(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- CATEGORIES TABLE (Synced from DB to Store)
+CREATE TABLE public.categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    type public.transaction_type NOT NULL,
+    is_system BOOLEAN DEFAULT false,
+    icon TEXT,
+    color TEXT,
+    is_active BOOLEAN DEFAULT true
+);
+
+-- Insert default 'Other' categories
+INSERT INTO public.categories (name, type, is_system, icon, color)
+VALUES 
+  ('Other', 'income', true, 'plus-circle', '#6b7280'),
+  ('Other', 'expense', true, 'minus-circle', '#6b7280');
+
+
+
+-- TRANSACTIONS TABLE (Core movement records)
+CREATE TABLE public.transactions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    description TEXT,
+    date TIMESTAMPTZ DEFAULT now()
+);
+
+
+-- 1. user1@mail.com (Only required fields)
+-- The profiles table only strictly requires the 'id' [3], which the trigger already handled. 
+-- We will just set a first name for basic UI identification.
+UPDATE public.profiles 
+SET first_name = 'Usuario1'
+WHERE id = (SELECT id FROM auth.users WHERE email = 'user1@mail.com');
+
+-- 2. user2@mail.com (All fields)
+-- Updating all available profile fields according to your schema [3, 4].
+UPDATE public.profiles
+SET 
+    first_name = 'Juan',
+    last_name = 'Pérez',
+    phone = '600123456',
+    address = 'Calle Mayor 1',
+    city = 'Madrid',
+    postal_code = '28001',
+    birthdate = '1990-01-01'
+WHERE id = (SELECT id FROM auth.users WHERE email = 'user2@mail.com');
+
+-- 3. admin@mypocket.com (All fields + Admin Role)
+-- Fills out the profile and queries the roles table to securely assign the 'admin' role [1, 4].
+UPDATE public.profiles
+SET 
+    first_name = 'Admin',
+    last_name = 'Principal',
+    phone = '600999999',
+    address = 'Avenida de la Administración 10',
+    city = 'Barcelona',
+    postal_code = '08001',
+    birthdate = '1985-05-15',
+    role_id = (SELECT id FROM public.roles WHERE name = 'admin')
+WHERE id = (SELECT id FROM auth.users WHERE email = 'admin@mail.com');
+
+
+-- ==========================================
+-- ROW LEVEL SECURITY (RLS) POLICIES
+-- ==========================================
+
+-- Enable automatic RLS for all tables
+ALTER TABLE public.roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
+
+-- ROLES
+CREATE POLICY "Allow read access on roles" ON public.roles FOR SELECT USING (true);
+
+-- PROFILES
+CREATE POLICY "Users can view their own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+-- CATEGORIES
+CREATE POLICY "Allow read access on categories" ON public.categories FOR SELECT USING (is_active = true);
+
+-- TRANSACTIONS
+CREATE POLICY "Users can view their own transactions" ON public.transactions FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can create their own transactions" ON public.transactions FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update their own transactions" ON public.transactions FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete their own transactions" ON public.transactions FOR DELETE USING (auth.uid() = user_id);
+
+
+-- ==========================================
+-- FUNCTIONS & TRIGGERS
+-- ==========================================
+
+-- Function: Automatically create a profile for new users
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, role_id)
+  VALUES (
+    new.id, 
+    (SELECT id FROM public.roles WHERE name = 'user' LIMIT 1)
+  );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger: Fire profile creation after auth.users insertion
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- Function: Apply default system category if none is provided
+CREATE OR REPLACE FUNCTION public.set_default_category()
+RETURNS trigger AS $$
+BEGIN
+  -- If the user didn't provide a category, find the system 'Other' for that type
+  IF NEW.category_id IS NULL THEN
+    NEW.category_id := (
+      SELECT id FROM public.categories 
+      WHERE is_system = true 
+      AND name = 'Other' 
+      AND type = NEW.type 
+      LIMIT 1
+    );
+  END IF;
+  
+  -- Safety check
+  IF NEW.category_id IS NULL THEN
+    RAISE EXCEPTION 'Default system category "Other" not found for type %', NEW.type;
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger: Fire default category assignment before transaction insertion
+CREATE TRIGGER ensure_default_category
+  BEFORE INSERT ON public.transactions
+  FOR EACH ROW EXECUTE PROCEDURE public.set_default_category();
+
+-- ==========================================
+-- RULES
+-- ==========================================
+
+-- Rule: Prevent deletion of essential system categories
+CREATE RULE protect_system_categories AS
+ON DELETE TO public.categories
+WHERE OLD.is_system = true
+DO INSTEAD NOTHING;

@@ -6,7 +6,7 @@ import { MobileNav } from "./MobileNav";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { AuthModal } from "../forms/AuthModal";
-import { Logo } from "@/components/Logo";
+import { Logo } from "@/components/app/Logo";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Navbar() {
