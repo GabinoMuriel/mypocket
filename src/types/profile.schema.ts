@@ -5,13 +5,13 @@ import { z } from "zod";
  * Used in the Profile Form and for type inference.
  */
 export const profileSchema = z.object({
-    firstName: z
+    first_name: z
         .string()
         .min(2, "El nombre debe tener al menos 2 caracteres")
         .max(50, "El nombre es demasiado largo")
         .optional(),
 
-    lastName: z // Used for DNI or Full Legal Name as per our discussion
+    last_name: z // Used for DNI or Full Legal Name as per our discussion
         .string()
         .min(2, "El apellido/DNI debe tener al menos 2 caracteres")
         .max(100, "El campo es demasiado largo")
@@ -40,12 +40,12 @@ export const profileSchema = z.object({
         .min(2, "El nombre de la ciudad es demasiado corto")
         .optional(),
 
-    postalCode: z
+    postal_code: z
         .string()
         .regex(/^[0-9]{5}$/, "El código postal debe tener 5 dígitos")
         .optional(),
 
-    roleId: z.string().uuid("ID de rol inválido").optional(),
+    role_id: z.string().uuid("ID de rol inválido").optional(),
 });
 
 /**

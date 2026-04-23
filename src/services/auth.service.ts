@@ -1,6 +1,6 @@
 import type { SignupFormValues } from "@/components/app/forms/SignupForm";
 import { supabase } from "@/lib/supabase";
-import type { ProfileFormValues } from "@/types/profile.schema";
+import type { Profile } from "@/store/useAuthStore";
 
 export const authService = {
   /**
@@ -55,7 +55,7 @@ export const authService = {
     return authData;
   },
 
-  async updateProfile(userId: string, data: Partial<ProfileFormValues>) {
+  async updateProfile(userId: string, data: Partial<Profile>) {
     const { error } = await supabase
       .from("profiles")
       .update(data)
@@ -89,6 +89,6 @@ export const authService = {
       .getPublicUrl(filePath);
 
     // 3. Update the profile with the new URL
-    return this.updateProfile(userId, { avatar_url: publicUrlData.publicUrl } as any);
+    return this.updateProfile(userId, { avatar_url: publicUrlData.publicUrl });
   },
 };

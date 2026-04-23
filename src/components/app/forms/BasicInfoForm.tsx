@@ -20,13 +20,13 @@ export default function BasicInfoForm() {
     } = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         values: {
-            firstName: profile?.first_name || "",
-            lastName: profile?.last_name || "",
+            first_name: profile?.first_name || "",
+            last_name: profile?.last_name || "",
             birthdate: profile?.birthdate || "",
             phone: profile?.phone || "",
             address: profile?.address || "",
             city: profile?.city || "",
-            postalCode: profile?.postal_code || "",
+            postal_code: profile?.postal_code || "",
         },
     });
 
@@ -42,27 +42,27 @@ export default function BasicInfoForm() {
         }
 
         const cleanedData = {
-            first_name: data.firstName?.trim() || null,
-            last_name: data.lastName?.trim() || null,
+            first_name: data.first_name?.trim() || null,
+            last_name: data.last_name?.trim() || null,
             phone: data.phone?.trim() || null,
             address: data.address?.trim() || null,
             city: data.city?.trim() || null,
-            postal_code: data.postalCode?.trim() || null,
+            postal_code: data.postal_code?.trim() || null,
             birthdate: data.birthdate?.trim() || null,
         };
 
         try {
-            const updatedProfile = await authService.updateProfile(user.id, data);
+            const updatedProfile = await authService.updateProfile(user.id, cleanedData);
 
             setProfile(updatedProfile);
 
             reset({
-                firstName: updatedProfile.first_name || "",
-                lastName: updatedProfile.last_name || "",
+                first_name: updatedProfile.first_name || "",
+                last_name: updatedProfile.last_name || "",
                 phone: updatedProfile.phone || "",
                 address: updatedProfile.address || "",
                 city: updatedProfile.city || "",
-                postalCode: updatedProfile.postal_code || "",
+                postal_code: updatedProfile.postal_code || "",
                 birthdate: updatedProfile.birthdate || "",
             });
 
@@ -78,8 +78,8 @@ export default function BasicInfoForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
-                <FormInput label="Nombre" type="text" error={errors.firstName?.message} {...register("firstName")} />
-                <FormInput label="Apellido" type="text" error={errors.lastName?.message} {...register("lastName")} />
+                <FormInput label="Nombre" type="text" error={errors.first_name?.message} {...register("first_name")} />
+                <FormInput label="Apellido" type="text" error={errors.last_name?.message} {...register("last_name")} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -91,7 +91,7 @@ export default function BasicInfoForm() {
 
             <div className="grid grid-cols-2 gap-4">
                 <FormInput label="Ciudad" type="text" error={errors.city?.message} {...register("city")} />
-                <FormInput label="Código Postal" type="text" error={errors.postalCode?.message} {...register("postalCode")} />
+                <FormInput label="Código Postal" type="text" error={errors.postal_code?.message} {...register("postal_code")} />
             </div>
 
             {errors.root && <div className="text-sm font-medium text-red-500">{errors.root.message}</div>}

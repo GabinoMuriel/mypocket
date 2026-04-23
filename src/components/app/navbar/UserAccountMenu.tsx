@@ -20,18 +20,28 @@ import {
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function UserAccountMenu() {
+
+    const user = useAuthStore((state) => state.user);
+    const profile = useAuthStore((state) => state.profile);
+
+    const firstName = profile?.first_name || "Usuario";
+    const email = user?.email || "usuario@email.com";
+    const avatarUrl = profile?.avatar_url || "/assets/default_avatar.png";
+    const initial = firstName.charAt(0).toUpperCase();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 {/* Botón que combina Avatar + Texto "Perfil" para desktop */}
                 <Button variant="ghost" className="relative h-10 w-full flex items-center justify-start gap-2 px-2 md:w-auto">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="" alt="@usuario" />
-                        <AvatarFallback>MP</AvatarFallback>
+                        <AvatarImage src={avatarUrl} alt={`@${firstName}`} />
+                        <AvatarFallback>{initial}</AvatarFallback>
                     </Avatar>
-                    <span className="text-sm font-medium">Perfil</span>
+                    <span className="text-sm font-medium">{firstName}</span>
                 </Button>
             </DropdownMenuTrigger>
 
@@ -40,7 +50,7 @@ export function UserAccountMenu() {
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">Mi Cuenta</p>
                         <p className="text-xs leading-none text-muted-foreground">
-                            usuario@email.com
+                            {email}
                         </p>
                     </div>
                 </DropdownMenuLabel>
@@ -48,7 +58,7 @@ export function UserAccountMenu() {
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
                         <User className="mr-2 h-4 w-4" />
-                        <span>Mi perfil</span>
+                        <a href="/profile">Mi perfil</a>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4" />

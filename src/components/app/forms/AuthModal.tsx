@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import { Check } from "lucide-react";
 import CheckEmailView from "./CheckEmailView";
 
 interface AuthModalProps {

@@ -4,6 +4,7 @@ import { z } from "zod";
 import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: z.string().email("Introduce un email válido"),
@@ -13,6 +14,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -24,11 +27,10 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      // 1. Call the service layer
       await authService.login(data);
 
-      // 2. Success! (If this is inside your AuthModal, you will want to close the modal here)
-      console.log("Login exitoso");
+      navigate("/transactions");
+      
     } catch (error) {
       // 3. Handle errors in Spanish for the UI
       if (

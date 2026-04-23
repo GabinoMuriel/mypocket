@@ -6,10 +6,21 @@ import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 
 // 1. SCHEMA: Now only requires email and password for the production flow
-const signupSchema = z.object({
-  email: z.string().email("Introduce un email válido"),
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-});
+const signupSchema = z
+  .object({
+    email: z.string().email("Introduce un email válido"),
+    password: z
+      .string()
+      .min(8, "La contraseña debe tener al menos 8 caracteres")
+      .regex(/[A-Z]/, "Debe contener al menos una letra mayúscula")
+      .regex(/[a-z]/, "Debe contener al menos una letra minúscula")
+      .regex(/[^A-Za-z0-9]/, "Debe contener al menos un símbolo especial"),
+    confirmPassword: z.string().min(1, "La confirmación es obligatoria"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
+  });
 
 export type SignupFormValues = z.infer<typeof signupSchema>;
 
@@ -27,32 +38,33 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
     resolver: zodResolver(signupSchema),
   });
 
-
   const onSubmit = async (data: SignupFormValues) => {
     try {
       await authService.signup(data);
 
       onSuccess();
-
     } catch (error) {
       console.error(error);
 
       if (error instanceof Error) {
-        if (error.message.includes("already registered") || error.message.includes("already exists")) {
+        if (
+          error.message.includes("already registered") ||
+          error.message.includes("already exists")
+        ) {
           setError("root", {
             type: "manual",
-            message: "Este correo electrónico ya está registrado."
+            message: "Este correo electrónico ya está registrado.",
           });
         } else {
           setError("root", {
             type: "manual",
-            message: "Hubo un problema al crear la cuenta: " + error.message
+            message: "Hubo un problema al crear la cuenta: " + error.message,
           });
         }
       } else {
         setError("root", {
           type: "manual",
-          message: "Ocurrió un error inesperado al registrarse."
+          message: "Ocurrió un error inesperado al registrarse.",
         });
       }
     }
@@ -74,6 +86,14 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
         placeholder="********"
         error={errors.password?.message}
         {...register("password")}
+      />
+
+      <FormInput
+        label="Confirmar contraseña"
+        type="password"
+        placeholder="********"
+        error={errors.confirmPassword?.message}
+        {...register("confirmPassword")}
       />
 
       {/* Root Error Display */}
