@@ -12,10 +12,17 @@ export const ProtectedRoute = ({ adminOnly = false }: ProtectedRouteProps) => {
   const isLoading = useAuthStore((state) => state.isLoading);
   const location = useLocation();
 
+  console.log("[ProtectedRoute] Render Triggered:", { 
+    path: location.pathname, 
+    isLoading, 
+    hasUser: !!user, 
+    hasProfile: !!profile 
+  });
+
   // 1. Wait for Supabase to finish checking auth state
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div >
         Cargando...
       </div>
     );

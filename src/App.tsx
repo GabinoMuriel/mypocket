@@ -11,62 +11,64 @@ export default function App() {
   const setIsLoading = useAuthStore((state) => state.setIsLoading);
 
   useEffect(() => {
-    
-    const initializeApp = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+    let isMounted = true;
 
-      if (session?.user) {
-        setSession(session);
-        setUser(session.user);
-        try {
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+
+        if (isMounted && session) {
+          setSession(session);
+          setUser(session.user);
+
+          // 2. Use your existing service method!
           const profileData = await authService.getUserProfile(session.user.id);
-          setProfile(profileData);
-        } catch (error) {
-          console.error("Error fetching profile on mount:", error);
-        }
-      }
 
-      // ALWAYS turn off loading after the first check finishes!
-      setIsLoading(false);
+          if (profileData) {
+            // 3. Separate the joined 'roles' object from the rest of the profile fields
+            const { roles, ...profileFields } = profileData;
+
+            setProfile(profileFields); // Strictly matches your Profile interface
+
+            // Directly update the role state in Zustand (assuming you don't have a specific setRole action)
+            useAuthStore.setState({ role: roles?.name || 'user' });
+          }
+        }
+      } catch (error) {
+        console.error("Session initialization error:", error);
+      } finally {
+        setIsLoading(false); // Bulletproof guarantee
+      }
     };
 
-    initializeApp();
+    initializeAuth();
 
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (isMounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
 
-    // This listener fires on initial load, login, logout, and token refresh
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      
-      if (event === 'INITIAL_SESSION') return;
-
-      setSession(session);
-      setUser(session?.user || null);
-
-      if (session?.user) {
-        try {
-          const profileData = await authService.getUserProfile(session.user.id);
-          setProfile(profileData);
-        } catch (error) {
-          console.error("Error fetching profile on app load:", error);
+          // Keep synced during login/signup events
+          if (session?.user) {
+            const profileData = await authService.getUserProfile(session.user.id);
+            if (profileData) {
+              const { roles, ...profileFields } = profileData;
+              setProfile(profileFields);
+              useAuthStore.setState({ role: roles?.name || 'user' });
+            }
+          } else {
+            // Clear memory on logout
+            setProfile(null);
+            useAuthStore.setState({ role: null });
+          }
         }
-      } else {
-        // Clear profile on logout
-        setProfile(null);
       }
-
-      // Stop the initial loading screen
-      setIsLoading(false);
-    });
-
-    // Fallback: Ensure loading stops if there is no active session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) setIsLoading(false);
-    });
+    );
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, [setSession, setUser, setProfile, setIsLoading]);

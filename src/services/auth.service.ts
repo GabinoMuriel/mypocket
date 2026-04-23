@@ -1,6 +1,6 @@
 import type { SignupFormValues } from "@/components/app/forms/SignupForm";
 import { supabase } from "@/lib/supabase";
-import type { Profile } from "@/store/useAuthStore";
+import { useAuthStore, type Profile } from "@/store/useAuthStore";
 
 export const authService = {
   /**
@@ -29,7 +29,18 @@ export const authService = {
   },
 
   async signOut() {
-    await supabase.auth.signOut();
+    // 1. BULLETPROOF RESET: Instantly wipe Zustand memory.
+    // This forces ProtectedRoute to kick you out to the login screen immediately.
+    useAuthStore.getState().setUser(null);
+    useAuthStore.getState().setSession(null);
+    useAuthStore.getState().setProfile(null);
+
+    // 2. Safely attempt the Supabase signout
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error("Supabase silent signout error:", error);
+    }
   },
 
   async login(credentials: { email: string; password: string }) {

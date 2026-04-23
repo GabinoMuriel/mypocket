@@ -2,8 +2,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BasicInfoForm from "@/components/app/forms/BasicInfoForm";
 import ChangePasswordForm from "@/components/app/forms/ChangePasswordForm";
 import UpdateAvatarForm from "@/components/app/forms/UpdateAvatarForm";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function EditProfilePage() {
+
+  const profile = useAuthStore((state) => state.profile);
+  
+  console.log("[EditProfilePage] Rendered. Profile data:", profile);
+  
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-6">Configuración de Perfil</h1>
