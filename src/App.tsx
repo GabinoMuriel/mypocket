@@ -7,62 +7,42 @@ import { AppRouter } from "@/routes/AppRouter"; // <-- Import your router
 export default function App() {
   const setUser = useAuthStore((state) => state.setUser);
   const setSession = useAuthStore((state) => state.setSession);
-  const setProfile = useAuthStore((state) => state.setProfile);
   const setIsLoading = useAuthStore((state) => state.setIsLoading);
+  const user = useAuthStore((state) => state.user);
+  const setProfile = useAuthStore((state) => state.setProfile);
+  const setRole = useAuthStore((state) => state.setRole);
 
+
+  // 1. First Effect: Handle ONLY Supabase Authentication & Session
   useEffect(() => {
     let isMounted = true;
 
-    const initializeAuth = async () => {
+    const init = async () => {
+      // It's safe to set this to true here, but ensure your store defaults to true as well
+      setIsLoading(true);
+
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
+        const { data: { session } } = await supabase.auth.getSession();
 
-        if (isMounted && session) {
-          setSession(session);
-          setUser(session.user);
-
-          // 2. Use your existing service method!
-          const profileData = await authService.getUserProfile(session.user.id);
-
-          if (profileData) {
-            // 3. Separate the joined 'roles' object from the rest of the profile fields
-            const { roles, ...profileFields } = profileData;
-
-            setProfile(profileFields); // Strictly matches your Profile interface
-
-            // Directly update the role state in Zustand (assuming you don't have a specific setRole action)
-            useAuthStore.setState({ role: roles?.name || 'user' });
-          }
-        }
-      } catch (error) {
-        console.error("Session initialization error:", error);
-      } finally {
-        setIsLoading(false); // Bulletproof guarantee
-      }
-    };
-
-    initializeAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
         if (isMounted) {
           setSession(session);
           setUser(session?.user ?? null);
+        }
+      } catch (error) {
+        console.error("Session fetch error:", error);
+      } finally {
+        // 🚨 BULLETPROOF GUARANTEE: Turns off the loader unconditionally!
+        setIsLoading(false);
+      }
+    };
 
-          // Keep synced during login/signup events
-          if (session?.user) {
-            const profileData = await authService.getUserProfile(session.user.id);
-            if (profileData) {
-              const { roles, ...profileFields } = profileData;
-              setProfile(profileFields);
-              useAuthStore.setState({ role: roles?.name || 'user' });
-            }
-          } else {
-            // Clear memory on logout
-            setProfile(null);
-            useAuthStore.setState({ role: null });
-          }
+    init();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (isMounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
         }
       }
     );
@@ -71,7 +51,40 @@ export default function App() {
       isMounted = false;
       subscription.unsubscribe();
     };
-  }, [setSession, setUser, setProfile, setIsLoading]);
+  }, []);
+
+  // 2. Second Effect: Handle ONLY Profile & Role fetching based on User state
+  useEffect(() => {
+    let isActive = true;
+
+    if (!user) {
+      setProfile(null);
+      setRole(null); // Use the action instead of setState
+      return;
+    }
+
+    const fetchProfile = async () => {
+      try {
+        const profileData = await authService.getUserProfile(user.id);
+
+        if (!isActive) return; // Abort if the component unmounted or user changed
+
+        if (profileData) {
+          const { roles, ...profileFields } = profileData;
+          setProfile(profileFields);
+          setRole(roles?.name || 'user');
+        }
+      } catch (error) {
+        console.error("Profile fetch error:", error);
+      }
+    };
+
+    fetchProfile();
+
+    return () => {
+      isActive = false; // Cleanup function to prevent race conditions
+    };
+  }, [user, setProfile, setRole]);
 
   return <AppRouter />;
 }

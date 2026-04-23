@@ -30,6 +30,7 @@ interface AuthState {
   setSession: (session: Session | null) => void;
   setProfile: (profile: Profile | null) => void;
   setIsLoading: (isLoading: boolean) => void;
+  setRole: (role: string | null) => void; 
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -50,6 +51,7 @@ export const useAuthStore = create<AuthState>()(
       setSession: (session) => set({ session }),
       setProfile: (profile) => set({ profile }),
       setIsLoading: (isLoading) => set({ isLoading }),
+      setRole: (role) => set({ role }),
     }),
     {
       name: "mypocket-auth-storage",
