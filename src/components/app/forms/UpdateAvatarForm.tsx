@@ -71,7 +71,7 @@ export default function UpdateAvatarForm() {
                 {error && <div className="text-sm font-medium text-red-500 text-center">{error}</div>}
                 {success && <div className="text-sm font-medium text-green-500 text-center">¡Avatar actualizado con éxito!</div>}
 
-                <Button onClick={handleUpload} disabled={!file || isUploading} className="w-full">
+                <Button onClick={handleUpload} disabled={!file || isUploading} className="w-full mt-4">
                     {isUploading ? "Subiendo imagen..." : "Subir nuevo avatar"}
                 </Button>
             </div>

@@ -23,7 +23,7 @@ export function AuthModal({ defaultView = "login", trigger }: AuthModalProps) {
             <DialogTrigger asChild>
                 {trigger}
             </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
                 <DialogHeader>
                     <DialogTitle>
                         {view === "login" && "Iniciar sesión"}

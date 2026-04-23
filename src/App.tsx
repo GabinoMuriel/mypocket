@@ -11,16 +11,42 @@ export default function App() {
   const setIsLoading = useAuthStore((state) => state.setIsLoading);
 
   useEffect(() => {
+    
+    const initializeApp = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session?.user) {
+        setSession(session);
+        setUser(session.user);
+        try {
+          const profileData = await authService.getUserProfile(session.user.id);
+          setProfile(profileData);
+        } catch (error) {
+          console.error("Error fetching profile on mount:", error);
+        }
+      }
+
+      // ALWAYS turn off loading after the first check finishes!
+      setIsLoading(false);
+    };
+
+    initializeApp();
+
+
     // This listener fires on initial load, login, logout, and token refresh
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      
+      if (event === 'INITIAL_SESSION') return;
+
       setSession(session);
       setUser(session?.user || null);
 
       if (session?.user) {
         try {
-          // MISSING LOGIC ADDED: Instantly fetch the profile!
           const profileData = await authService.getUserProfile(session.user.id);
           setProfile(profileData);
         } catch (error) {

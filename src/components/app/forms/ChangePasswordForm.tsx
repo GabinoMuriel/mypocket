@@ -98,7 +98,7 @@ export default function ChangePasswordForm() {
         </div>
       )}
 
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
         {isSubmitting ? "Guardando..." : "Actualizar contraseña"}
       </Button>
     </form>

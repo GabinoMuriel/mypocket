@@ -2,11 +2,11 @@ import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/app/forms/AuthModal";
-
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function HeroSection() {
-
-  const isLogged = false;
+  const { user } = useAuthStore();
+  const isLogged = !!user;
 
   return (
     <section className="py-10 lg:py-16">
@@ -21,13 +21,20 @@ export default function HeroSection() {
               Controla tus finanzas sin esfuerzo.
             </h1>
             <p className="text-muted-foreground mb-8 text-balance lg:text-lg">
-              Gestiona tus ingresos y gastos con MyPocket. Sencillo, visual y accesible desde cualquier dispositivo.
+              Gestiona tus ingresos y gastos con MyPocket. Sencillo, visual y
+              accesible desde cualquier dispositivo.
             </p>
-            {isLogged ? '' : (
+            {isLogged ? (
+              ""
+            ) : (
               <div className="flex justify-center gap-2">
                 <AuthModal
                   defaultView="login"
-                  trigger={<Button variant="ghost" size="sm">Entrar</Button>}
+                  trigger={
+                    <Button variant="ghost" size="sm">
+                      Entrar
+                    </Button>
+                  }
                 />
                 <AuthModal
                   defaultView="signup"
@@ -35,7 +42,6 @@ export default function HeroSection() {
                 />
               </div>
             )}
-
           </header>
           <img
             src="https://images.unsplash.com/photo-1748723594319-142e211b46a9?q=80&w=700&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

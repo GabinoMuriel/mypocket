@@ -1,11 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock1Icon } from "lucide-react";
+/* import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Clock1Icon } from "lucide-react"; */
 
-const Link = ({ href, children, ...props }: any) => (
+/* const Link = ({ href, children, ...props }: any) => (
   <a href={href} {...props}>{children}</a>
-);
+); */
 
-const posts = [
+/* const posts = [
   {
     title: "The Future of Web Development",
     description: "Explore the advantages of serverless and how to implement it effectively.",
@@ -30,7 +30,7 @@ const posts = [
     imageSrc:
       "https://images.unsplash.com/photo-1751093383900-dbf2a79169f8?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   }
-];
+]; */
 
 export default function BlogSection() {
   return (
@@ -44,7 +44,7 @@ export default function BlogSection() {
             </p>
           </header>
         </div>
-        <div className="mx-auto grid gap-6 py-12 lg:grid-cols-3">
+        {/* <div className="mx-auto grid gap-6 py-12 lg:grid-cols-3">
           {posts.map((post, i) => (
             <Link className="group grid gap-4" href={post.href}>
               <Card key={i} className="hover:bg-muted/50 pt-0 shadow-none">
@@ -68,7 +68,7 @@ export default function BlogSection() {
               </Card>
             </Link>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

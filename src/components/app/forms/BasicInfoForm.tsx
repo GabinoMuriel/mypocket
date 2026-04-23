@@ -97,7 +97,7 @@ export default function BasicInfoForm() {
             {errors.root && <div className="text-sm font-medium text-red-500">{errors.root.message}</div>}
             {isSubmitSuccessful && !errors.root && !isDirty && <div className="text-sm font-medium text-green-500">¡Perfil actualizado con éxito!</div>}
 
-            <Button type="submit" disabled={isSubmitting} className="w-full">
+            <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
                 {isSubmitting ? "Guardando..." : "Guardar cambios"}
             </Button>
         </form>

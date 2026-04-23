@@ -29,9 +29,6 @@ export default function EditProfilePage() {
             Asegúrate de usar una contraseña segura de al menos 6 caracteres.
           </p>
           <ChangePasswordForm />
-          <div className="py-8 text-center text-muted-foreground border-2 border-dashed rounded-lg">
-            Formulario de contraseña próximamente...
-          </div>
         </TabsContent>
 
         <TabsContent value="avatar" className="mt-6 border rounded-lg p-6 bg-card">
@@ -40,9 +37,6 @@ export default function EditProfilePage() {
             Sube una nueva imagen para tu avatar.
           </p>
           <UpdateAvatarForm />
-          <div className="py-8 text-center text-muted-foreground border-2 border-dashed rounded-lg">
-            Subida de avatar próximamente...
-          </div>
         </TabsContent>
       </Tabs>
     </div>
