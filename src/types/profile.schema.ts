@@ -8,13 +8,13 @@ export const profileSchema = z.object({
     first_name: z
         .string()
         .min(2, "El nombre debe tener al menos 2 caracteres")
-        .max(50, "El nombre es demasiado largo")
-        .optional(),
+        .max(50, "El nombre es demasiado largo"),
 
-    last_name: z // Used for DNI or Full Legal Name as per our discussion
+    last_name: z
         .string()
-        .min(2, "El apellido/DNI debe tener al menos 2 caracteres")
+        .min(2, "El apellidodebe tener al menos 2 caracteres")
         .max(100, "El campo es demasiado largo")
+        .or(z.literal(''))
         .optional(),
 
     birthdate: z
@@ -22,27 +22,32 @@ export const profileSchema = z.object({
         .refine((date) => !isNaN(Date.parse(date)), {
             message: "Fecha de nacimiento inválida",
         })
+        .or(z.literal(''))
         .optional(),
 
     phone: z
         .string()
         .regex(/^\+?[0-9]{9,15}$/, "Número de teléfono inválido (ej: 600123456)")
+        .or(z.literal(''))
         .optional(),
 
     address: z
         .string()
         .min(5, "La dirección debe ser más específica")
         .max(200, "La dirección es demasiado larga")
+        .or(z.literal(''))
         .optional(),
 
     city: z
         .string()
         .min(2, "El nombre de la ciudad es demasiado corto")
+        .or(z.literal(''))
         .optional(),
 
     postal_code: z
         .string()
         .regex(/^[0-9]{5}$/, "El código postal debe tener 5 dígitos")
+        .or(z.literal(''))
         .optional(),
 
     role_id: z.string().uuid("ID de rol inválido").optional(),

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
@@ -12,25 +12,43 @@ import { Button } from "@/components/ui/button";
 import FormInput from "./FormInput";
 import { z } from "zod";
 import { CategorySelect } from "./CategorySelect";
+import { useAuthStore } from "@/store/useAuthStore";
+import { transactionService } from "@/services/transaction.service";
+import { useTransactionStore } from "@/store/useTransactionStore";
 
 const transactionSchema = z.object({
   type: z.enum(["income", "expense"]),
-  description: z.string().min(1, "Obligatorio"),
+  description: z
+    .string()
+    .min(1, "Obligatorio")
+    .max(100, "La descripción es demasiado larga")
+    .optional(),
   amount: z.number().positive("Debe ser mayor a 0"),
-  date: z.string().min(1, "Obligatorio"),
-  categoryId: z.string().uuid("Categoría inválida"), // Updated to match userId/categoryId style
+  date: z
+    .string()
+    .refine((date) => !isNaN(Date.parse(date)), {
+      message: "Fecha de nacimiento inválida",
+    })
+    .or(z.literal(""))
+    .optional(),
+  category_id: z.string().uuid("Categoría inválida"),
 });
 
 type TransactionFormValues = z.infer<typeof transactionSchema>;
 
 export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const user = useAuthStore((state) => state.user);
+  const categories = useTransactionStore((state) => state.categories);
 
   const {
     register,
     handleSubmit,
-    setValue,
+    control,
     watch,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<TransactionFormValues>({
@@ -40,26 +58,46 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
       amount: 0,
       description: "",
       date: new Date().toISOString().split("T")[0],
-      categoryId: "11111111-1111-1111-1111-111111111111", // Use a real UUID mock
+      category_id: "",
     },
   });
 
   const currentType = watch("type");
 
-  // Logic to switch default categories based on type
   useEffect(() => {
-    const defaultCategory =
-      currentType === "income"
-        ? "11111111-1111-1111-1111-111111111111" // Mock Income UUID
-        : "22222222-2222-2222-2222-222222222222"; // Mock Expense UUID
-    setValue("categoryId", defaultCategory);
-  }, [currentType, setValue]);
+    const defaultCat = categories.find(
+      (c) => c.type === currentType && c.is_system && c.name === "Other",
+    );
+    if (defaultCat) {
+      setValue("category_id", defaultCat.id);
+    } else {
+      setValue("category_id", "");
+    }
+  }, [currentType, categories, setValue]);
 
-  const onSubmit = (data: TransactionFormValues) => {
-    console.log("Transacción lista para Supabase:", data);
-    // Here you would call your repository: userRepository.createTransaction(data)
-    setOpen(false);
-    reset();
+  const onSubmit = async (data: TransactionFormValues) => {
+    if (!user) return;
+    setIsSubmitting(true);
+
+    try {
+      await transactionService.addTransaction({
+        user_id: user.id,
+        type: data.type,
+        amount: data.amount,
+        description: data.description,
+        date: data.date,
+        category_id: data.category_id || undefined,
+      });
+
+      setOpen(false);
+      reset();
+
+      // TODO: Tell the store to refetch
+    } catch (error) {
+      console.error("Error al guardar la transacción:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -91,7 +129,7 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
             label="Descripción"
             placeholder="Ej: Compra supermercado"
@@ -116,22 +154,28 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
           />
 
           <div className="space-y-2">
-            <CategorySelect
-              type={currentType}
-              value={watch("categoryId")}
-              onChange={(val) =>
-                setValue("categoryId", val, { shouldValidate: true })
-              }
+            <label className="text-sm font-medium">Categoría</label>
+            <Controller
+              name="category_id"
+              control={control}
+              render={({ field }) => (
+                <CategorySelect
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  type={currentType}
+                  categories={categories}
+                />
+              )}
             />
-            {errors.categoryId && (
-              <p className="text-destructive text-xs">
-                {errors.categoryId.message}
-              </p>
+            {errors.category_id && (
+              <span className="text-red-500 text-sm">
+                {errors.category_id.message}
+              </span>
             )}
           </div>
 
-          <Button type="submit" className="w-full mt-4">
-            Guardar {currentType === "income" ? "Ingreso" : "Gasto"}
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? "Guardando..." : "Guardar Transacción"}
           </Button>
         </form>
       </DialogContent>

@@ -55,6 +55,7 @@ CREATE TABLE public.transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
     category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
+    type public.transaction_type NOT NULL,
     amount NUMERIC(12, 2) NOT NULL,
     description TEXT,
     date TIMESTAMPTZ DEFAULT now()
@@ -146,23 +147,18 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
 -- Function: Apply default system category if none is provided
-CREATE OR REPLACE FUNCTION public.set_default_category()
-RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION public.set_default_category() RETURNS trigger AS $$
 BEGIN
-  -- If the user didn't provide a category, find the system 'Other' for that type
   IF NEW.category_id IS NULL THEN
     NEW.category_id := (
       SELECT id FROM public.categories 
-      WHERE is_system = true 
-      AND name = 'Other' 
-      AND type = NEW.type 
+      WHERE is_system = true AND name = 'Other' AND type = NEW.transaction_type -- Updated to match the new column
       LIMIT 1
     );
   END IF;
-  
-  -- Safety check
+
   IF NEW.category_id IS NULL THEN
-    RAISE EXCEPTION 'Default system category "Other" not found for type %', NEW.type;
+    RAISE EXCEPTION 'Default system category "Other" not found for type %', NEW.transaction_type;
   END IF;
 
   RETURN NEW;

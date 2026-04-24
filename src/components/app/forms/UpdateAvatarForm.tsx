@@ -1,80 +1,109 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
 import { User } from "lucide-react";
 
 export default function UpdateAvatarForm() {
-    const { user, profile, setProfile } = useAuthStore();
-    const [file, setFile] = useState<File | null>(null);
-    const [isUploading, setIsUploading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
+  const { user, profile, setProfile } = useAuthStore();
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    profile?.avatar_url || null,
+  );
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Check if the FileList exists and has at least one file
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-            setSuccess(false);
-            setError(null);
-        }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+
+      // Create a temporary local URL for the image
+      const objectUrl = URL.createObjectURL(selectedFile);
+      setPreviewUrl(objectUrl);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl && !previewUrl.startsWith("http")) {
+        URL.revokeObjectURL(previewUrl);
+      }
     };
+  }, [previewUrl]);
 
-    const handleUpload = async () => {
-        if (!file || !user) return;
+  const handleUpload = async () => {
+    if (!file || !user) return;
 
-        // Optional client-side size validation (e.g., max 2MB)
-        if (file.size > 2 * 1024 * 1024) {
-            setError("La imagen no debe superar los 2MB.");
-            return;
-        }
+    // Optional client-side size validation (e.g., max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      setError("La imagen no debe superar los 2MB.");
+      return;
+    }
 
-        setIsUploading(true);
-        setError(null);
-        setSuccess(false);
+    setIsUploading(true);
+    setError(null);
+    setSuccess(false);
 
-        try {
-            const updatedProfile = await authService.uploadAvatar(user.id, file);
+    try {
+      const updatedProfile = await authService.uploadAvatar(user.id, file);
 
-            // Update global Zustand state with the new avatar URL
-            setProfile(updatedProfile);
-            setSuccess(true);
-            setFile(null); // Reset input
-        } catch (err) {
-            console.error(err);
-            setError("Error al subir la imagen. Asegúrate de tener conexión.");
-        } finally {
-            setIsUploading(false);
-        }
-    };
+      // Update global Zustand state with the new avatar URL
+      if (updatedProfile) {
+        setProfile(updatedProfile);
+        setSuccess(true);
+      } else {
+        setError("No se pudo actualizar el avatar. Inténtalo de nuevo.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Error al subir la imagen. Asegúrate de tener conexión.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
-    return (
-        <div className="space-y-6 py-4 flex flex-col items-center">
-            {/* Avatar Preview Circle */}
-            <div className="h-24 w-24 rounded-full bg-secondary flex items-center justify-center overflow-hidden border-2 border-border">
-                {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
-                ) : (
-                    <User className="h-12 w-12 text-muted-foreground" />
-                )}
-            </div>
-
-            {/* File Upload Controls */}
-            <div className="w-full max-w-sm space-y-4">
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
-                />
-
-                {error && <div className="text-sm font-medium text-red-500 text-center">{error}</div>}
-                {success && <div className="text-sm font-medium text-green-500 text-center">¡Avatar actualizado con éxito!</div>}
-
-                <Button onClick={handleUpload} disabled={!file || isUploading} className="w-full mt-4">
-                    {isUploading ? "Subiendo imagen..." : "Subir nuevo avatar"}
-                </Button>
-            </div>
+  return (
+    <>
+      <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
+        <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-muted bg-secondary flex items-center justify-center shrink-0">
+          {previewUrl ? (
+            <img
+              src={previewUrl}
+              alt="Avatar Preview"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <User className="w-12 h-12 text-muted-foreground" />
+          )}
         </div>
-    );
+
+        <div className="flex flex-col gap-3 w-full max-w-sm">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={isUploading}
+            className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 text-sm text-muted-foreground"
+          />
+          <Button
+            onClick={handleUpload}
+            disabled={!file || isUploading}
+            className="w-full sm:w-auto"
+          >
+            {isUploading ? "Subiendo..." : "Guardar Imagen"}
+          </Button>
+        </div>
+      </div>
+
+      {/* Success/Error Messages */}
+      {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+      {success && (
+        <p className="text-sm text-green-500 mt-2">
+          ¡Avatar actualizado con éxito!
+        </p>
+      )}
+    </>
+  );
 }

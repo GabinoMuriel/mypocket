@@ -63,18 +63,16 @@ export function UserAccountMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
-    className="text-red-600 focus:text-red-600" 
-    onClick={async () => {
-        console.log("[SignOut] Button clicked...");
-        try {
-            await authService.signOut();
-            console.log("[SignOut] Success!");
-        } catch (error) {
-            console.error("[SignOut] Failed:", error);
-        }
-    }}
->
+        <DropdownMenuItem
+          className="text-red-600 focus:text-red-600"
+          onClick={async () => {
+            try {
+              await authService.signout();
+            } catch (error) {
+              console.error("SignOut failed:", error);
+            }
+          }}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Cerrar sesión</span>
         </DropdownMenuItem>

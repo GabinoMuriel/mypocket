@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store/useAuthStore";
 import { authService } from "@/services/auth.service";
-import { AppRouter } from "@/routes/AppRouter"; // <-- Import your router
+import { AppRouter } from "@/routes/AppRouter";
+import { useTransactionStore } from "./store/useTransactionStore";
 
 export default function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -11,7 +12,6 @@ export default function App() {
   const user = useAuthStore((state) => state.user);
   const setProfile = useAuthStore((state) => state.setProfile);
   const setRole = useAuthStore((state) => state.setRole);
-
 
   // 1. First Effect: Handle ONLY Supabase Authentication & Session
   useEffect(() => {
@@ -22,7 +22,9 @@ export default function App() {
       setIsLoading(true);
 
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
         if (isMounted) {
           setSession(session);
@@ -38,20 +40,20 @@ export default function App() {
 
     init();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (isMounted) {
-          setSession(session);
-          setUser(session?.user ?? null);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (isMounted) {
+        setSession(session);
+        setUser(session?.user ?? null);
       }
-    );
+    });
 
     return () => {
       isMounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [setIsLoading, setSession, setUser]);
 
   // 2. Second Effect: Handle ONLY Profile & Role fetching based on User state
   useEffect(() => {
@@ -72,14 +74,26 @@ export default function App() {
         if (profileData) {
           const { roles, ...profileFields } = profileData;
           setProfile(profileFields);
-          setRole(roles?.name || 'user');
+          setRole(roles?.name || "user");
         }
       } catch (error) {
         console.error("Profile fetch error:", error);
       }
     };
 
-    fetchProfile();
+    const fetchCategories = async () => {
+      try {
+        await useTransactionStore.getState().fetchCategories();
+      } catch (error) {
+        console.error("Categories fetch error:", error);
+      }
+    };
+
+    const initializeData = async () => {
+      await Promise.all([fetchProfile(), fetchCategories()]);
+    };
+
+    initializeData();
 
     return () => {
       isActive = false; // Cleanup function to prevent race conditions

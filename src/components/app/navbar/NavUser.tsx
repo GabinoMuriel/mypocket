@@ -36,9 +36,9 @@ export function NavUser() {
                     <NavigationMenuTrigger>Mis Transacciones</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[200px] gap-1 p-2">
-                            <ListItem href="/t/diarias" title="Diarias" icon={<CalendarCheck className="size-4" />} />
-                            <ListItem href="/t/mensuales" title="Mensuales" icon={<CalendarDays className="size-4" />} />
-                            <ListItem href="/t/anuales" title="Anuales" icon={<CalendarRange className="size-4" />} />
+                            <ListItem href="/transaction/day" title="Diarias" icon={<CalendarCheck className="size-4" />} />
+                            <ListItem href="/transaction/month" title="Mensuales" icon={<CalendarDays className="size-4" />} />
+                            <ListItem href="/transaction/year" title="Anuales" icon={<CalendarRange className="size-4" />} />
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>

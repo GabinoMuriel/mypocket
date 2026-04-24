@@ -3,9 +3,52 @@ import { supabase } from "@/lib/supabase";
 import { useAuthStore, type Profile } from "@/store/useAuthStore";
 
 export const authService = {
-  /**
-   * Fetches the extended profile including the role name
-   */
+  async signup(data: SignupFormValues) {
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (authError) throw authError;
+    if (!authData.user) throw new Error("No se pudo crear el usuario");
+
+    return authData;
+  },
+
+  async login(credentials: { email: string; password: string }) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: credentials.email,
+      password: credentials.password,
+    });
+
+    if (error) throw error;
+    return data;
+  },
+
+  async signout() {
+    useAuthStore.getState().setUser(null);
+    useAuthStore.getState().setSession(null);
+    useAuthStore.getState().setProfile(null);
+
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error("Supabase silent signout error:", error);
+    }
+  },
+
+  async updateProfile(userId: string, data: Partial<Profile>) {
+    const { error } = await supabase
+      .from("profiles")
+      .update(data)
+      .eq("id", userId);
+
+    if (error) throw error;
+
+    return this.getUserProfile(userId);
+  },
+
+  /* GET PROFILE */
   async getUserProfile(userId: string) {
     const { data, error } = await supabase
       .from("profiles")
@@ -28,54 +71,7 @@ export const authService = {
     return data;
   },
 
-  async signOut() {
-    // 1. BULLETPROOF RESET: Instantly wipe Zustand memory.
-    // This forces ProtectedRoute to kick you out to the login screen immediately.
-    useAuthStore.getState().setUser(null);
-    useAuthStore.getState().setSession(null);
-    useAuthStore.getState().setProfile(null);
-
-    // 2. Safely attempt the Supabase signout
-    try {
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error("Supabase silent signout error:", error);
-    }
-  },
-
-  async login(credentials: { email: string; password: string }) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: credentials.email,
-      password: credentials.password,
-    });
-
-    if (error) throw error;
-    return data;
-  },
-
-  async signup(data: SignupFormValues) {
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-    });
-
-    if (authError) throw authError;
-    if (!authData.user) throw new Error("No se pudo crear el usuario");
-
-    // Profile UPDATE removed to respect RLS constraints before email verification
-    return authData;
-  },
-
-  async updateProfile(userId: string, data: Partial<Profile>) {
-    const { error } = await supabase
-      .from("profiles")
-      .update(data)
-      .eq("id", userId);
-
-    if (error) throw error;
-
-    return this.getUserProfile(userId);
-  },
+  /* EDIT PROFILE */
 
   async updatePassword(password: string) {
     const { error } = await supabase.auth.updateUser({ password });
@@ -83,23 +79,21 @@ export const authService = {
   },
 
   async uploadAvatar(userId: string, file: File) {
-    const fileExt = file.name.split('.').pop();
-    // Unique file name to avoid caching issues when replacing avatars
-    const filePath = `${userId}/avatar-${Math.random()}.${fileExt}`;
+    const fileExt = file.name.split(".").pop();
+    const filePath = `${userId}/avatar.${fileExt}`;
 
-    // 1. Upload to the 'avatars' bucket
     const { error: uploadError } = await supabase.storage
-      .from('avatars')
+      .from("avatars")
       .upload(filePath, file, { upsert: true });
 
     if (uploadError) throw uploadError;
 
-    // 2. Get the public URL of the uploaded image
     const { data: publicUrlData } = supabase.storage
-      .from('avatars')
+      .from("avatars")
       .getPublicUrl(filePath);
 
-    // 3. Update the profile with the new URL
-    return this.updateProfile(userId, { avatar_url: publicUrlData.publicUrl });
+    const finalUrl = `${publicUrlData.publicUrl}?t=${Date.now()}`;
+
+    return this.updateProfile(userId, { avatar_url: finalUrl });
   },
 };
