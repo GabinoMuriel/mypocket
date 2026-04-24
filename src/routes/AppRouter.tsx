@@ -31,8 +31,8 @@ export const AppRouter = () => {
 
                     {/* User Routes (Protected) */}
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/transaction/:period" element={<TransactionsPage />} />
-                        <Route path="/graphs" element={<GraphsPage />} />
+                        <Route path="/transactions/:period" element={<TransactionsPage />} />
+                        <Route path="/graphs/:period" element={<GraphsPage />} />
                         <Route path="/profile" element={<EditProfilePage />} />
 
                         {/* Admin Only Routes (Strictly Protected) */}

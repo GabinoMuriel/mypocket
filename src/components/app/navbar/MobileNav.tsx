@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { TransactionModal } from "../forms/TransactionModal";
 
 export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: boolean }) {
     return (
@@ -42,18 +43,24 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                         </>
                     ) : (
                         <>
-                            <Button className="justify-start gap-2" size="lg">
-                                <PlusCircle className="size-5" /> Añadir Transacción
-                            </Button>
+                            <TransactionModal
+                                trigger={
+                                    /* We use asChild on the Modal Trigger and then asChild on the MenuLink 
+                                       to ensure the final HTML is just a button with your styles */
+                                    <Button className="justify-start gap-2" size="lg">
+                                        <PlusCircle className="size-5" /> Añadir Transacción
+                                    </Button>
+                                }
+                            />
                             <Separator />
                             <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">Transacciones</div>
-                            <a href="/t/diarias" className="pl-8 text-md">Diarias</a>
-                            <a href="/t/mensuales" className="pl-8 text-md">Mensuales</a>
-                            <a href="/t/anuales" className="pl-8 text-md">Anuales</a>
+                            <a href="/transactions/day" className="pl-8 text-md">Diarias</a>
+                            <a href="/transactions/month" className="pl-8 text-md">Mensuales</a>
+                            <a href="/transactions/year" className="pl-8 text-md">Anuales</a>
                             <Separator />
                             <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">Gráficas</div>
-                            <a href="/g/diarios" className="pl-8 text-md">Diarios</a>
-                            <a href="/g/mensuales" className="pl-8 text-md">Mensuales</a>
+                            <a href="/graphs/month" className="pl-8 text-md">Diarios</a>
+                            <a href="/graphs/year" className="pl-8 text-md">Mensuales</a>
                         </>
                     )}
                 </div>

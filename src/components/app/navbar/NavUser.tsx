@@ -36,9 +36,9 @@ export function NavUser() {
                     <NavigationMenuTrigger>Mis Transacciones</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[200px] gap-1 p-2">
-                            <ListItem href="/transaction/day" title="Diarias" icon={<CalendarCheck className="size-4" />} />
-                            <ListItem href="/transaction/month" title="Mensuales" icon={<CalendarDays className="size-4" />} />
-                            <ListItem href="/transaction/year" title="Anuales" icon={<CalendarRange className="size-4" />} />
+                            <ListItem href="/transactions/day" title="Diarias" icon={<CalendarCheck className="size-4" />} />
+                            <ListItem href="/transactions/month" title="Mensuales" icon={<CalendarDays className="size-4" />} />
+                            <ListItem href="/transactions/year" title="Anuales" icon={<CalendarRange className="size-4" />} />
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -48,9 +48,8 @@ export function NavUser() {
                     <NavigationMenuTrigger>Gráficas</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[200px] gap-1 p-2">
-                            <ListItem href="/g/diarios" title="Diarios" icon={<BarChart3 className="size-4" />} />
-                            <ListItem href="/g/mensuales" title="Mensuales" icon={<BarChart3 className="size-4" />} />
-                            <ListItem href="/g/anuales" title="Anuales" icon={<BarChart3 className="size-4" />} />
+                            <ListItem href="/graphs/month" title="Mensuales" icon={<BarChart3 className="size-4" />} />
+                            <ListItem href="/graphs/year" title="Anuales" icon={<BarChart3 className="size-4" />} />
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
