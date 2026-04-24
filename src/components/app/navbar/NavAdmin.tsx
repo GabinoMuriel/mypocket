@@ -30,7 +30,7 @@ export function NavAdmin() {
                 {/* Estadísticas Globales */}
                 <NavigationMenuItem>
                     <NavigationMenuLink
-                        href="/admin/stats"
+                        href="/admin/statistics"
                         className={cn(navigationMenuTriggerStyle(), "gap-2")}
                     >
                         <LineChartIcon className="size-4" />

@@ -55,73 +55,11 @@ CREATE TABLE public.transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
     category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
-    type public.transaction_type NOT NULL,
     amount NUMERIC(12, 2) NOT NULL,
+    type public.transaction_type NOT NULL,
     description TEXT,
     date TIMESTAMPTZ DEFAULT now()
 );
-
-
--- 1. user1@mail.com (Only required fields)
--- The profiles table only strictly requires the 'id' [3], which the trigger already handled. 
--- We will just set a first name for basic UI identification.
-UPDATE public.profiles 
-SET first_name = 'Usuario1'
-WHERE id = (SELECT id FROM auth.users WHERE email = 'user1@mail.com');
-
--- 2. user2@mail.com (All fields)
--- Updating all available profile fields according to your schema [3, 4].
-UPDATE public.profiles
-SET 
-    first_name = 'Juan',
-    last_name = 'Pérez',
-    phone = '600123456',
-    address = 'Calle Mayor 1',
-    city = 'Madrid',
-    postal_code = '28001',
-    birthdate = '1990-01-01'
-WHERE id = (SELECT id FROM auth.users WHERE email = 'user2@mail.com');
-
--- 3. admin@mypocket.com (All fields + Admin Role)
--- Fills out the profile and queries the roles table to securely assign the 'admin' role [1, 4].
-UPDATE public.profiles
-SET 
-    first_name = 'Admin',
-    last_name = 'Principal',
-    phone = '600999999',
-    address = 'Avenida de la Administración 10',
-    city = 'Barcelona',
-    postal_code = '08001',
-    birthdate = '1985-05-15',
-    role_id = (SELECT id FROM public.roles WHERE name = 'admin')
-WHERE id = (SELECT id FROM auth.users WHERE email = 'admin@mail.com');
-
-
--- ==========================================
--- ROW LEVEL SECURITY (RLS) POLICIES
--- ==========================================
-
--- Enable automatic RLS for all tables
-ALTER TABLE public.roles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
-
--- ROLES
-CREATE POLICY "Allow read access on roles" ON public.roles FOR SELECT USING (true);
-
--- PROFILES
-CREATE POLICY "Users can view their own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
-
--- CATEGORIES
-CREATE POLICY "Allow read access on categories" ON public.categories FOR SELECT USING (is_active = true);
-
--- TRANSACTIONS
-CREATE POLICY "Users can view their own transactions" ON public.transactions FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Users can create their own transactions" ON public.transactions FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "Users can update their own transactions" ON public.transactions FOR UPDATE USING (auth.uid() = user_id);
-CREATE POLICY "Users can delete their own transactions" ON public.transactions FOR DELETE USING (auth.uid() = user_id);
 
 
 -- ==========================================
@@ -170,6 +108,22 @@ CREATE TRIGGER ensure_default_category
   BEFORE INSERT ON public.transactions
   FOR EACH ROW EXECUTE PROCEDURE public.set_default_category();
 
+-- 1. Create a secure helper function to check if the current user is an admin
+-- SECURITY DEFINER allows it to read the roles table while bypassing RLS, preventing infinite loops
+CREATE OR REPLACE FUNCTION public.is_admin() RETURNS boolean AS $$
+DECLARE
+  admin_status boolean;
+BEGIN
+  SELECT EXISTS (
+    SELECT 1 FROM public.profiles p
+    JOIN public.roles r ON p.role_id = r.id
+    WHERE p.id = auth.uid() AND r.name = 'admin'
+  ) INTO admin_status;
+  
+  RETURN admin_status;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
 -- ==========================================
 -- RULES
 -- ==========================================
@@ -179,6 +133,72 @@ CREATE RULE protect_system_categories AS
 ON DELETE TO public.categories
 WHERE OLD.is_system = true
 DO INSTEAD NOTHING;
+
+
+-- ==========================================
+-- ROW LEVEL SECURITY (RLS) POLICIES
+-- ==========================================
+
+-- Enable automatic RLS for all tables
+ALTER TABLE public.roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
+
+-- ROLES
+CREATE POLICY "Allow read access on roles" ON public.roles FOR SELECT USING (true);
+
+-- PROFILES
+CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users and Admins can view profiles" ON public.profiles 
+FOR SELECT USING (auth.uid() = id OR public.is_admin());
+
+-- CATEGORIES
+CREATE POLICY "Allow read access on categories" ON public.categories FOR SELECT USING (is_active = true);
+
+-- TRANSACTIONS
+CREATE POLICY "Users and Admins can view transactions" ON public.transactions 
+FOR SELECT USING (auth.uid() = user_id OR public.is_admin());
+CREATE POLICY "Users can create their own transactions" ON public.transactions FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update their own transactions" ON public.transactions FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete their own transactions" ON public.transactions FOR DELETE USING (auth.uid() = user_id);
+
+
+
+-- 1. user1@mail.com (Only required fields)
+-- The profiles table only strictly requires the 'id' [3], which the trigger already handled. 
+-- We will just set a first name for basic UI identification.
+UPDATE public.profiles 
+SET first_name = 'Usuario1'
+WHERE id = (SELECT id FROM auth.users WHERE email = 'user1@mail.com');
+
+-- 2. user2@mail.com (All fields)
+-- Updating all available profile fields according to your schema [3, 4].
+UPDATE public.profiles
+SET 
+    first_name = 'Juan',
+    last_name = 'Pérez',
+    phone = '600123456',
+    address = 'Calle Mayor 1',
+    city = 'Madrid',
+    postal_code = '28001',
+    birthdate = '1990-01-01'
+WHERE id = (SELECT id FROM auth.users WHERE email = 'user2@mail.com');
+
+-- 3. admin@mypocket.com (All fields + Admin Role)
+-- Fills out the profile and queries the roles table to securely assign the 'admin' role [1, 4].
+UPDATE public.profiles
+SET 
+    first_name = 'Admin',
+    last_name = 'Principal',
+    phone = '600999999',
+    address = 'Avenida de la Administración 10',
+    city = 'Barcelona',
+    postal_code = '08001',
+    birthdate = '1985-05-15',
+    role_id = (SELECT id FROM public.roles WHERE name = 'admin')
+WHERE id = (SELECT id FROM auth.users WHERE email = 'admin@mail.com');
+
 
 INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
 

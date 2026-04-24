@@ -39,7 +39,7 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                         <>
                             <div className="text-xs font-bold text-primary uppercase pl-8">Admin Panel</div>
                             <a href="/admin/users" className="text-lg font-medium pl-8">Gestión Usuarios</a>
-                            <a href="/admin/stats" className="text-lg font-medium pl-8">Estadísticas</a>
+                            <a href="/admin/statistics" className="text-lg font-medium pl-8">Estadísticas</a>
                         </>
                     ) : (
                         <>
