@@ -21,22 +21,21 @@ import {
 import { DataBox } from "@/components/app/DataBox";
 import { TransactionCard } from "./components/TransactionCard";
 import { useNavigate, useParams } from "react-router-dom";
-
-/* const getModeFromUrl = (period?: string): 'day' | 'month' | 'year' => {
-  if (period === 'mensuales') return 'month';
-  if (period === 'anuales') return 'year';
-  return 'day'; // Default fallback for 'diarias'
-}; */
+import { FloatingAddButton } from "./components/FloatingAddButton";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export default function TransactionsPage() {
   const { period } = useParams();
   const navigate = useNavigate();
   const viewMode = period === "month" || period === "year" ? period : "day";
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchTransactions = useTransactionStore(
     (state) => state.fetchTransactions,
   );
+
   const allTransactions = useTransactionStore((state) => state.transactions);
 
   // 1. Arrow Navigation Logic
@@ -78,12 +77,22 @@ export default function TransactionsPage() {
 
   const activeTransactions = useMemo(() => {
     return allTransactions.filter((tx) => {
+      // 1. Check Date Range
       const txDate = new Date(tx.date);
-      if (viewMode === "day") return isSameDay(txDate, currentDate);
-      if (viewMode === "month") return isSameMonth(txDate, currentDate);
-      return isSameYear(txDate, currentDate);
+      let matchesDate = false;
+      if (viewMode === 'day') matchesDate = isSameDay(txDate, currentDate);
+      else if (viewMode === 'month') matchesDate = isSameMonth(txDate, currentDate);
+      else matchesDate = isSameYear(txDate, currentDate);
+
+      // 2. Check Search String
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = !searchTerm ||
+        (tx.description?.toLowerCase().includes(searchLower)) ||
+        (tx.categories?.name.toLowerCase().includes(searchLower));
+
+      return matchesDate && matchesSearch;
     });
-  }, [allTransactions, currentDate, viewMode]);
+  }, [allTransactions, currentDate, viewMode, searchTerm]);
 
   const handleViewChange = (newMode: "day" | "month" | "year") => {
     navigate(`/transactions/${newMode}`);
@@ -118,8 +127,7 @@ export default function TransactionsPage() {
         currentDate={currentDate}
         viewMode={viewMode}
         onPrev={handlePrev}
-        onNext={handleNext}
-      />
+        onNext={handleNext} onReset={() => setCurrentDate(new Date())} />
 
       <DataBox transactions={activeTransactions} />
 
@@ -130,6 +138,18 @@ export default function TransactionsPage() {
             ? "Transacciones del Día"
             : "Historial de Transacciones"}
         </h3>
+
+        {/* Search Input */}
+        <div className="relative w-full sm:w-100">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Buscar por categoría o descripción..."
+            className="pl-8"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
         {activeTransactions.length === 0 ? (
           <div className="text-center py-10 bg-card border rounded-lg border-dashed">
@@ -145,6 +165,7 @@ export default function TransactionsPage() {
           </div>
         )}
       </div>
+      <FloatingAddButton />
     </div>
   );
 }

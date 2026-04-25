@@ -1,3 +1,4 @@
+import { TransactionModal } from "@/components/app/forms/TransactionModal";
 import type { Transaction } from "@/services/transaction.service";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -15,6 +16,7 @@ import {
   PlusCircle,
   MinusCircle,
   HelpCircle,
+  Edit,
 } from "lucide-react";
 
 // Icon mapping (same as the one you used in CategorySelect)
@@ -77,16 +79,25 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
       </div>
 
       {/* Amount & Date */}
-      <div className="text-right">
-        <p
-          className={`font-bold ${isIncome ? "text-[var(--secondary)]" : "text-[var(--destructive)]"}`}
-        >
-          {isIncome ? "+" : "-"}
-          {formattedAmount}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {format(new Date(transaction.date), "d MMM yyyy", { locale: es })}
-        </p>
+      <div className="text-right flex items-center gap-4">
+        <div>
+          <p className={`font-bold ${isIncome ? "text-[var(--secondary)]" : "text-[var(--destructive)]"}`}>
+            {isIncome ? "+" : "-"}{formattedAmount}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {format(new Date(transaction.date), "d MMM yyyy", { locale: es })}
+          </p>
+        </div>
+        
+        {/* 🚀 NEW: Edit Button triggering the Modal */}
+        <TransactionModal 
+          initialData={transaction}
+          trigger={
+            <button className="p-2 text-muted-foreground hover:text-primary transition-colors bg-muted/50 rounded-md">
+              <Edit className="w-4 h-4" />
+            </button>
+          }
+        />
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   isSameMonth, isSameYear
 } from "date-fns";
 import type { Formatter, NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
+import { FloatingAddButton } from "../transactions/components/FloatingAddButton";
 
 export default function GraphsPage() {
   const { period } = useParams();
@@ -97,7 +98,7 @@ export default function GraphsPage() {
   };
 
   const renderCustomLabel = ({ percent }: any) => {
-    if(percent < 0.01){
+    if (percent < 0.01) {
       return '<1%';
     }
     return `${(percent * 100).toFixed(1)}%`;
@@ -125,8 +126,7 @@ export default function GraphsPage() {
         currentDate={currentDate}
         viewMode={viewMode}
         onPrev={handlePrev}
-        onNext={handleNext}
-      />
+        onNext={handleNext} onReset={() => setCurrentDate(new Date())} />
 
       {/* 🚀 THE 3 CIRCULAR GRAPHS */}
       {activeTransactions.length === 0 ? (
@@ -195,6 +195,7 @@ export default function GraphsPage() {
 
         </div>
       )}
+      <FloatingAddButton />
     </div>
   );
 }

@@ -12,14 +12,22 @@ interface TransactionState {
 
   transactions: Transaction[];
   isLoadingTransactions: boolean;
+
+  activeStartDate: string | null;
+  activeEndDate: string | null;
+
   fetchTransactions: (startDate: string, endDate: string) => Promise<void>;
+  refreshTransactions: () => Promise<void>;
 }
 
-export const useTransactionStore = create<TransactionState>()((set) => ({
+export const useTransactionStore = create<TransactionState>()((set, get) => ({
   categories: [],
   isLoadingCategories: false,
   transactions: [],
   isLoadingTransactions: false,
+
+  activeStartDate: null,
+  activeEndDate: null,
 
   fetchCategories: async () => {
     set({ isLoadingCategories: true });
@@ -35,12 +43,10 @@ export const useTransactionStore = create<TransactionState>()((set) => ({
   },
 
   fetchTransactions: async (startDate: string, endDate: string) => {
-    set({ isLoadingTransactions: true });
+    // Save the dates to the store so we can reuse them later
+    set({ isLoadingTransactions: true, activeStartDate: startDate, activeEndDate: endDate });
     try {
-      const transactions = await transactionService.getTransactions(
-        startDate,
-        endDate,
-      );
+      const transactions = await transactionService.getTransactions(startDate, endDate);
       set({ transactions });
     } catch (error) {
       console.error("Failed to load transactions:", error);
@@ -48,4 +54,11 @@ export const useTransactionStore = create<TransactionState>()((set) => ({
       set({ isLoadingTransactions: false });
     }
   },
+
+  refreshTransactions: async () => {
+    const { activeStartDate, activeEndDate, fetchTransactions } = get();
+    if (activeStartDate && activeEndDate) {
+      await fetchTransactions(activeStartDate, activeEndDate);
+    }
+  }
 }));

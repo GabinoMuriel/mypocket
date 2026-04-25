@@ -24,11 +24,10 @@ export interface Transaction {
   user_id: string;
   category_id: string | null;
   type: "income" | "expense";
-  amount: number; // Absolute positive number
+  amount: number;
   description: string | null;
   date: string;
 
-  // The joined data from the public.categories table
   categories?: {
     name: string;
     icon: string | null;
@@ -87,5 +86,21 @@ export const transactionService = {
     }
 
     return data as Transaction[];
+  },
+
+  async updateTransaction(id: string, transactionUpdate: Partial<TransactionInsert>) {
+    const { data, error } = await supabase
+      .from("transactions")
+      .update(transactionUpdate)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error updating transaction:", error.message);
+      throw error;
+    }
+
+    return data;
   },
 };

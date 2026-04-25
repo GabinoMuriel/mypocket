@@ -13,7 +13,7 @@ import FormInput from "./FormInput";
 import { z } from "zod";
 import { CategorySelect } from "./CategorySelect";
 import { useAuthStore } from "@/store/useAuthStore";
-import { transactionService } from "@/services/transaction.service";
+import { transactionService, type Transaction } from "@/services/transaction.service";
 import { useTransactionStore } from "@/store/useTransactionStore";
 
 const transactionSchema = z.object({
@@ -36,12 +36,19 @@ const transactionSchema = z.object({
 
 type TransactionFormValues = z.infer<typeof transactionSchema>;
 
-export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
+interface TransactionModalProps {
+  trigger: React.ReactNode;
+  initialData?: Transaction;
+}
+
+export function TransactionModal({ trigger, initialData }: TransactionModalProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const user = useAuthStore((state) => state.user);
   const categories = useTransactionStore((state) => state.categories);
+
+  const refreshTransactions = useTransactionStore((state) => state.refreshTransactions);
 
   const {
     register,
@@ -75,28 +82,47 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
     }
   }, [currentType, categories, setValue]);
 
-  const onSubmit = async (data: TransactionFormValues) => {
-    if (!user) return;
-    setIsSubmitting(true);
+  useEffect(() => {
+    if (initialData && open) {
+      reset({
+        type: initialData.type, // Map DB column to form
+        amount: Number(initialData.amount),
+        description: initialData.description || "",
+        category_id: initialData.category_id || "",
+      });
+    } else if (!open && !initialData) {
+      reset({ type: "expense", amount: 0, description: "", category_id: "" });
+    }
+  }, [initialData, open, reset]);
 
+  const onSubmit = async (data: TransactionFormValues) => {
     try {
-      await transactionService.addTransaction({
-        user_id: user.id,
+      const payload = {
         type: data.type,
         amount: data.amount,
         description: data.description,
-        date: data.date,
         category_id: data.category_id || undefined,
-      });
+      };
+
+      if (initialData) {
+        // Edit Mode
+        await transactionService.updateTransaction(initialData.id, payload);
+      } else {
+        const user = useAuthStore.getState().user; // Ensure you have access to the user
+        if (!user) return;
+
+        await transactionService.addTransaction({
+          user_id: user.id,
+          ...payload
+        });
+      }
 
       setOpen(false);
-      reset();
 
-      // TODO: Tell the store to refetch
+      await refreshTransactions();
+
     } catch (error) {
       console.error("Error al guardar la transacción:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -106,7 +132,7 @@ export function TransactionModal({ trigger }: { trigger: React.ReactNode }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
-            Nueva Transacción
+            {initialData ? "Editar Transacción" : "Nueva Transacción"}
           </DialogTitle>
         </DialogHeader>
 
