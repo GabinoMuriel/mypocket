@@ -3,14 +3,12 @@ import { supabase } from "@/lib/supabase";
 // Define the strict TypeScript interface for the Admin view of a user
 export interface AdminUserProfile {
     id: string;
+    email: string;
     first_name: string | null;
     last_name: string | null;
     phone: string | null;
     created_at: string;
-    // Relational join from the public.roles table
-    roles: {
-        name: string;
-    } | null;
+    role_name: string;
 }
 
 export interface GlobalStatistics {
@@ -21,33 +19,26 @@ export interface GlobalStatistics {
 }
 
 export const adminService = {
-    /**
-     * Fetches all registered users and their assigned roles.
-     * Only succeeds if the requesting user has the 'admin' role, thanks to RLS.
-     */
     async getAllUsers(): Promise<AdminUserProfile[]> {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select(`
-        id,
-        first_name,
-        last_name,
-        phone,
-        created_at,
-        roles (
-          name
-        )
-      `)
-            .order('created_at', { ascending: false }); // Newest users first
+        const { data, error } = await supabase.rpc('admin_get_users_with_emails');
 
         if (error) {
-            console.error("Error fetching all users for admin panel:", error.message);
+            console.error("Error fetching admin users:", error.message);
             throw error;
         }
 
-        // Because 'roles' is a many-to-one relationship (profile -> role), 
-        // Supabase returns it as a single object which perfectly matches our interface.
-        return data as unknown as AdminUserProfile[];
+        return data as AdminUserProfile[];
+    },
+
+    async deleteUser(userId: string): Promise<void> {
+        const { error } = await supabase.rpc('admin_delete_user', {
+            target_user_id: userId
+        });
+
+        if (error) {
+            console.error("Error deleting user:", error.message);
+            throw error;
+        }
     },
 
     async getGlobalStatistics(): Promise<GlobalStatistics> {

@@ -210,3 +210,53 @@ ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'avatars' AND auth.uid() =
 
 CREATE POLICY "Users can update their own avatar." 
 ON storage.objects FOR UPDATE USING (bucket_id = 'avatars' AND auth.uid() = owner);
+
+
+-- 1. Securely fetch profiles combined with their auth.users email
+CREATE OR REPLACE FUNCTION public.admin_get_users_with_emails()
+RETURNS TABLE(
+  id uuid, 
+  email varchar, 
+  first_name text, 
+  last_name text, 
+  phone text, 
+  created_at timestamptz, 
+  role_name text
+)
+SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  -- Strict verification using the is_admin() helper we made earlier
+  IF NOT public.is_admin() THEN
+    RAISE EXCEPTION 'Access denied: Must be an admin';
+  END IF;
+
+  RETURN QUERY
+  SELECT
+    p.id,
+    au.email::varchar,
+    p.first_name,
+    p.last_name,
+    p.phone,
+    p.created_at,
+    r.name AS role_name
+  FROM public.profiles p
+  JOIN auth.users au ON p.id = au.id
+  LEFT JOIN public.roles r ON p.role_id = r.id
+  ORDER BY p.created_at DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 2. Securely delete a user from the authentication system
+CREATE OR REPLACE FUNCTION public.admin_delete_user(target_user_id uuid)
+RETURNS void
+SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  -- Strict verification
+  IF NOT public.is_admin() THEN
+    RAISE EXCEPTION 'Access denied: Must be an admin';
+  END IF;
+
+  -- Deleting from auth.users triggers the ON DELETE CASCADE on your public.profiles table
+  DELETE FROM auth.users WHERE id = target_user_id;
+END;
+$$ LANGUAGE plpgsql;
