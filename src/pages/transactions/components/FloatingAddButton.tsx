@@ -1,11 +1,15 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TransactionModal } from "@/components/app/forms/TransactionModal";
+import type React from "react";
 
-export function FloatingAddButton() {
+type FloatingAddButtonProps = {
+    component: React.ComponentType<{ trigger: React.ReactNode }>;
+};
+
+export function FloatingAddButton({ component: Component }: FloatingAddButtonProps) {
     return (
         <div className="fixed bottom-8 right-8 z-50">
-            <TransactionModal
+            <Component
                 trigger={
                     <Button
                         size="icon"

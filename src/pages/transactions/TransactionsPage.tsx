@@ -24,6 +24,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FloatingAddButton } from "./components/FloatingAddButton";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { TransactionModal } from "@/components/app/forms/TransactionModal";
 
 export default function TransactionsPage() {
   const { period } = useParams();
@@ -165,7 +166,7 @@ export default function TransactionsPage() {
           </div>
         )}
       </div>
-      <FloatingAddButton />
+      <FloatingAddButton component={TransactionModal}/>
     </div>
   );
 }

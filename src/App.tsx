@@ -42,10 +42,19 @@ export default function App() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (isMounted) {
         setSession(session);
         setUser(session?.user ?? null);
+      }
+      if (event === 'SIGNED_IN' && session) {
+        (async () => {
+          try {
+            await supabase.rpc('record_daily_login');
+          } catch (error) {
+            console.error("Error tracking login:", error);
+          }
+        })();
       }
     });
 

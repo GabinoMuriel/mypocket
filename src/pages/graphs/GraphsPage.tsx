@@ -11,6 +11,7 @@ import {
 } from "date-fns";
 import type { Formatter, NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 import { FloatingAddButton } from "../transactions/components/FloatingAddButton";
+import { TransactionModal } from "@/components/app/forms/TransactionModal";
 
 export default function GraphsPage() {
   const { period } = useParams();
@@ -195,7 +196,7 @@ export default function GraphsPage() {
 
         </div>
       )}
-      <FloatingAddButton />
+      <FloatingAddButton component={TransactionModal}/>
     </div>
   );
 }

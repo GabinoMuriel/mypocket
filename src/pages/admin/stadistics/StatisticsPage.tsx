@@ -1,11 +1,28 @@
 import { useState, useEffect } from "react";
-import { adminService, type GlobalStatistics } from "@/services/admin.service";
+import { adminService, type DailyLoginStat, type GlobalStatistics } from "@/services/admin.service";
 import { Users, TrendingUp, TrendingDown, ArrowLeftRight, Loader2 } from "lucide-react";
+import { subMonths, addMonths } from "date-fns";
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer
+} from "recharts";
+import { DateNavigator } from "@/components/app/DateNavigator";
 
 export default function StatisticsPage() {
     const [stats, setStats] = useState<GlobalStatistics | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [loginData, setLoginData] = useState<DailyLoginStat[]>([]);
+
+    const handlePrev = () => setCurrentDate((prev) => subMonths(prev, 1));
+    const handleNext = () => setCurrentDate((prev) => addMonths(prev, 1));
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -22,6 +39,26 @@ export default function StatisticsPage() {
 
         fetchStats();
     }, []);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            setIsLoading(true);
+            try {
+                // JS getMonth() is 0-indexed (0-11), so we add 1 for Postgres (1-12)
+                const targetMonth = currentDate.getMonth() + 1;
+                const targetYear = currentDate.getFullYear();
+
+                const stats = await adminService.getDailyLoginStats(targetMonth, targetYear);
+                setLoginData(stats);
+            } catch (error) {
+                console.error("Failed to load statistics", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, [currentDate]);
 
     // Helper function to format global money volumes
     const formatCurrency = (amount: number) =>
@@ -52,6 +89,17 @@ export default function StatisticsPage() {
                 <p className="text-muted-foreground mt-1">
                     Visión general del rendimiento y uso de la plataforma MyPocket.
                 </p>
+
+                <div className="flex justify-center mb-8">
+                    <DateNavigator
+                        currentDate={currentDate}
+                        viewMode="month"
+                        onPrev={handlePrev}
+                        onNext={handleNext}
+                        onReset={function (): void {
+                            throw new Error("Function not implemented.");
+                        }} />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -102,6 +150,60 @@ export default function StatisticsPage() {
                         </h3>
                     </div>
                 </div>
+            </div>
+
+            {/* Unique Logins Graph Panel */}
+            <div className="bg-card border rounded-xl p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-6">Inicios de Sesión Únicos por Día</h2>
+
+                {isLoading ? (
+                    <div className="h-[300px] flex items-center justify-center">
+                        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                    </div>
+                ) : loginData.length === 0 ? (
+                    <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                        No hay datos registrados para este mes.
+                    </div>
+                ) : (
+                    <div className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={loginData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                                <XAxis
+                                    dataKey="date"
+                                    tickFormatter={(val) => {
+                                        // Extracts just the day from 'YYYY-MM-DD' for a cleaner X-axis
+                                        return val.split('-')[2];
+                                    }}
+                                    stroke="#888888"
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                />
+                                <YAxis
+                                    stroke="#888888"
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    allowDecimals={false}
+                                />
+                                <Tooltip
+                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    labelFormatter={(label) => `Fecha: ${label}`}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="unique_logins"
+                                    name="Usuarios Únicos"
+                                    stroke="#8b5cf6" // A nice violet color matching your admin badges
+                                    strokeWidth={3}
+                                    dot={{ r: 4, strokeWidth: 2 }}
+                                    activeDot={{ r: 6 }}
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                )}
             </div>
         </div>
     );

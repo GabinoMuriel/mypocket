@@ -29,18 +29,21 @@ export const AppRouter = () => {
                     {/* Public Route */}
                     <Route path="/" element={<HomePage />} />
 
-                    {/* User Routes (Protected) */}
-                    <Route element={<ProtectedRoute />}>
+                    {/* User Only Routes */}
+                    <Route element={<ProtectedRoute adminOnly={false} />}>
                         <Route path="/transactions/:period" element={<TransactionsPage />} />
                         <Route path="/graphs/:period" element={<GraphsPage />} />
-                        <Route path="/profile" element={<EditProfilePage />} />
-
-                        {/* Admin Only Routes (Strictly Protected) */}
-                        <Route element={<ProtectedRoute adminOnly={true} />}>
-                            <Route path="/admin/users" element={<UsersPanelPage />} />
-                            <Route path="/admin/statistics" element={<StatisticsPage />} />
-                        </Route>
                     </Route>
+                    {/* User and Admin Only Routes */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/profile" element={<EditProfilePage />} />
+                    </Route>
+                    {/* Admin Only Routes */}
+                    <Route element={<ProtectedRoute adminOnly={true} />}>
+                        <Route path="/admin/users" element={<UsersPanelPage />} />
+                        <Route path="/admin/statistics" element={<StatisticsPage />} />
+                    </Route>
+
 
                 </Route>
             </Routes>

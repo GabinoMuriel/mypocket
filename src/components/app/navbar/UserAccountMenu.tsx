@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import { LanguageToggle } from "./LanguageToggle";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function UserAccountMenu() {
   const navigate = useNavigate();

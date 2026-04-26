@@ -32,7 +32,7 @@ export const ProtectedRoute = ({ adminOnly = false }: ProtectedRouteProps) => {
 
   // 3. Protect Admin-only routes by checking the explicit 'admin' string
   if (adminOnly && role !== "admin") {
-    return <Navigate to="/transactions" replace />;
+    return <Navigate to="/transactions/month" replace />;
   }
 
   // 4. Authorized users get to see the requested route

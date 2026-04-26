@@ -29,7 +29,7 @@ export default function LoginForm() {
     try {
       await authService.login(data);
 
-      navigate("/transactions");
+      navigate("/transactions/month");
       
     } catch (error) {
       // 3. Handle errors in Spanish for the UI

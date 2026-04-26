@@ -23,6 +23,11 @@ export interface GlobalStatistics {
     totalExpenseVolume: number;
 }
 
+export interface DailyLoginStat {
+    date: string;
+    unique_logins: number;
+}
+
 export const adminService = {
     async getAllUsers(): Promise<AdminUserProfile[]> {
         const { data, error } = await supabase.rpc('admin_get_users_with_emails');
@@ -101,5 +106,20 @@ export const adminService = {
         }
 
         return true;
+    },
+
+    async getDailyLoginStats(month: number, year: number): Promise<DailyLoginStat[]> {
+    // Note: ensure your month parameter is 1-indexed (1-12) to match PostgreSQL
+    const { data, error } = await supabase.rpc('admin_get_daily_login_stats', {
+        target_month: month,
+        target_year: year
+    });
+
+    if (error) {
+        console.error("Error fetching daily login stats:", error);
+        throw error;
     }
+
+    return data || [];
+}
 };
