@@ -58,7 +58,7 @@ export default function UsersPanelPage() {
                 <div>
                     <h1 className="text-3xl font-bold text-foreground">Gestión de Usuarios</h1>
                     <p className="text-muted-foreground mt-1">
-                        Administra todos los usuarios registrados en la plataforma.
+                        Administra todos los usuarios registrados en la plataforma (excepto los administradores).
                     </p>
                 </div>
 
@@ -127,8 +127,9 @@ export default function UsersPanelPage() {
                         </tbody>
                     </table>
 
+
                     {/* 3. Render the panel outside the table when a user is selected */}
-                    {selectedUser && (
+                    {(selectedUser && selectedUser.role_name !== 'admin') && (
                         <UserView
                             userData={selectedUser}
                             onClose={() => setSelectedUser(null)}
