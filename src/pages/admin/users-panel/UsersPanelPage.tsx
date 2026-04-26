@@ -4,14 +4,17 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Shield, User as UserIcon, Loader2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { UserView } from "./components/UserView";
+import type { ProfileFormValues } from "@/types/profile.schema";
 
 export default function UsersPanelPage() {
     const [users, setUsers] = useState<AdminUserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // 🚀 NEW: Search state
     const [searchTerm, setSearchTerm] = useState("");
+
+    const [selectedUser, setSelectedUser] = useState<AdminUserProfile | null>(null);
 
     useEffect(() => {
         fetchUsers();
@@ -44,6 +47,8 @@ export default function UsersPanelPage() {
         });
     }, [users, searchTerm]);
 
+    
+
     if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
     if (error) return <div className="text-center text-red-600 p-4">{error}</div>;
 
@@ -57,7 +62,7 @@ export default function UsersPanelPage() {
                     </p>
                 </div>
 
-                {/* 🚀 NEW: Search Input UI */}
+                {/* Search Input UI */}
                 <div className="relative w-full md:w-72">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -86,7 +91,7 @@ export default function UsersPanelPage() {
                                 const isAdmin = user.role_name === 'admin'; // Using updated role_name
 
                                 return (
-                                    <tr key={user.id} className="hover:bg-muted/50 transition-colors cursor-pointer">
+                                    <tr key={user.id} className="hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => setSelectedUser(user)}>
                                         <td className="px-6 py-4">
                                             <div className="font-medium text-foreground">
                                                 {user.first_name || user.last_name
@@ -99,7 +104,6 @@ export default function UsersPanelPage() {
                                         </td>
 
                                         <td className="px-6 py-4 text-muted-foreground">
-                                            {/* 🚀 NEW: We can now display the email! */}
                                             <div className="font-medium text-foreground">{user.email}</div>
                                             <div className="text-xs">{user.phone || 'Sin teléfono'}</div>
                                         </td>
@@ -110,8 +114,8 @@ export default function UsersPanelPage() {
 
                                         <td className="px-6 py-4 flex justify-center">
                                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${isAdmin
-                                                    ? 'bg-violet-100 text-violet-700 border border-violet-200'
-                                                    : 'bg-blue-100 text-blue-700 border border-blue-200'
+                                                ? 'bg-violet-100 text-violet-700 border border-violet-200'
+                                                : 'bg-blue-100 text-blue-700 border border-blue-200'
                                                 }`}>
                                                 {isAdmin ? <Shield className="w-3.5 h-3.5" /> : <UserIcon className="w-3.5 h-3.5" />}
                                                 {isAdmin ? 'Admin' : 'Usuario'}
@@ -122,6 +126,18 @@ export default function UsersPanelPage() {
                             })}
                         </tbody>
                     </table>
+
+                    {/* 3. Render the panel outside the table when a user is selected */}
+                    {selectedUser && (
+                        <UserView
+                            userData={selectedUser}
+                            onClose={() => setSelectedUser(null)}
+                            onSuccess={() => {
+                                setSelectedUser(null);
+                                fetchUsers();
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>

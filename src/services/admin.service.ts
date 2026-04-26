@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import type { ProfileFormValues } from "@/types/profile.schema";
 
 // Define the strict TypeScript interface for the Admin view of a user
 export interface AdminUserProfile {
@@ -7,6 +8,10 @@ export interface AdminUserProfile {
     first_name: string | null;
     last_name: string | null;
     phone: string | null;
+    address: string | null;
+    city: string | null;
+    postal_code: string | null;
+    birthdate: string | null;
     created_at: string;
     role_name: string;
 }
@@ -75,5 +80,26 @@ export const adminService = {
             totalIncomeVolume,
             totalExpenseVolume
         };
+    },
+
+    async updateUser(userId: string, data: Partial<ProfileFormValues>): Promise<boolean> {
+        console.log("holi")
+        const { error } = await supabase.rpc('admin_update_user', {
+            target_user_id: userId,
+            p_first_name: data.first_name || null,
+            p_last_name: data.last_name || null,
+            p_phone: data.phone || null,
+            p_address: data.address || null,
+            p_city: data.city || null,
+            p_postal_code: data.postal_code || null,
+            p_birthdate: data.birthdate || null
+        });
+
+        if (error) {
+            console.error("Error in admin_update_user RPC:", error);
+            throw error;
+        }
+
+        return true;
     }
 };
