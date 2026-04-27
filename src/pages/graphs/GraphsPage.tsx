@@ -42,7 +42,7 @@ export default function GraphsPage() {
     const start = viewMode === 'year' ? startOfYear(currentDate) : startOfMonth(currentDate);
     const end = viewMode === 'year' ? endOfYear(currentDate) : endOfMonth(currentDate);
     fetchTransactions(format(start, 'yyyy-MM-dd'), format(end, 'yyyy-MM-dd'));
-  }, [viewMode, currentDate.getMonth(), currentDate.getFullYear(), fetchTransactions]);
+  }, [viewMode, fetchTransactions, currentDate]);
 
   // 4. Local Filtering
   const activeTransactions = useMemo(() => {
@@ -86,7 +86,7 @@ export default function GraphsPage() {
   }, [activeTransactions]);
 
   // Custom Formatter for the Tooltip
-  const formatCurrency: Formatter<ValueType, NameType> = (value) => {
+  const formatCurrency: Formatter<ValueType, NameType> = (value, name) => {
     const numericValue = typeof value === 'number' ? value : Number(value) || 0;
 
     return [
@@ -94,7 +94,7 @@ export default function GraphsPage() {
         style: "currency",
         currency: "EUR"
       }).format(numericValue),
-      'Euro'
+      name
     ];
   };
 

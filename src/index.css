@@ -63,6 +63,22 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(47.41% 0.136 261.2);
+
+  /* Role: General / Total (Slate Blue) */
+  --general: oklch(40% 0.03 260);
+  --general-background: oklch(94% 0.01 260);
+
+  /* Role: User (Now Cyan/Teal) */
+  --user: oklch(45% 0.14 195);
+  --user-background: oklch(94% 0.04 195);
+
+  /* Role: Premium (Amber/Gold - Unchanged) */
+  --premium: oklch(55% 0.18 75);
+  --premium-background: oklch(96% 0.05 75);
+
+  /* Role: Admin (Now Purple) */
+  --admin: oklch(45% 0.19 295);
+  --admin-background: oklch(95% 0.04 295);
 }
 
 .dark {
@@ -113,6 +129,22 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(60% 0.12 261.2);
+
+  /* Role: General - Dark mode */
+  --general: oklch(85% 0.02 260);
+  --general-background: oklch(25% 0.02 260 / 30%);
+
+  /* Role: User (Now Cyan/Teal) */
+  --user: oklch(75% 0.11 195);
+  --user-background: oklch(25% 0.06 195 / 30%);
+
+  /* Role: Premium - Dark mode (Unchanged) */
+  --premium: oklch(80% 0.15 75);
+  --premium-background: oklch(30% 0.08 75 / 30%);
+
+  /* Role: Admin - Dark mode (Now Purple) */
+  --admin: oklch(75% 0.12 295);
+  --admin-background: oklch(25% 0.06 295 / 30%);
 }
 
 @theme inline {

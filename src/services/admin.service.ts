@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase";
 import type { ProfileFormValues } from "@/types/profile.schema";
-import { number } from "zod";
 
 // Define the strict TypeScript interface for the Admin view of a user
 export interface AdminUserProfile {
@@ -24,9 +23,9 @@ export interface GlobalStatistics {
   totalAdminUsers: number;
 }
 
-export interface DailyLoginStat {
+export interface DailyStat {
   date: string;
-  unique_logins: number;
+  stat: number;
 }
 
 export const adminService = {
@@ -61,7 +60,7 @@ export const adminService = {
     }
 
     // The RPC returns an array with a single row, so we extract the first element
-    const stats = data && data.length > 0 ? data[0] : null; 
+    const stats = data && data.length > 0 ? data[0] : null;
 
     return {
       totalUsers: Number(stats.total_users),
@@ -75,7 +74,6 @@ export const adminService = {
     userId: string,
     data: Partial<ProfileFormValues>,
   ): Promise<boolean> {
-    console.log("holi");
     const { error } = await supabase.rpc("admin_update_user", {
       target_user_id: userId,
       p_first_name: data.first_name || null,
@@ -85,6 +83,7 @@ export const adminService = {
       p_city: data.city || null,
       p_postal_code: data.postal_code || null,
       p_birthdate: data.birthdate || null,
+      p_role_name: data.role_name || null,
     });
 
     if (error) {
@@ -95,10 +94,7 @@ export const adminService = {
     return true;
   },
 
-  async getDailyLoginStats(
-    month: number,
-    year: number,
-  ): Promise<DailyLoginStat[]> {
+  async getDailyLoginStats(month: number, year: number): Promise<DailyStat[]> {
     // Note: ensure your month parameter is 1-indexed (1-12) to match PostgreSQL
     const { data, error } = await supabase.rpc("admin_get_daily_login_stats", {
       target_month: month,
@@ -107,6 +103,21 @@ export const adminService = {
 
     if (error) {
       console.error("Error fetching daily login stats:", error);
+      throw error;
+    }
+
+    return data || [];
+  },
+
+  async getDailySignupStats(month: number, year: number): Promise<DailyStat[]> {
+    // Note: ensure your month parameter is 1-indexed (1-12) to match PostgreSQL
+    const { data, error } = await supabase.rpc("admin_get_daily_signup_stats", {
+      target_month: month,
+      target_year: year,
+    });
+
+    if (error) {
+      console.error("Error fetching daily signup stats:", error);
       throw error;
     }
 

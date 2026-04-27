@@ -50,11 +50,12 @@ export const profileSchema = z.object({
         .or(z.literal(''))
         .optional(),
 
-    role_id: z.string().uuid("ID de rol inválido").optional(),
+    role_name: z.enum(["user", "premium"]).default("user").optional(),
 });
 
 /**
  * TypeScript type inferred from the schema.
  * Use this for your form state and function props.
  */
+export type RoleName = z.infer<typeof profileSchema>["role_name"];
 export type ProfileFormValues = z.infer<typeof profileSchema>;

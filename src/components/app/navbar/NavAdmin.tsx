@@ -39,7 +39,7 @@ export function NavAdmin() {
                 </NavigationMenuItem>
 
                 {/* Badge visual de Admin */}
-                <div className="ml-2 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-wider">
+                <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--admin-background)] text-[var(--admin)] border border-[var(--admin)] text-[10px] font-bold uppercase tracking-wider">
                     Admin Mode
                 </div>
 

@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarSync } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -26,7 +26,7 @@ export function DateNavigator({ currentDate, viewMode, onPrev, onNext, onReset }
 
       <div className="flex items-center gap-3">
         <h2 className="text-xl font-semibold capitalize">{getFormattedDate()}</h2>
-        {/* 🚀 Return to Today Button */}
+        {/* Return to Today Button */}
         <Button
           variant="outline"
           size="icon"
@@ -34,7 +34,7 @@ export function DateNavigator({ currentDate, viewMode, onPrev, onNext, onReset }
           onClick={onReset}
           title="Volver a la fecha actual"
         >
-          <CalendarDays className="w-4 h-4" />
+          <CalendarSync className="w-4 h-4" />
         </Button>
       </div>
 
