@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   adminService,
-  type DailyLoginStat,
   type DailyStat,
   type GlobalStatistics,
 } from "@/services/admin.service";

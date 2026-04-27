@@ -25,6 +25,7 @@ import { FloatingAddButton } from "./components/FloatingAddButton";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
+import { PremiumMonthlyReport } from "./components/PremiumMonthlyReport";
 
 export default function TransactionsPage() {
   const { period } = useParams();
@@ -134,11 +135,12 @@ export default function TransactionsPage() {
 
       {/* Transactions List Area */}
       <div className="pt-6 space-y-4">
-        <h3 className="text-lg font-bold text-foreground">
+        <h3 className="text-lg font-bold text-foreground ">
           {viewMode === "day"
             ? "Transacciones del Día"
             : "Historial de Transacciones"}
         </h3>
+        {viewMode === "month" && <PremiumMonthlyReport currentMonth={currentDate} transactionsData={[]} />}
 
         {/* Search Input */}
         <div className="relative w-full sm:w-100">
@@ -166,7 +168,7 @@ export default function TransactionsPage() {
           </div>
         )}
       </div>
-      <FloatingAddButton component={TransactionModal}/>
+      <FloatingAddButton component={TransactionModal} />
     </div>
   );
 }

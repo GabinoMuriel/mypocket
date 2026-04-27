@@ -101,21 +101,21 @@ export default function UsersPanelPage() {
 
                 const roleConfig = isAdmin
                   ? {
-                      label: "Admin",
-                      icon: <Shield className="w-3.5 h-3.5" />,
-                      var: "admin",
-                    }
+                    label: "Admin",
+                    icon: <Shield className="w-3.5 h-3.5" />,
+                    var: "admin",
+                  }
                   : isPremium
                     ? {
-                        label: "Premium",
-                        icon: <Star className="w-3.5 h-3.5" />,
-                        var: "premium",
-                      }
+                      label: "Premium",
+                      icon: <Star className="w-3.5 h-3.5" />,
+                      var: "premium",
+                    }
                     : {
-                        label: "Usuario",
-                        icon: <UserIcon className="w-3.5 h-3.5" />,
-                        var: "user",
-                      };
+                      label: "Usuario",
+                      icon: <UserIcon className="w-3.5 h-3.5" />,
+                      var: "user",
+                    };
 
                 return (
                   <tr
@@ -152,11 +152,11 @@ export default function UsersPanelPage() {
                     <td className="px-6 py-4 flex justify-center">
                       <span
                         className={`
-  inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border
-  bg-[var(--${roleConfig.var}-background)] 
-  text-[var(--${roleConfig.var})] 
-  border-[var(--${roleConfig.var})]
-`}
+                          inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border
+                          bg-[var(--${roleConfig.var}-background)] 
+                          text-[var(--${roleConfig.var})] 
+                          border-[var(--${roleConfig.var})]
+                        `}
                       >
                         {roleConfig.icon}
                         {roleConfig.label}
