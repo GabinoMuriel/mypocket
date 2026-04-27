@@ -85,7 +85,7 @@ export default function UpdateAvatarForm() {
             accept="image/*"
             onChange={handleFileChange}
             disabled={isUploading}
-            className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 text-sm text-muted-foreground"
+            className="file:mr-4 file:py-2 file:px-4 file:rounded-4xl file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 text-sm text-muted-foreground"
           />
           <Button
             onClick={handleUpload}

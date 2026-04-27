@@ -3,9 +3,10 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 interface ProtectedRouteProps {
   adminOnly?: boolean;
+  allowAll?: boolean;
 }
 
-export const ProtectedRoute = ({ adminOnly = false }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ adminOnly = false, allowAll = false }: ProtectedRouteProps) => {
   const user = useAuthStore((state) => state.user);
   const profile = useAuthStore((state) => state.profile);
   const role = useAuthStore((state) => state.role);
@@ -29,6 +30,8 @@ export const ProtectedRoute = ({ adminOnly = false }: ProtectedRouteProps) => {
   if (profile && !profile.first_name && location.pathname !== "/profile") {
     return <Navigate to="/profile" replace />;
   }
+
+  if (allowAll) return <Outlet />;
 
   // 3. Protect Admin-only routes by checking the explicit 'admin' string
   if (adminOnly && role !== "admin") {

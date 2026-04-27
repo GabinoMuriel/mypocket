@@ -35,7 +35,7 @@ export const AppRouter = () => {
                         <Route path="/graphs/:period" element={<GraphsPage />} />
                     </Route>
                     {/* User and Admin Only Routes */}
-                    <Route element={<ProtectedRoute />}>
+                    <Route element={<ProtectedRoute allowAll={true}/>}>
                         <Route path="/profile" element={<EditProfilePage />} />
                     </Route>
                     {/* Admin Only Routes */}

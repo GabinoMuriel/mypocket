@@ -26,6 +26,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
 import { PremiumMonthlyReport } from "./components/PremiumMonthlyReport";
+import { es } from "date-fns/locale";
 
 export default function TransactionsPage() {
   const { period } = useParams();
@@ -100,6 +101,60 @@ export default function TransactionsPage() {
     navigate(`/transactions/${newMode}`);
   };
 
+  const monthlyReportData = useMemo(() => {
+    // 1. Force filter all transactions strictly for the current month
+    const monthlyTxs = allTransactions.filter((tx) =>
+      isSameMonth(new Date(tx.date), currentDate)
+    );
+
+    // 2. Initialize aggregators
+    let totalIncome = 0;
+    let totalExpense = 0;
+    const categoryMap = new Map();
+
+    // 3. Calculate totals and group by category AND type
+    monthlyTxs.forEach((tx) => {
+      const amount = Number(tx.amount);
+      const catName = tx.categories?.name || "Other";
+
+      if (tx.type === "income") {
+        totalIncome += amount;
+      } else {
+        totalExpense += amount;
+      }
+
+      // FIX: Create a unique key merging type and category name
+      const uniqueKey = `${tx.type}-${catName}`;
+
+      const existing = categoryMap.get(uniqueKey) || { amount: 0, type: tx.type, name: catName };
+
+      categoryMap.set(uniqueKey, {
+        amount: existing.amount + amount,
+        type: tx.type,
+        name: catName // We store the clean name here to use it later
+      });
+    });
+
+    // 4. Return the exact structure expected by MyDedicatedPDF
+    return {
+      monthName: format(currentDate, "MMMM yyyy", { locale: es }).replace(/^\w/, c => c.toUpperCase()),
+      totalIncome,
+      totalExpense,
+      balance: totalIncome - totalExpense,
+
+      // FIX: We now map over categoryMap.values() instead of entries()
+      categories: Array.from(categoryMap.values()).map((data) => ({
+        name: data.name,
+        amount: data.amount,
+        type: data.type,
+        percentage: data.type === "income"
+          ? (totalIncome > 0 ? (data.amount / totalIncome) * 100 : 0)
+          : (totalExpense > 0 ? (data.amount / totalExpense) * 100 : 0),
+      })),
+      logoUrl: "/assets/logos/logo_small_ts.png"
+    };
+  }, [allTransactions, currentDate]);
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
       {/* View Mode Selector */}
@@ -140,7 +195,7 @@ export default function TransactionsPage() {
             ? "Transacciones del Día"
             : "Historial de Transacciones"}
         </h3>
-        {viewMode === "month" && <PremiumMonthlyReport currentMonth={currentDate} transactionsData={[]} />}
+        {viewMode === "month" && <PremiumMonthlyReport currentMonth={currentDate} transactionsData={monthlyReportData} />}
 
         {/* Search Input */}
         <div className="relative w-full sm:w-100">
