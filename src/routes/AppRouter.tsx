@@ -43,8 +43,6 @@ export const AppRouter = () => {
                         <Route path="/admin/users" element={<UsersPanelPage />} />
                         <Route path="/admin/statistics" element={<StatisticsPage />} />
                     </Route>
-
-
                 </Route>
             </Routes>
         </BrowserRouter>

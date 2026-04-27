@@ -35,6 +35,10 @@ export const ProtectedRoute = ({ adminOnly = false }: ProtectedRouteProps) => {
     return <Navigate to="/transactions/month" replace />;
   }
 
+  if (!adminOnly && role === "admin") {
+    return <Navigate to="/admin/statistics" replace />;
+  }
+
   // 4. Authorized users get to see the requested route
   return <Outlet />;
 };
