@@ -12,6 +12,7 @@ import { TransactionModal } from "../forms/TransactionModal";
 import { Logo } from "../Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
+import { AuthModal } from "../forms/AuthModal";
 
 export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: boolean }) {
     return (
@@ -34,10 +35,19 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                             <a href="#" className="text-lg font-semibold pl-8">Inicio</a>
                             <Separator />
                             <ThemeToggle description={true} />
-                            <LanguageToggle description={true}/>
+                            <LanguageToggle description={true} />
                             <Separator />
-                            <Button w-full className="mx-5">Registrarse</Button>
-                            <Button variant="outline" w-full className="mx-5">Entrar</Button>
+                            {/* MODAL PARA LOGIN */}
+                            <AuthModal
+                                defaultView="login"
+                                trigger={<Button variant="outline" size="sm" className="mx-5">Entrar</Button>}
+                            />
+
+                            {/* MODAL PARA REGISTRO */}
+                            <AuthModal
+                                defaultView="signup"
+                                trigger={<Button size="sm" className="mx-5">Registro</Button>}
+                            />
                         </>
                     ) : isAdmin ? (
                         <>
