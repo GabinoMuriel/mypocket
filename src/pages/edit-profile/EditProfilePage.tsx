@@ -25,7 +25,7 @@ export default function EditProfilePage() {
 
       <Tabs defaultValue="basic" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="basic">Información Básica</TabsTrigger>
+          <TabsTrigger value="basic" >Información Básica</TabsTrigger>
           <TabsTrigger value="password">Contraseña</TabsTrigger>
           <TabsTrigger value="avatar">Avatar</TabsTrigger>
         </TabsList>
