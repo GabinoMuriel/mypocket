@@ -16,6 +16,7 @@ export default function Navbar() {
   // Compute the boolean values based on the exact AuthState interface
   const isLogged = !!user;
   const isAdmin = role === 'admin';
+  const isPremium = role === 'premium';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -24,15 +25,24 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <MobileNav isLogged={isLogged} isAdmin={isAdmin} />
           <Logo />
+
           <nav className="hidden lg:flex ml-4">
             {isLogged ? (isAdmin ? <NavAdmin /> : <NavUser />) : null}
           </nav>
+          {isPremium && (
+            <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--premium-background)] text-[var(--premium)] border border-[var(--premium)] text-[10px] font-bold uppercase tracking-wider">
+              Premium
+            </div>)}
+          {isAdmin && (
+            <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--admin-background)] text-[var(--admin)] border border-[var(--admin)] text-[10px] font-bold uppercase tracking-wider">
+              Admin
+            </div>)}
         </div>
 
         {/* GRUPO DERECHA: Siempre al final gracias al justify-between del padre */}
         <div className="flex items-center gap-1 md:gap-2 ">
 
-          <div className="mx-1 h-4 w-px bg-border hidden sm:block" />
+          <div className="mx-1 h-4 bg-border hidden sm:block" />
 
           {isLogged ? (
             <UserAccountMenu />
@@ -54,6 +64,7 @@ export default function Navbar() {
               />
             </div>
           )}
+
         </div>
       </div>
     </header>

@@ -231,7 +231,7 @@ export default function StatisticsPage() {
       {/* Signups Graph Panel */}
       <div className="bg-card border rounded-xl p-6 shadow-sm">
         <h2 className="text-xl font-semibold mb-6">
-          Registros de usuarios por Día
+          Registros de Usuarios por Día
         </h2>
         {isLoading ? (
           <div className="h-[300px] flex items-center justify-center">

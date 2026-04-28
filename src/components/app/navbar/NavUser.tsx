@@ -84,11 +84,11 @@ export function NavUser() {
         </NavigationMenuItem>
 
         {/* Badge visual de Premium */}
-        {isPremium && (
+        {/* {isPremium && (
           <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--premium-background)] text-[var(--premium)] border border-[var(--premium)] text-[10px] font-bold uppercase tracking-wider">
             Premium
           </div>
-        )}
+        )} */}
       </NavigationMenuList>
     </NavigationMenu>
   );

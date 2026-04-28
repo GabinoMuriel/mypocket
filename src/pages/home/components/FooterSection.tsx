@@ -1,3 +1,4 @@
+import { Logo } from "@/components/app/Logo";
 import {
   InputGroup,
   InputGroupAddon,
@@ -12,19 +13,6 @@ const Link = ({ href, children, className, ...props }: any) => (
     {children}
   </a>
 );
-
-const Logo = () => {
-  return (
-    <Link href="#" className="flex items-center space-x-2">
-      <img
-        src="/assets/logos/logo_small_ts.png"
-        className="size-8 dark:invert"
-        alt="bundui logo"
-      />
-      <span className="text-2xl font-bold">MyPocket</span>
-    </Link>
-  );
-};
 
 export default function FooterSection() {
   return (
@@ -92,7 +80,7 @@ export default function FooterSection() {
         <Separator className="lg:mt-10" />
         <div className="text-muted-foreground text-center">
           <div className="text-xs">
-            &copy; {new Date().getFullYear()} Bundui. All rights reserved.
+            &copy; {new Date().getFullYear()} MyPocket. All rights reserved.
           </div>
         </div>
       </div>

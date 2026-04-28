@@ -119,7 +119,7 @@ export function UserView({
             {...register("phone")}
           />
           <FormInput
-            label="Fechade de nacimiento"
+            label="Fecha de Nacimiento"
             type="date"
             error={errors.birthdate?.message}
             {...register("birthdate")}
@@ -156,7 +156,6 @@ export function UserView({
                 >
                   <option value="user">Usuario Básico</option>
                   <option value="premium">Usuario Premium</option>
-                  <option value="admin">Administrador</option>
                 </select>
               )}
             />

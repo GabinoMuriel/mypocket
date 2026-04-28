@@ -13,7 +13,7 @@ const COLORS = {
 const styles = StyleSheet.create({
     page: { padding: 40, fontFamily: 'Helvetica', backgroundColor: '#FFFFFF' },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30, borderBottom: `2px solid ${COLORS.primary}`, paddingBottom: 10 },
-    logo: { width: 120, height: 40, objectFit: 'contain' },
+    logo: { width: 40, height: 40, objectFit: 'contain' },
     titleContainer: { alignItems: 'flex-end' },
     title: { fontSize: 24, fontWeight: 'bold', color: COLORS.primary },
     subtitle: { fontSize: 12, color: '#666666', marginTop: 4 },
@@ -62,7 +62,7 @@ export const MyDedicatedPDF = ({ data }: MyDedicatedPDFProps) => {
                     {data.logoUrl ? (
                         <Image src={data.logoUrl} style={styles.logo} />
                     ) : (
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: COLORS.primary }}>MiBolsillo</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: COLORS.primary }}>MyPocket</Text>
                     )}
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>Reporte Financiero</Text>

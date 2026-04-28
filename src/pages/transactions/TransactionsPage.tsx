@@ -186,9 +186,9 @@ export default function TransactionsPage() {
       {/* Transactions List Area */}
       <div className="pt-6 space-y-4">
         <h3 className="text-lg font-bold text-foreground ">
-          {viewMode === "day"
-            ? "Transacciones del Día"
-            : "Historial de Transacciones"}
+          {viewMode === "day" && "Transacciones del Día"}
+          {viewMode === "month" && "Transacciones del Mes"}
+          {viewMode === "year" && "Transacciones del Año"}
         </h3>
         {viewMode === "month" && <PremiumMonthlyReport currentMonth={currentDate} transactionsData={monthlyReportData} />}
 
@@ -197,7 +197,7 @@ export default function TransactionsPage() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por categoría o descripción..."
+            placeholder="Buscar por Categoría o Descripción..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

@@ -34,15 +34,9 @@ export function UserAccountMenu() {
   const profile = useAuthStore((state) => state.profile);
 
   const firstName = profile?.first_name || "Usuario";
-  const lastName = profile?.last_name || "Apellido";
   const email = user?.email || "usuario@email.com";
   const avatarUrl = profile?.avatar_url || "/assets/default_avatar.png";
-  const initial_first_name = profile?.first_name
-    ? firstName.charAt(0).toUpperCase() + "."
-    : "Usuario";
-  const initial_last_name = profile?.last_name
-    ? lastName.charAt(0).toUpperCase() + "."
-    : "";
+
 
   const { setTheme } = useTheme();
 
@@ -51,16 +45,12 @@ export function UserAccountMenu() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative h-10 w-auto flex items-center justify-start gap-2 px-2"
+          className="h-11 w-auto p-0 flex items-center justify-start"
         >
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-full w-full hover:scale-105 transition-all duration-200 ease-in-out">
             <AvatarImage src={avatarUrl} alt={`@${firstName}`} />
             <AvatarFallback>{firstName}</AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium w-7">
-            {initial_first_name}
-            {initial_last_name}
-          </span>
         </Button>
       </DropdownMenuTrigger>
 
@@ -85,7 +75,7 @@ export function UserAccountMenu() {
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
-            <span>Mi perfil</span>
+            <span>Mi Perfil</span>
           </DropdownMenuItem>
           {/* Expandable Configuration Trigger */}
           <DropdownMenuItem
@@ -93,12 +83,12 @@ export function UserAccountMenu() {
               e.preventDefault(); // Prevents the entire dropdown from closing when clicked
               setShowConfig(!showConfig);
             }}
-            className="flex items-center justify-between cursor-pointer"
+            className="cursor-pointer"
           >
-            <div className="flex items-center">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Configuración</span>
-            </div>
+
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Configuración</span>
+
             {showConfig ? (
               <ChevronUp className="h-4 w-4 text-muted-foreground" />
             ) : (
@@ -114,10 +104,28 @@ export function UserAccountMenu() {
                 Idioma
               </DropdownMenuLabel>
               <DropdownMenuItem onClick={() => console.log("Changing language to Spanish")}>
+                <img
+                  src="/assets/flags/es.svg"
+                  alt="Spanish"
+                  className="w-4 h-3"
+                />
                 <span>Español</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => console.log("Changing language to English")}>
+                <img
+                  src="/assets/flags/gb.svg"
+                  alt="Spanish"
+                  className="w-4 h-3"
+                />
                 <span>English</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => console.log("Changing language to Chinese")}>
+                <img
+                  src="/assets/flags/cn.svg"
+                  alt="Spanish"
+                  className="w-4 h-3"
+                />
+                <span>Chinese</span>
               </DropdownMenuItem>
 
               {/* Tema */}
@@ -125,15 +133,15 @@ export function UserAccountMenu() {
                 Tema
               </DropdownMenuLabel>
               <DropdownMenuItem onClick={() => setTheme("light")}>
-                <Sun className="mr-2 h-4 w-4" />
+                <Sun className="h-4 w-4" />
                 <span>Claro</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
-                <Moon className="mr-2 h-4 w-4" />
+                <Moon className="h-4 w-4" />
                 <span>Oscuro</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
-                <Monitor className="mr-2 h-4 w-4" />
+                <Monitor className="h-4 w-4" />
                 <span>Sistema</span>
               </DropdownMenuItem>
             </div>
@@ -154,7 +162,7 @@ export function UserAccountMenu() {
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Cerrar sesión</span>
+          <span>Cerrar Sesión</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -65,8 +65,7 @@ export default function UsersPanelPage() {
             Gestión de Usuarios
           </h1>
           <p className="text-muted-foreground mt-1">
-            Administra todos los usuarios registrados en la plataforma (excepto
-            los administradores).
+            Administra todos los usuarios registrados en la plataforma (excepto los administradores).
           </p>
         </div>
 
@@ -75,7 +74,7 @@ export default function UsersPanelPage() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por nombre o correo..."
+            placeholder="Buscar por Nombre o Correo..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
