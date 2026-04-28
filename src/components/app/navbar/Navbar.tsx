@@ -3,8 +3,6 @@ import { NavUser } from "./NavUser";
 import { NavAdmin } from "./NavAdmin";
 import { UserAccountMenu } from "./UserAccountMenu";
 import { MobileNav } from "./MobileNav";
-import { ThemeToggle } from "./ThemeToggle";
-import { LanguageToggle } from "./LanguageToggle";
 import { AuthModal } from "../forms/AuthModal";
 import { Logo } from "@/components/app/Logo";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -31,8 +29,6 @@ export default function Navbar() {
 
         {/* GRUPO DERECHA: Siempre al final gracias al justify-between del padre */}
         <div className="flex items-center gap-1 md:gap-2">
-          <LanguageToggle />
-          <ThemeToggle />
 
           <div className="mx-1 h-4 w-px bg-border hidden sm:block" />
 
