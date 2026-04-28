@@ -27,7 +27,7 @@ const transactionSchema = z.object({
   date: z
     .string()
     .refine((date) => !isNaN(Date.parse(date)), {
-      message: "Fecha de nacimiento inválida",
+      message: "Fecha inválida",
     })
     .or(z.literal(""))
     .optional(),
@@ -89,6 +89,7 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
         amount: Number(initialData.amount),
         description: initialData.description || "",
         category_id: initialData.category_id || "",
+        date: initialData.date ? new Date(initialData.date).toISOString().split("T")[0] : "",
       });
     } else if (!open && !initialData) {
       reset({ type: "expense", amount: 0, description: "", category_id: "" });
@@ -102,6 +103,7 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
         amount: data.amount,
         description: data.description,
         category_id: data.category_id || undefined,
+        date: data.date || new Date().toISOString(),
       };
 
       if (initialData) {

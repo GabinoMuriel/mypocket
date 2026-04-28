@@ -89,7 +89,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
           </p>
         </div>
         
-        {/* 🚀 NEW: Edit Button triggering the Modal */}
+        {/* Edit Button triggering the Modal */}
         <TransactionModal 
           initialData={transaction}
           trigger={
