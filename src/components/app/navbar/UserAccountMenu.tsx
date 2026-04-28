@@ -113,10 +113,10 @@ export function UserAccountMenu() {
               <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground">
                 Idioma
               </DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => handleLanguageChange("es")}>
+              <DropdownMenuItem onClick={() => console.log("Changing language to Spanish")}>
                 <span>Español</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLanguageChange("en")}>
+              <DropdownMenuItem onClick={() => console.log("Changing language to English")}>
                 <span>English</span>
               </DropdownMenuItem>
 
