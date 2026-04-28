@@ -45,7 +45,6 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const user = useAuthStore((state) => state.user);
   const categories = useTransactionStore((state) => state.categories);
 
   const refreshTransactions = useTransactionStore((state) => state.refreshTransactions);
@@ -97,6 +96,7 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
   }, [initialData, open, reset]);
 
   const onSubmit = async (data: TransactionFormValues) => {
+    setIsSubmitting(true);
     try {
       const payload = {
         type: data.type,
@@ -125,6 +125,8 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
 
     } catch (error) {
       console.error("Error al guardar la transacción:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

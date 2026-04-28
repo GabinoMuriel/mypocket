@@ -71,12 +71,7 @@ export default function TransactionsPage() {
 
     // Pass the formatted YYYY-MM-DD strings to the store
     fetchTransactions(format(start, "yyyy-MM-dd"), format(end, "yyyy-MM-dd"));
-  }, [
-    viewMode,
-    currentDate.getMonth(),
-    currentDate.getFullYear(),
-    fetchTransactions,
-  ]);
+  }, [viewMode, fetchTransactions, currentDate]);
 
   const activeTransactions = useMemo(() => {
     return allTransactions.filter((tx) => {
