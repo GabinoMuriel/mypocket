@@ -3,7 +3,7 @@ import { useId } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function InputError(label: string, error: string) {
+export default function InputError() {
     const id = useId();
     return (
         <div className="max-w-sm w-full *:not-first:mt-2">
