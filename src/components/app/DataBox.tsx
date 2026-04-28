@@ -27,7 +27,7 @@ export function DataBox({ transactions }: DataBoxProps) {
     }).format(amount);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
       {/* Income Card */}
       <div className="flex items-center p-4 bg-card border rounded-lg shadow-sm">
         <div className="p-3 bg-green-100 text-[var(--secondary)] rounded-full mr-4">
