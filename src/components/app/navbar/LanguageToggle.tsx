@@ -7,13 +7,17 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function LanguageToggle() {
+interface LanguageToggleProps {
+    description?: boolean;
+}
+
+export function LanguageToggle({ description = false }: LanguageToggleProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-9">
-                    <Languages className="size-4" />
-                    <span className="sr-only">Cambiar idioma</span>
+                <Button variant="ghost" size="default" className="size-9 w-auto mx-5">
+                    <Languages />
+                    {description && <span className="ml-3">Cambiar Idioma</span>}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

@@ -6,6 +6,8 @@ import { MobileNav } from "./MobileNav";
 import { AuthModal } from "../forms/AuthModal";
 import { Logo } from "@/components/app/Logo";
 import { useAuthStore } from "@/store/useAuthStore";
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageToggle } from "./LanguageToggle";
 
 export default function Navbar() {
   // Pull user and role from the Zustand store
@@ -28,14 +30,17 @@ export default function Navbar() {
         </div>
 
         {/* GRUPO DERECHA: Siempre al final gracias al justify-between del padre */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-1 md:gap-2 ">
 
           <div className="mx-1 h-4 w-px bg-border hidden sm:block" />
 
           {isLogged ? (
             <UserAccountMenu />
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hidden lg:flex">
+              <ThemeToggle />
+              <LanguageToggle />
+
               {/* MODAL PARA LOGIN */}
               <AuthModal
                 defaultView="login"

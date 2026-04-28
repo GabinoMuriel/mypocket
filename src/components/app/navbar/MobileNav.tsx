@@ -9,6 +9,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { TransactionModal } from "../forms/TransactionModal";
+import { Logo } from "../Logo";
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageToggle } from "./LanguageToggle";
 
 export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: boolean }) {
     return (
@@ -21,7 +24,7 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                 <SheetHeader>
-                    <SheetTitle className="text-left">MyPocket</SheetTitle>
+                    <SheetTitle className="text-left"><Logo /></SheetTitle>
                 </SheetHeader>
 
                 <div className="flex flex-col gap-4 py-6">
@@ -29,11 +32,12 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                     {!isLogged ? (
                         <>
                             <a href="#" className="text-lg font-semibold pl-8">Inicio</a>
-                            <a href="#" className="text-lg font-semibold text-muted-foreground pl-8">Características</a>
-                            <a href="#" className="text-lg font-semibold text-muted-foreground pl-8">Precios</a>
                             <Separator />
-                            <Button w-full >Registrarse</Button>
-                            <Button variant="outline" w-full>Entrar</Button>
+                            <ThemeToggle description={true} />
+                            <LanguageToggle description={true}/>
+                            <Separator />
+                            <Button w-full className="mx-5">Registrarse</Button>
+                            <Button variant="outline" w-full className="mx-5">Entrar</Button>
                         </>
                     ) : isAdmin ? (
                         <>
@@ -47,7 +51,7 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                                 trigger={
                                     /* We use asChild on the Modal Trigger and then asChild on the MenuLink 
                                        to ensure the final HTML is just a button with your styles */
-                                    <Button className="justify-start gap-2" size="lg">
+                                    <Button className="justify-start gap-2 mx-5" size="lg" >
                                         <PlusCircle className="size-5" /> Añadir Transacción
                                     </Button>
                                 }
