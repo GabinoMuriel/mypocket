@@ -59,8 +59,8 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                             <a href="/transactions/year" className="pl-8 text-md">Anuales</a>
                             <Separator />
                             <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">Gráficas</div>
-                            <a href="/graphs/month" className="pl-8 text-md">Diarios</a>
-                            <a href="/graphs/year" className="pl-8 text-md">Mensuales</a>
+                            <a href="/graphs/month" className="pl-8 text-md">Mensuales</a>
+                            <a href="/graphs/year" className="pl-8 text-md">Anuales</a>
                         </>
                     )}
                 </div>
