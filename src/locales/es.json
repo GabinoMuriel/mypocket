@@ -1,9 +1,119 @@
 {
+    "COMMON": {
+        "ACCEPT": "Aceptar",
+        "OK": "OK",
+        "CANCEL": "Cancelar"
+    },
     "NAVBAR" : {
         "LANGUAGES" : {
             "SPANISH" : "Español",
             "ENGLISH" : "Inglés",
             "CHINESE" : "Chino"
+        },
+        "CHANGE_LANGUAGE": "Cambiar Idioma",
+        "MOBILE_NAV": {
+            "HOME": "Inicio",
+            "LOGIN": "Entrar",
+            "REGISTER": "Registro",
+            "ADMIN_PANEL": "Panel de Admin",
+            "MANAGE_USERS": "Gestión Usuarios",
+            "STATISTICS": "Estadísticas",
+            "ADD_TRANSACTION": "Añadir Transacción",
+            "TRANSACTIONS": "Transacciones",
+            "DAILY": "Diarias",
+            "MONTHLY": "Mensuales",
+            "YEARLY": "Anuales",
+            "GRAPHS": "Gráficas"
         }
+    },
+    "HOME_PAGE": {
+        "HERO_SECTION": {
+            "BADGE": "💸 Empieza a ahorrar",
+            "TITLE": "Controla tus finanzas sin esfuerzo.",
+            "DESCRIPTION": "Gestiona tus ingresos y gastos con MyPocket. Sencillo, visual y accesible desde cualquier dispositivo.",
+            "LOGIN": "Entrar",
+            "REGISTER": "Registro"
+        },
+        "BLOG_SECTION": {
+            "HEADER_TITLE": "Tus finanzas, desde todos los ángulos",
+            "HEADER_DESCRIPTION": "Del análisis detallado en escritorio a la rapidez del móvil. Todo lo que necesitas para entender tus hábitos de gasto.",
+            "POST_1_TITLE": "Claridad financiera al instante",
+            "POST_1_DESC": "Gestiona tus ingresos y gastos con una interfaz intuitiva. Navega fácilmente entre fechas y encuentra lo que buscas con filtros avanzados.",
+            "POST_2_TITLE": "Tu dinero, a tu manera",
+            "POST_2_DESC": "Lleva MyPocket siempre contigo. Personaliza tu experiencia con temas claros u oscuros, múltiples idiomas y visualiza tus gráficos de gastos en cualquier lugar.",
+            "POST_3_TITLE": "Visualiza tus hábitos",
+            "POST_3_DESC": "Analiza tus totales y porcentajes por categoría con gráficos detallados. Controla tu panel de usuario y ajusta tu presupuesto en una interfaz limpia y profesional."
+        },
+        "FOOTER_SECTION": {
+            "SLOGAN": "Tu dinero bajo control, estés donde estés y sin complicaciones.",
+            "COPY_HOVER": "Click para copiar",
+            "COPY": "Copiar",
+            "LOCATION": "Mérida, Extremadura, España",
+            "RIGHTS": "Todos los derechos reservados."
+        }
+    },
+    "VALIDATION": {
+        "PROFILE": {
+            "FIRST_NAME_MIN": "El nombre debe tener al menos 2 caracteres",
+            "FIRST_NAME_MAX": "El nombre es demasiado largo",
+            "FIRST_NAME_REGEX": "El nombre solo puede contener letras",
+            "LAST_NAME_MIN": "El apellido debe tener al menos 2 caracteres",
+            "LAST_NAME_MAX": "El campo es demasiado largo",
+            "LAST_NAME_REGEX": "El apellido solo puede contener letras",
+            "BIRTHDATE_INVALID": "Fecha de nacimiento inválida",
+            "PHONE_INVALID": "Número de teléfono inválido (ej: +34 600123456)",
+            "ADDRESS_MIN": "La dirección debe ser más específica",
+            "ADDRESS_MAX": "La dirección es demasiado larga",
+            "ADDRESS_LETTERS": "La dirección debe contener al menos una letra",
+            "CITY_MIN": "El nombre de la ciudad es demasiado corto",
+            "CITY_REGEX": "La ciudad solo puede contener letras",
+            "POSTAL_CODE_INVALID": "El código postal debe tener 5 dígitos"
+        },
+        "TRANSACTION": {
+            "TYPE_REQUIRED": "Selecciona si es un ingreso o un gasto",
+            "AMOUNT_POSITIVE": "El monto debe ser mayor a 0",
+            "AMOUNT_DECIMALS": "Máximo 2 decimales permitidos",
+            "CATEGORY_REQUIRED": "Debes seleccionar una categoría",
+            "CATEGORY_INVALID": "Categoría inválida",
+            "DESCRIPTION_MAX": "La descripción es demasiado larga",
+            "DATE_INVALID": "Fecha inválida"
+        }
+    },
+    "TRANSACTIONS_PAGE": {
+        "TABS": {
+            "DAY": "Día",
+            "MONTH": "Mes",
+            "YEAR": "Año"
+        },
+        "HEADERS": {
+            "DAY": "Transacciones del Día",
+            "MONTH": "Transacciones del Mes",
+            "YEAR": "Transacciones del Año"
+        },
+        "SEARCH_PLACEHOLDER": "Buscar por Categoría o Descripción...",
+        "EMPTY_STATE": "No hay transacciones registradas en esta fecha."
+    },
+    "PREMIUM_PDF_GENERATOR": {
+        "TITLE_YEARLY": "Informe Anual PDF",
+        "TITLE_MONTHLY": "Informe Mensual PDF",
+        "EXCLUSIVE_REPORT": "Informe Exclusivo",
+        "UPGRADE_PROMPT": "Actualiza a Premium para generar y descargar tus informes.",
+        "LOCKED": "Bloqueado",
+        "HIDE_PREVIEW": "Ocultar Previsualización",
+        "SHOW_PREVIEW": "Previsualizar PDF",
+        "GENERATING": "Generando...",
+        "DOWNLOAD_FILE": "Descargar Archivo"
+    },
+    "PREMIUM_PDF_REPORT": {
+        "FINANCIAL_REPORT": "Reporte Financiero",
+        "TOTAL_INCOME": "Total Ingresos",
+        "TOTAL_EXPENSE": "Total Gastos",
+        "NET_BALANCE": "Balance Neto",
+        "INCOME_BREAKDOWN": "Desglose de Ingresos por Categoría",
+        "EXPENSE_BREAKDOWN": "Desglose de Gastos por Categoría",
+        "GENERATED_ON": "Generado el:"
+    },
+    "TRANSACTION_CARD": {
+        "UNCATEGORIZED": "Sin Categoría"
     }
 }

@@ -3,9 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/app/forms/AuthModal";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useTranslation } from "react-i18next";
 
 export default function HeroSection() {
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const isLogged = !!user;
 
   return (
@@ -17,18 +19,17 @@ export default function HeroSection() {
               defaultView="login"
               trigger={
                 <Badge variant="outline" className="cursor-pointer">
-                  💸 Empieza a ahorrar
+                  {t('HOME_PAGE.HERO_SECTION.BADGE')}
                   <ArrowUpRight />
                 </Badge>
               }
             />
 
             <h1 className="font-heading my-4 text-4xl text-balance md:text-5xl lg:leading-14">
-              Controla tus finanzas sin esfuerzo.
+              {t('HOME_PAGE.HERO_SECTION.TITLE')}
             </h1>
             <p className="text-muted-foreground mb-8 text-balance lg:text-lg">
-              Gestiona tus ingresos y gastos con MyPocket. Sencillo, visual y
-              accesible desde cualquier dispositivo.
+              {t('HOME_PAGE.HERO_SECTION.DESCRIPTION')}
             </p>
             {isLogged ? (
               ""
@@ -38,13 +39,13 @@ export default function HeroSection() {
                   defaultView="login"
                   trigger={
                     <Button variant="ghost" size="sm">
-                      Entrar
+                      {t('HOME_PAGE.HERO_SECTION.LOGIN')}
                     </Button>
                   }
                 />
                 <AuthModal
                   defaultView="signup"
-                  trigger={<Button size="sm">Registro</Button>}
+                  trigger={<Button size="sm">{t('HOME_PAGE.HERO_SECTION.REGISTER')}</Button>}
                 />
               </div>
             )}

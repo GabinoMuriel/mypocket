@@ -1,9 +1,119 @@
 {
+    "COMMON": {
+        "ACCEPT": "Accept",
+        "OK": "OK",
+        "CANCEL": "Cancel"
+    },
     "NAVBAR" : {
         "LANGUAGES" : {
             "SPANISH" : "Spanish",
             "ENGLISH" : "English",
             "CHINESE" : "Chinese"
+        },
+        "CHANGE_LANGUAGE": "Change Language",
+        "MOBILE_NAV": {
+            "HOME": "Home",
+            "LOGIN": "Login",
+            "REGISTER": "Register",
+            "ADMIN_PANEL": "Admin Panel",
+            "MANAGE_USERS": "Manage Users",
+            "STATISTICS": "Statistics",
+            "ADD_TRANSACTION": "Add Transaction",
+            "TRANSACTIONS": "Transactions",
+            "DAILY": "Daily",
+            "MONTHLY": "Monthly",
+            "YEARLY": "Yearly",
+            "GRAPHS": "Graphs"
         }
+    },
+    "HOME_PAGE": {
+        "HERO_SECTION": {
+            "BADGE": "💸 Start saving",
+            "TITLE": "Control your finances effortlessly.",
+            "DESCRIPTION": "Manage your income and expenses with MyPocket. Simple, visual, and accessible from any device.",
+            "LOGIN": "Login",
+            "REGISTER": "Register"
+        },
+        "BLOG_SECTION": {
+            "HEADER_TITLE": "Your finances, from all angles",
+            "HEADER_DESCRIPTION": "From detailed analysis on desktop to mobile speed. Everything you need to understand your spending habits.",
+            "POST_1_TITLE": "Instant financial clarity",
+            "POST_1_DESC": "Manage your income and expenses with an intuitive interface. Navigate easily between dates and find what you're looking for with advanced filters.",
+            "POST_2_TITLE": "Your money, your way",
+            "POST_2_DESC": "Take MyPocket always with you. Customize your experience with light or dark themes, multiple languages, and view your expense graphs anywhere.",
+            "POST_3_TITLE": "Visualize your habits",
+            "POST_3_DESC": "Analyze your totals and percentages by category with detailed graphs. Control your user panel and adjust your budget in a clean and professional interface."
+        },
+        "FOOTER_SECTION": {
+            "SLOGAN": "Your money under control, wherever you are and without complications.",
+            "COPY_HOVER": "Click to copy",
+            "COPY": "Copy",
+            "LOCATION": "Mérida, Extremadura, Spain",
+            "RIGHTS": "All rights reserved."
+        }
+    },
+    "VALIDATION": {
+        "PROFILE": {
+            "FIRST_NAME_MIN": "First name must be at least 2 characters",
+            "FIRST_NAME_MAX": "First name is too long",
+            "FIRST_NAME_REGEX": "First name can only contain letters",
+            "LAST_NAME_MIN": "Last name must be at least 2 characters",
+            "LAST_NAME_MAX": "Last name is too long",
+            "LAST_NAME_REGEX": "Last name can only contain letters",
+            "BIRTHDATE_INVALID": "Invalid birthdate",
+            "PHONE_INVALID": "Invalid phone number (e.g., +1234567890)",
+            "ADDRESS_MIN": "Address must be more specific",
+            "ADDRESS_MAX": "Address is too long",
+            "ADDRESS_LETTERS": "Address must contain at least one letter",
+            "CITY_MIN": "City name is too short",
+            "CITY_REGEX": "City can only contain letters",
+            "POSTAL_CODE_INVALID": "Postal code must be 5 digits"
+        },
+        "TRANSACTION": {
+            "TYPE_REQUIRED": "Select whether it is an income or an expense",
+            "AMOUNT_POSITIVE": "Amount must be greater than 0",
+            "AMOUNT_DECIMALS": "Maximum 2 decimals allowed",
+            "CATEGORY_REQUIRED": "You must select a category",
+            "CATEGORY_INVALID": "Invalid category",
+            "DESCRIPTION_MAX": "Description is too long",
+            "DATE_INVALID": "Invalid date"
+        }
+    },
+    "TRANSACTIONS_PAGE": {
+        "TABS": {
+            "DAY": "Day",
+            "MONTH": "Month",
+            "YEAR": "Year"
+        },
+        "HEADERS": {
+            "DAY": "Transactions of the Day",
+            "MONTH": "Transactions of the Month",
+            "YEAR": "Transactions of the Year"
+        },
+        "SEARCH_PLACEHOLDER": "Search by Category or Description...",
+        "EMPTY_STATE": "No transactions recorded on this date."
+    },
+    "PREMIUM_PDF_GENERATOR": {
+        "TITLE_YEARLY": "Yearly PDF Report",
+        "TITLE_MONTHLY": "Monthly PDF Report",
+        "EXCLUSIVE_REPORT": "Exclusive Report",
+        "UPGRADE_PROMPT": "Upgrade to Premium to generate and download your reports.",
+        "LOCKED": "Locked",
+        "HIDE_PREVIEW": "Hide Preview",
+        "SHOW_PREVIEW": "Preview PDF",
+        "GENERATING": "Generating...",
+        "DOWNLOAD_FILE": "Download File"
+    },
+    "PREMIUM_PDF_REPORT": {
+        "FINANCIAL_REPORT": "Financial Report",
+        "TOTAL_INCOME": "Total Income",
+        "TOTAL_EXPENSE": "Total Expenses",
+        "NET_BALANCE": "Net Balance",
+        "INCOME_BREAKDOWN": "Income Breakdown by Category",
+        "EXPENSE_BREAKDOWN": "Expense Breakdown by Category",
+        "GENERATED_ON": "Generated on:"
+    },
+    "TRANSACTION_CARD": {
+        "UNCATEGORIZED": "Uncategorized"
     }
 }

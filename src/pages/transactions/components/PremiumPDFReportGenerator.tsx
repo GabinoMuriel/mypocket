@@ -12,8 +12,9 @@ import {
 import { format } from "date-fns";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { PremiumPDFReport, type ReportData } from "./PremiumPDFReport";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import MiniLogoLoader from "@/components/app/MiniLogoLoader";
+import { useTranslation } from "react-i18next";
 
 interface PremiumPDFReportProps {
   currentDate: Date;
@@ -31,14 +32,17 @@ export function PremiumPDFReportGenerator({
 
   const [isOpen, setIsOpen] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "en" ? enUS : es;
 
   const isYear = viewMode === "year";
   const reportTitle = isYear
-    ? `Informe Anual PDF - ${format(currentDate, "yyyy")}`
-    : `Informe Mensual PDF - ${format(currentDate, "MMMM yyyy", { locale: es })}`;
+    ? `${t('PREMIUM_PDF_GENERATOR.TITLE_YEARLY')} - ${format(currentDate, "yyyy")}`
+    : `${t('PREMIUM_PDF_GENERATOR.TITLE_MONTHLY')} - ${format(currentDate, "MMMM yyyy", { locale: dateLocale })}`;
+  
   const downloadFileName = isYear
-    ? `MyPocket_Reporte_Anual_${format(currentDate, "yyyy")}.pdf`
-    : `MyPocket_Reporte_Mensual_${format(currentDate, "MM_yyyy")}.pdf`;
+    ? `MyPocket_Report_${format(currentDate, "yyyy")}.pdf`
+    : `MyPocket_Report_${format(currentDate, "MM_yyyy")}.pdf`;
 
   return (
     <div className="space-y-4">
@@ -67,9 +71,9 @@ export function PremiumPDFReportGenerator({
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5 text-amber-500" />
                 <div>
-                  <h4 className="font-semibold text-sm">Informe Exclusivo</h4>
+                  <h4 className="font-semibold text-sm">{t('PREMIUM_PDF_GENERATOR.EXCLUSIVE_REPORT')}</h4>
                   <p className="text-xs mt-0.5">
-                    Actualiza a Premium para generar y descargar tus informes.
+                    {t('PREMIUM_PDF_GENERATOR.UPGRADE_PROMPT')}
                   </p>
                 </div>
               </div>
@@ -77,7 +81,7 @@ export function PremiumPDFReportGenerator({
                 disabled
                 className="px-3 py-1.5 bg-amber-200 text-amber-800 rounded-md text-sm opacity-50 cursor-not-allowed"
               >
-                Bloqueado
+                {t('PREMIUM_PDF_GENERATOR.LOCKED')}
               </button>
             </div>
           ) : (
@@ -94,8 +98,8 @@ export function PremiumPDFReportGenerator({
                     <Eye className="w-4 h-4" />
                   )}
                   {showPreview
-                    ? "Ocultar Previsualización"
-                    : "Previsualizar PDF"}
+                    ? t('PREMIUM_PDF_GENERATOR.HIDE_PREVIEW')
+                    : t('PREMIUM_PDF_GENERATOR.SHOW_PREVIEW')}
                 </button>
 
                 {/* 1- Download Link with Loader and Disabled State */}
@@ -116,12 +120,12 @@ export function PremiumPDFReportGenerator({
                       {loading ? (
                         <>
                           <MiniLogoLoader className="w-4 h-4" />
-                          <span>Generando...</span>
+                          <span>{t('PREMIUM_PDF_GENERATOR.GENERATING')}</span>
                         </>
                       ) : (
                         <>
                           <Download className="w-4 h-4" />
-                          <span>Descargar Archivo</span>
+                          <span>{t('PREMIUM_PDF_GENERATOR.DOWNLOAD_FILE')}</span>
                         </>
                       )}
                     </button>

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ThemeProvider } from 'next-themes'
-import './i18n.ts';
+import './locales/i18n.ts';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

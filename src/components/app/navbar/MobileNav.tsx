@@ -13,8 +13,11 @@ import { Logo } from "../Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { AuthModal } from "../forms/AuthModal";
+import { useTranslation } from "react-i18next";
 
 export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: boolean }) {
+    const { t } = useTranslation();
+
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -32,7 +35,7 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                     {/* Lógica de links según el estado */}
                     {!isLogged ? (
                         <>
-                            <a href="#" className="text-lg font-semibold pl-8">Inicio</a>
+                            <a href="#" className="text-lg font-semibold pl-8">{t('NAVBAR.MOBILE_NAV.HOME')}</a>
                             <Separator />
                             <ThemeToggle description={true} />
                             <LanguageToggle description={true} />
@@ -40,20 +43,20 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                             {/* MODAL PARA LOGIN */}
                             <AuthModal
                                 defaultView="login"
-                                trigger={<Button variant="outline" size="sm" className="mx-5">Entrar</Button>}
+                                trigger={<Button variant="outline" size="sm" className="mx-5">{t('NAVBAR.MOBILE_NAV.LOGIN')}</Button>}
                             />
 
                             {/* MODAL PARA REGISTRO */}
                             <AuthModal
                                 defaultView="signup"
-                                trigger={<Button size="sm" className="mx-5">Registro</Button>}
+                                trigger={<Button size="sm" className="mx-5">{t('NAVBAR.MOBILE_NAV.REGISTER')}</Button>}
                             />
                         </>
                     ) : isAdmin ? (
                         <>
-                            <div className="text-xs font-bold text-primary uppercase pl-8">Admin Panel</div>
-                            <a href="/admin/users" className="text-lg font-medium pl-8">Gestión Usuarios</a>
-                            <a href="/admin/statistics" className="text-lg font-medium pl-8">Estadísticas</a>
+                            <div className="text-xs font-bold text-primary uppercase pl-8">{t('NAVBAR.MOBILE_NAV.ADMIN_PANEL')}</div>
+                            <a href="/admin/users" className="text-lg font-medium pl-8">{t('NAVBAR.MOBILE_NAV.MANAGE_USERS')}</a>
+                            <a href="/admin/statistics" className="text-lg font-medium pl-8">{t('NAVBAR.MOBILE_NAV.STATISTICS')}</a>
                         </>
                     ) : (
                         <>
@@ -62,19 +65,19 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                                     /* We use asChild on the Modal Trigger and then asChild on the MenuLink 
                                        to ensure the final HTML is just a button with your styles */
                                     <Button className="justify-start gap-2 mx-5" size="lg" >
-                                        <PlusCircle className="size-5" /> Añadir Transacción
+                                        <PlusCircle className="size-5" /> {t('NAVBAR.MOBILE_NAV.ADD_TRANSACTION')}
                                     </Button>
                                 }
                             />
                             <Separator />
-                            <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">Transacciones</div>
-                            <a href="/transactions/day" className="pl-8 text-md">Diarias</a>
-                            <a href="/transactions/month" className="pl-8 text-md">Mensuales</a>
-                            <a href="/transactions/year" className="pl-8 text-md">Anuales</a>
+                            <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">{t('NAVBAR.MOBILE_NAV.TRANSACTIONS')}</div>
+                            <a href="/transactions/day" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.DAILY')}</a>
+                            <a href="/transactions/month" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.MONTHLY')}</a>
+                            <a href="/transactions/year" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.YEARLY')}</a>
                             <Separator />
-                            <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">Gráficas</div>
-                            <a href="/graphs/month" className="pl-8 text-md">Mensuales</a>
-                            <a href="/graphs/year" className="pl-8 text-md">Anuales</a>
+                            <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">{t('NAVBAR.MOBILE_NAV.GRAPHS')}</div>
+                            <a href="/graphs/month" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.MONTHLY')}</a>
+                            <a href="/graphs/year" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.YEARLY')}</a>
                         </>
                     )}
                 </div>

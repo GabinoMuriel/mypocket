@@ -1,7 +1,8 @@
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
 import type { Transaction } from "@/services/transaction.service";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 import {
   Utensils,
   Car,
@@ -40,10 +41,12 @@ interface TransactionCardProps {
 }
 
 export function TransactionCard({ transaction }: TransactionCardProps) {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "en" ? enUS : es;
   const isIncome = transaction.type === "income";
 
   // Format the absolute amount
-  const formattedAmount = new Intl.NumberFormat("es-ES", {
+  const formattedAmount = new Intl.NumberFormat(i18n.language === "en" ? "en-US" : "es-ES", {
     style: "currency",
     currency: "EUR",
   }).format(Number(transaction.amount));
@@ -68,7 +71,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         {/* Details */}
         <div>
           <p className="font-semibold text-foreground">
-            {transaction.categories?.name || "Sin Categoría"}
+            {transaction.categories?.name || t('TRANSACTION_CARD.UNCATEGORIZED')}
           </p>
           {transaction.description && (
             <p className="text-sm text-muted-foreground line-clamp-1">
@@ -85,7 +88,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
             {isIncome ? "+" : "-"}{formattedAmount}
           </p>
           <p className="text-xs text-muted-foreground">
-            {format(new Date(transaction.date), "d MMM yyyy", { locale: es })}
+            {format(new Date(transaction.date), "d MMM yyyy", { locale: dateLocale })}
           </p>
         </div>
         

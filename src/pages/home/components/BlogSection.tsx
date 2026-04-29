@@ -1,32 +1,35 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const posts = [
-  {
-    title: "Claridad financiera al instante",
-    description: "Gestiona tus ingresos y gastos con una interfaz intuitiva. Navega fácilmente entre fechas y encuentra lo que buscas con filtros avanzados.",
-    imageSrc: "/assets/landing/pc_dark.png"
-  },
-  {
-    title: "Tu dinero, a tu manera",
-    description: "Lleva MyPocket siempre contigo. Personaliza tu experiencia con temas claros u oscuros, múltiples idiomas y visualiza tus gráficos de gastos en cualquier lugar.",
-    imageSrc: "/assets/landing/mobile.png"
-  },
-  {
-    title: "Visualiza tus hábitos",
-    description: "Analiza tus totales y porcentajes por categoría con gráficos detallados. Controla tu panel de usuario y ajusta tu presupuesto en una interfaz limpia y profesional.",
-    imageSrc: "/assets/landing/pc_light.png"
-  }
-];
+import { useTranslation } from "react-i18next";
 
 export default function BlogSection() {
+  const { t } = useTranslation();
+
+  const posts = [
+    {
+      title: t('HOME_PAGE.BLOG_SECTION.POST_1_TITLE'),
+      description: t('HOME_PAGE.BLOG_SECTION.POST_1_DESC'),
+      imageSrc: "/assets/landing/pc_dark.png"
+    },
+    {
+      title: t('HOME_PAGE.BLOG_SECTION.POST_2_TITLE'),
+      description: t('HOME_PAGE.BLOG_SECTION.POST_2_DESC'),
+      imageSrc: "/assets/landing/mobile.png"
+    },
+    {
+      title: t('HOME_PAGE.BLOG_SECTION.POST_3_TITLE'),
+      description: t('HOME_PAGE.BLOG_SECTION.POST_3_DESC'),
+      imageSrc: "/assets/landing/pc_light.png"
+    }
+  ];
+
   return (
     <section className="py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <header className="mx-auto max-w-2xl space-y-2">
-            <h2 className="font-heading text-4xl sm:text-5xl">Tus finanzas, desde todos los ángulos</h2>
+            <h2 className="font-heading text-4xl sm:text-5xl">{t('HOME_PAGE.BLOG_SECTION.HEADER_TITLE')}</h2>
             <p className="text-muted-foreground text-balance lg:text-lg">
-              Del análisis detallado en escritorio a la rapidez del móvil. Todo lo que necesitas para entender tus hábitos de gasto.
+              {t('HOME_PAGE.BLOG_SECTION.HEADER_DESCRIPTION')}
             </p>
           </header>
         </div>

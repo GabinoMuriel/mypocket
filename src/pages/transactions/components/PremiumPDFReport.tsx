@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import i18n from "@/locales/i18n";
 
 // Use the exact colors from your Tailwind configuration
 const COLORS = {
@@ -138,7 +139,7 @@ interface MyDedicatedPDFProps {
 export const PremiumPDFReport = ({ data }: MyDedicatedPDFProps) => {
   // Safe formatting function adhering to your Spanish UI rules
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("es-ES", {
+    new Intl.NumberFormat(i18n.language === "en" ? "en-US" : "es-ES", {
       style: "currency",
       currency: "EUR",
     }).format(amount);
@@ -162,7 +163,7 @@ export const PremiumPDFReport = ({ data }: MyDedicatedPDFProps) => {
             </Text>
           )}
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Reporte Financiero</Text>
+            <Text style={styles.title}>{i18n.t('PREMIUM_PDF_REPORT.FINANCIAL_REPORT')}</Text>
             <Text style={styles.subtitle}>{data.monthName}</Text>
           </View>
         </View>
@@ -170,19 +171,19 @@ export const PremiumPDFReport = ({ data }: MyDedicatedPDFProps) => {
         {/* SUMMARY CARDS: Income, Expense, Balance */}
         <View style={styles.summaryRow}>
           <View style={styles.summaryCard}>
-            <Text style={styles.cardLabel}>Total Ingresos</Text>
+            <Text style={styles.cardLabel}>{i18n.t('PREMIUM_PDF_REPORT.TOTAL_INCOME')}</Text>
             <Text style={[styles.cardValue, styles.incomeText]}>
               {formatCurrency(data.totalIncome)}
             </Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.cardLabel}>Total Gastos</Text>
+            <Text style={styles.cardLabel}>{i18n.t('PREMIUM_PDF_REPORT.TOTAL_EXPENSE')}</Text>
             <Text style={[styles.cardValue, styles.expenseText]}>
               {formatCurrency(data.totalExpense)}
             </Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.cardLabel}>Balance Neto</Text>
+            <Text style={styles.cardLabel}>{i18n.t('PREMIUM_PDF_REPORT.NET_BALANCE')}</Text>
             <Text
               style={[
                 styles.cardValue,
@@ -204,7 +205,7 @@ export const PremiumPDFReport = ({ data }: MyDedicatedPDFProps) => {
         {/* NATIVE PDF GRAPH: Income  */}
         <View style={{ marginTop: 10 }}>
           <Text style={styles.sectionTitle}>
-            Desglose de Ingresos por Categoría
+            {i18n.t('PREMIUM_PDF_REPORT.INCOME_BREAKDOWN')}
           </Text>
           {data.categories
             .filter((c) => c.type === "income")
@@ -235,7 +236,7 @@ export const PremiumPDFReport = ({ data }: MyDedicatedPDFProps) => {
         {/* NATIVE PDF GRAPH: Category Breakdown */}
         <View style={{ marginTop: 10 }}>
           <Text style={styles.sectionTitle}>
-            Desglose de Gastos por Categoría
+            {i18n.t('PREMIUM_PDF_REPORT.EXPENSE_BREAKDOWN')}
           </Text>
           {data.categories
             .filter((c) => c.type === "expense")
@@ -278,7 +279,7 @@ export const PremiumPDFReport = ({ data }: MyDedicatedPDFProps) => {
             )}
             {data.generationDate && (
               <Text style={styles.footerText}>
-                Generado el: {data.generationDate}
+                {i18n.t('PREMIUM_PDF_REPORT.GENERATED_ON')} {data.generationDate}
               </Text>
             )}
           </View>

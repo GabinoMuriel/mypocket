@@ -24,7 +24,7 @@ export function LanguageToggle({ description = false }: LanguageToggleProps) {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="default" className="size-9 w-auto">
                     <Languages />
-                    {description && <span className="ml-3">Cambiar Idioma</span>}
+                    {description && <span className="ml-3">{t('NAVBAR.CHANGE_LANGUAGE')}</span>}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

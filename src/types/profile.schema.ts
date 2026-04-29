@@ -1,4 +1,5 @@
 import { z } from "zod";
+import i18n from "@/locales/i18n";
 
 /**
  * Zod schema for Profile validation.
@@ -7,17 +8,17 @@ import { z } from "zod";
 export const profileSchema = z.object({
   first_name: z
     .string()
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(50, "El nombre es demasiado largo")
-    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, "El nombre solo puede contener letras"),
+    .min(2, i18n.t("VALIDATION.PROFILE.FIRST_NAME_MIN"))
+    .max(50, i18n.t("VALIDATION.PROFILE.FIRST_NAME_MAX"))
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, i18n.t("VALIDATION.PROFILE.FIRST_NAME_REGEX")),
 
   last_name: z
     .string()
-    .min(2, "El apellidodebe tener al menos 2 caracteres")
-    .max(100, "El campo es demasiado largo")
+    .min(2, i18n.t("VALIDATION.PROFILE.LAST_NAME_MIN"))
+    .max(100, i18n.t("VALIDATION.PROFILE.LAST_NAME_MAX"))
     .regex(
       /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/,
-      "El apellido solo puede contener letras",
+      i18n.t("VALIDATION.PROFILE.LAST_NAME_REGEX"),
     )
     .or(z.literal(""))
     .optional(),
@@ -25,37 +26,37 @@ export const profileSchema = z.object({
   birthdate: z
     .string()
     .refine((date) => !isNaN(Date.parse(date)), {
-      message: "Fecha de nacimiento inválida",
+      message: i18n.t("VALIDATION.PROFILE.BIRTHDATE_INVALID"),
     })
     .or(z.literal(""))
     .optional(),
 
   phone: z
     .string()
-    .regex(/^\+?[0-9]{9,15}$/, "Número de teléfono inválido (ej: 600123456)")
+    .regex(/^\+?[0-9]{9,15}$/, i18n.t("VALIDATION.PROFILE.PHONE_INVALID"))
     .or(z.literal(""))
     .optional(),
 
   address: z
     .string()
-    .min(5, "La dirección debe ser más específica")
-    .max(200, "La dirección es demasiado larga")
+    .min(5, i18n.t("VALIDATION.PROFILE.ADDRESS_MIN"))
+    .max(200, i18n.t("VALIDATION.PROFILE.ADDRESS_MAX"))
     .refine((val) => /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(val), {
-      message: "La dirección debe contener al menos una letra",
+      message: i18n.t("VALIDATION.PROFILE.ADDRESS_LETTERS"),
     })
     .or(z.literal(""))
     .optional(),
 
   city: z
     .string()
-    .min(2, "El nombre de la ciudad es demasiado corto")
-    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/, "La ciudad solo puede contener letras")
+    .min(2, i18n.t("VALIDATION.PROFILE.CITY_MIN"))
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/, i18n.t("VALIDATION.PROFILE.CITY_REGEX"))
     .or(z.literal(""))
     .optional(),
 
   postal_code: z
     .string()
-    .regex(/^[0-9]{5}$/, "El código postal debe tener 5 dígitos")
+    .regex(/^[0-9]{5}$/, i18n.t("VALIDATION.PROFILE.POSTAL_CODE_INVALID"))
     .or(z.literal(""))
     .optional(),
 

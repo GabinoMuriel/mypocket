@@ -1,4 +1,5 @@
 import { z } from "zod";
+import i18n from "@/locales/i18n";
 
 export const TRANSACTION_TYPES = ["income", "expense"] as const;
 
@@ -12,30 +13,30 @@ export const transactionSchema = z.object({
   type: z
     .enum(TRANSACTION_TYPES)
     .refine((val) => val !== undefined, {
-      message: "Selecciona si es un ingreso o un gasto",
+      message: i18n.t("VALIDATION.TRANSACTION.TYPE_REQUIRED"),
     })
     .default("expense"),
 
   amount: z.coerce
     .number()
-    .positive("El monto debe ser mayor a 0")
-    .refine(currencyValidation, "Máximo 2 decimales permitidos"),
+    .positive(i18n.t("VALIDATION.TRANSACTION.AMOUNT_POSITIVE"))
+    .refine(currencyValidation, i18n.t("VALIDATION.TRANSACTION.AMOUNT_DECIMALS")),
 
   category_id: z
     .string()
-    .min(1, "Debes seleccionar una categoría")
-    .uuid("Categoría inválida"),
+    .min(1, i18n.t("VALIDATION.TRANSACTION.CATEGORY_REQUIRED"))
+    .uuid(i18n.t("VALIDATION.TRANSACTION.CATEGORY_INVALID")),
 
   description: z
     .string()
-    .max(100, "La descripción es demasiado larga")
+    .max(100, i18n.t("VALIDATION.TRANSACTION.DESCRIPTION_MAX"))
     .optional()
     .or(z.literal("")),
 
   date: z
     .string()
     .refine((date) => !isNaN(Date.parse(date)), {
-      message: "Fecha inválida",
+      message: i18n.t("VALIDATION.TRANSACTION.DATE_INVALID"),
     })
     .default(() => new Date().toISOString().split("T")[0]),
 });

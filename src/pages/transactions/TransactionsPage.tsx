@@ -26,8 +26,9 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
 import { PremiumPDFReportGenerator } from "./components/PremiumPDFReportGenerator";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useTranslation } from "react-i18next";
 
 export default function TransactionsPage() {
   const { period } = useParams();
@@ -42,6 +43,9 @@ export default function TransactionsPage() {
         return `${first}***${domain}`;
       })
     : null;
+
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "en" ? enUS : es;
 
   const fetchTransactions = useTransactionStore(
     (state) => state.fetchTransactions,
@@ -147,7 +151,7 @@ export default function TransactionsPage() {
     // 4. Create a dynamic label for the PDF subtitle ("Mayo 2026" vs "2026")
     const periodLabel =
       viewMode === "month"
-        ? format(currentDate, "MMMM yyyy", { locale: es }).replace(/^\w/, (c) =>
+        ? format(currentDate, "MMMM yyyy", { locale: dateLocale }).replace(/^\w/, (c) =>
             c.toUpperCase(),
           )
         : format(currentDate, "yyyy");
@@ -172,11 +176,12 @@ export default function TransactionsPage() {
       })),
       logoUrl: "/assets/logos/logo_small_ts.png",
       userEmail: userEmailForPDF || "user@mypocket.app",
-      generationDate: format(new Date(), "dd 'de' MMMM, yyyy - HH:mm", {
-        locale: es,
+      generationDate: format(new Date(), 
+        i18n.language === 'en' ? "MMMM do, yyyy - HH:mm" : "dd 'de' MMMM, yyyy - HH:mm", {
+        locale: dateLocale,
       }),
     };
-  }, [allTransactions, currentDate, viewMode, userEmailForPDF]);
+  }, [allTransactions, currentDate, viewMode, userEmailForPDF, i18n.language, dateLocale]);
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
@@ -186,19 +191,19 @@ export default function TransactionsPage() {
           variant={viewMode === "day" ? "default" : "outline"}
           onClick={() => handleViewChange("day")}
         >
-          Día
+          {t('TRANSACTIONS_PAGE.TABS.DAY')}
         </Button>
         <Button
           variant={viewMode === "month" ? "default" : "outline"}
           onClick={() => handleViewChange("month")}
         >
-          Mes
+          {t('TRANSACTIONS_PAGE.TABS.MONTH')}
         </Button>
         <Button
           variant={viewMode === "year" ? "default" : "outline"}
           onClick={() => handleViewChange("year")}
         >
-          Año
+          {t('TRANSACTIONS_PAGE.TABS.YEAR')}
         </Button>
       </div>
 
@@ -216,9 +221,9 @@ export default function TransactionsPage() {
       {/* Transactions List Area */}
       <div className="pt-6 space-y-4">
         <h3 className="text-lg font-bold text-foreground ">
-          {viewMode === "day" && "Transacciones del Día"}
-          {viewMode === "month" && "Transacciones del Mes"}
-          {viewMode === "year" && "Transacciones del Año"}
+          {viewMode === "day" && t('TRANSACTIONS_PAGE.HEADERS.DAY')}
+          {viewMode === "month" && t('TRANSACTIONS_PAGE.HEADERS.MONTH')}
+          {viewMode === "year" && t('TRANSACTIONS_PAGE.HEADERS.YEAR')}
         </h3>
         {premiumReportData && (
           <div className="mt-6">
@@ -235,7 +240,7 @@ export default function TransactionsPage() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por Categoría o Descripción..."
+            placeholder={t('TRANSACTIONS_PAGE.SEARCH_PLACEHOLDER')}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -245,7 +250,7 @@ export default function TransactionsPage() {
         {activeTransactions.length === 0 ? (
           <div className="text-center py-10 bg-card border rounded-lg border-dashed">
             <p className="text-muted-foreground">
-              No hay transacciones registradas en esta fecha.
+              {t('TRANSACTIONS_PAGE.EMPTY_STATE')}
             </p>
           </div>
         ) : (
