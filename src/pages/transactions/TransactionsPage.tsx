@@ -25,8 +25,9 @@ import { FloatingAddButton } from "./components/FloatingAddButton";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
-import { PremiumMonthlyReport } from "./components/PremiumMonthlyReport";
+import { PremiumPDFReportGenerator } from "./components/PremiumPDFReportGenerator";
 import { es } from "date-fns/locale";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function TransactionsPage() {
   const { period } = useParams();
@@ -34,6 +35,13 @@ export default function TransactionsPage() {
   const viewMode = period === "day" || period === "year" ? period : "month";
   const [currentDate, setCurrentDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState("");
+
+  const userEmail = useAuthStore((state) => state.user?.email);
+  const userEmailForPDF = userEmail
+    ? userEmail.replace(/^(...)(.*)(@.*)$/, (_, first, middle, domain) => {
+        return `${first}***${domain}`;
+      })
+    : null;
 
   const fetchTransactions = useTransactionStore(
     (state) => state.fetchTransactions,
@@ -78,15 +86,17 @@ export default function TransactionsPage() {
       // 1. Check Date Range
       const txDate = new Date(tx.date);
       let matchesDate = false;
-      if (viewMode === 'day') matchesDate = isSameDay(txDate, currentDate);
-      else if (viewMode === 'month') matchesDate = isSameMonth(txDate, currentDate);
+      if (viewMode === "day") matchesDate = isSameDay(txDate, currentDate);
+      else if (viewMode === "month")
+        matchesDate = isSameMonth(txDate, currentDate);
       else matchesDate = isSameYear(txDate, currentDate);
 
       // 2. Check Search String
       const searchLower = searchTerm.toLowerCase();
-      const matchesSearch = !searchTerm ||
-        (tx.description?.toLowerCase().includes(searchLower)) ||
-        (tx.categories?.name.toLowerCase().includes(searchLower));
+      const matchesSearch =
+        !searchTerm ||
+        tx.description?.toLowerCase().includes(searchLower) ||
+        tx.categories?.name.toLowerCase().includes(searchLower);
 
       return matchesDate && matchesSearch;
     });
@@ -96,59 +106,77 @@ export default function TransactionsPage() {
     navigate(`/transactions/${newMode}`);
   };
 
-  const monthlyReportData = useMemo(() => {
-    // 1. Force filter all transactions strictly for the current month
-    const monthlyTxs = allTransactions.filter((tx) =>
-      isSameMonth(new Date(tx.date), currentDate)
-    );
+  const premiumReportData = useMemo(() => {
+    // 1. If we are in "day" view, we don't need to calculate the PDF data
+    if (viewMode === "day") return null;
 
-    // 2. Initialize aggregators
+    // 2. Dynamically filter by Month OR Year
+    const filteredTxs = allTransactions.filter((tx) => {
+      const txDate = new Date(tx.date);
+      if (viewMode === "month") return isSameMonth(txDate, currentDate);
+      if (viewMode === "year") return isSameYear(txDate, currentDate);
+      return false;
+    });
+
     let totalIncome = 0;
     let totalExpense = 0;
     const categoryMap = new Map();
 
-    // 3. Calculate totals and group by category AND type
-    monthlyTxs.forEach((tx) => {
+    // 3. Calculate totals using the composite key we fixed earlier
+    filteredTxs.forEach((tx) => {
       const amount = Number(tx.amount);
       const catName = tx.categories?.name || "Other";
 
-      if (tx.type === "income") {
-        totalIncome += amount;
-      } else {
-        totalExpense += amount;
-      }
+      if (tx.type === "income") totalIncome += amount;
+      else totalExpense += amount;
 
-      // FIX: Create a unique key merging type and category name
       const uniqueKey = `${tx.type}-${catName}`;
-
-      const existing = categoryMap.get(uniqueKey) || { amount: 0, type: tx.type, name: catName };
+      const existing = categoryMap.get(uniqueKey) || {
+        amount: 0,
+        type: tx.type,
+        name: catName,
+      };
 
       categoryMap.set(uniqueKey, {
         amount: existing.amount + amount,
         type: tx.type,
-        name: catName // We store the clean name here to use it later
+        name: catName,
       });
     });
 
-    // 4. Return the exact structure expected by MyDedicatedPDF
+    // 4. Create a dynamic label for the PDF subtitle ("Mayo 2026" vs "2026")
+    const periodLabel =
+      viewMode === "month"
+        ? format(currentDate, "MMMM yyyy", { locale: es }).replace(/^\w/, (c) =>
+            c.toUpperCase(),
+          )
+        : format(currentDate, "yyyy");
+
     return {
-      monthName: format(currentDate, "MMMM yyyy", { locale: es }).replace(/^\w/, c => c.toUpperCase()),
+      monthName: periodLabel, // The PDF interface calls this 'monthName', but it accepts any string!
       totalIncome,
       totalExpense,
       balance: totalIncome - totalExpense,
-
-      // FIX: We now map over categoryMap.values() instead of entries()
       categories: Array.from(categoryMap.values()).map((data) => ({
         name: data.name,
         amount: data.amount,
         type: data.type,
-        percentage: data.type === "income"
-          ? (totalIncome > 0 ? (data.amount / totalIncome) * 100 : 0)
-          : (totalExpense > 0 ? (data.amount / totalExpense) * 100 : 0),
+        percentage:
+          data.type === "income"
+            ? totalIncome > 0
+              ? (data.amount / totalIncome) * 100
+              : 0
+            : totalExpense > 0
+              ? (data.amount / totalExpense) * 100
+              : 0,
       })),
-      logoUrl: "/assets/logos/logo_small_ts.png"
+      logoUrl: "/assets/logos/logo_small_ts.png",
+      userEmail: userEmailForPDF || "user@mypocket.app",
+      generationDate: format(new Date(), "dd 'de' MMMM, yyyy - HH:mm", {
+        locale: es,
+      }),
     };
-  }, [allTransactions, currentDate]);
+  }, [allTransactions, currentDate, viewMode, userEmailForPDF]);
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
@@ -179,7 +207,9 @@ export default function TransactionsPage() {
         currentDate={currentDate}
         viewMode={viewMode}
         onPrev={handlePrev}
-        onNext={handleNext} onReset={() => setCurrentDate(new Date())} />
+        onNext={handleNext}
+        onReset={() => setCurrentDate(new Date())}
+      />
 
       <DataBox transactions={activeTransactions} />
 
@@ -190,7 +220,15 @@ export default function TransactionsPage() {
           {viewMode === "month" && "Transacciones del Mes"}
           {viewMode === "year" && "Transacciones del Año"}
         </h3>
-        {viewMode === "month" && <PremiumMonthlyReport currentMonth={currentDate} transactionsData={monthlyReportData} />}
+        {premiumReportData && (
+          <div className="mt-6">
+            <PremiumPDFReportGenerator
+              currentDate={currentDate}
+              transactionsData={premiumReportData}
+              viewMode={viewMode as "month" | "year"}
+            />
+          </div>
+        )}
 
         {/* Search Input */}
         <div className="relative w-full sm:w-100">
