@@ -118,7 +118,12 @@ export default function UsersPanelPage() {
                 return (
                   <tr
                     key={user.id}
-                    className="hover:bg-muted/50 transition-colors cursor-pointer"
+                    className={`
+                        transition-colors
+                        ${isAdmin
+                        ? 'cursor-not-allowed opacity-80'
+                        : 'cursor-pointer hover:bg-muted/50'}
+                    `}
                     onClick={() => setSelectedUser(user)}
                   >
                     <td className="px-6 py-4">

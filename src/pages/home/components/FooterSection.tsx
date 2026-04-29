@@ -1,81 +1,69 @@
 import { Logo } from "@/components/app/Logo";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
-import { SendIcon } from "lucide-react";
+import { Mail, MapPin, Check } from "lucide-react";
+import { useState } from "react";
 
 export default function FooterSection() {
+  const [copied, setCopied] = useState(false);
+  const email = "hola@mypocket.com"; // Cambia esto por tu correo real
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <footer className="py-12">
-      <div className="container mx-auto space-y-6 px-4">
-        <div className="grid gap-8 md:grid-cols-4">
-          <div className="space-y-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <Separator className="mb-6" />
+
+        {/* Cambiado: Padding responsivo (lg:px-20) y alineación adaptable (items-center a items-start) */}
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 mb-10 lg:px-20">
+
+          {/* Logo y Eslogan */}
+          {/* Cambiado: Centrado en móvil, alineado a la izquierda en desktop */}
+          <div className="flex flex-col items-center md:items-start space-y-3 text-center md:text-left">
             <Logo />
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-sm max-w-[250px]">
               Tu dinero bajo control, estés donde estés y sin complicaciones.
             </p>
           </div>
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Programs</h3>
-            <ul className="[&_li_a]:text-muted-foreground [&_li_a]:hover:text-foreground space-y-2 [&_li_a]:block [&_li_a]:text-sm [&_li_a]:transition-colors [&_li_a]:hover:underline">
-              <li>
-                <a href="/programs">Strength Training</a>
-              </li>
-              <li>
-                <a href="/programs">HIIT Classes</a>
-              </li>
-              <li>
-                <a href="/programs">Yoga & Wellness</a>
-              </li>
-              <li>
-                <a href="/programs">Personal Training</a>
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Company</h3>
-            <ul className="[&_li_a]:text-muted-foreground [&_li_a]:hover:text-foreground space-y-2 [&_li_a]:block [&_li_a]:text-sm [&_li_a]:transition-colors [&_li_a]:hover:underline">
-              <li>
-                <a href="/about">About Us</a>
-              </li>
-              <li>
-                <a href="/trainers">Our Trainers</a>
-              </li>
-              <li>
-                <a href="/membership">Membership</a>
-              </li>
-              <li>
-                <a href="/contact">Contact</a>
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Newsletter</h3>
-            <p className="text-muted-foreground text-sm">
-              Stay updated with fitness tips and offers.
-            </p>
-            <div className="flex space-x-2">
-              <InputGroup>
-                <InputGroupInput type="email" placeholder="Your email" />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton variant="secondary">
-                    <span className="hidden lg:inline">Subscribe</span>
-                    <SendIcon className="inline lg:hidden" />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+
+          {/* Contacto Minimalista */}
+          {/* Cambiado: Alineación adaptable para los items de contacto */}
+          <div className="flex flex-col items-center md:items-start gap-4 text-sm text-muted-foreground">
+            {/* Email con Copiar */}
+            <button
+              onClick={copyToClipboard}
+              className="flex items-center gap-2 hover:text-foreground transition-colors group"
+              title="Click para copiar"
+            >
+              <Mail size={16} />
+              <span>{email}</span>
+              <div className="w-12 flex items-center justify-start">
+    {copied ? (
+      <Check size={20} className="text-[var(--primary)]" />
+    ) : (
+      <span className="text-[10px] opacity-0 group-hover:opacity-100 bg-[var(--primary)] text-[var(--background)] px-2 py-0.5 rounded transition-opacity">
+        Copiar
+      </span>
+    )}
+  </div>
+            </button>
+
+            {/* Dirección */}
+            <div className="flex items-center gap-2">
+              <MapPin size={16} />
+              <span>Mérida, Extremadura, España</span>
             </div>
           </div>
         </div>
-        <Separator className="lg:mt-10" />
+
         <div className="text-muted-foreground text-center">
-          <div className="text-xs">
-            &copy; {new Date().getFullYear()} MyPocket. All rights reserved.
-          </div>
+          <p className="text-xs">
+            &copy; {new Date().getFullYear()} MyPocket. Todos los derechos reservados.
+          </p>
         </div>
       </div>
     </footer>
