@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { adminService, type AdminUserProfile } from "@/services/admin.service";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { Shield, User as UserIcon, Loader2, Search, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { UserView } from "./components/UserView";
 import LogoLoader from "@/components/app/LogoLoader";
+import { useTranslation } from "react-i18next";
 
 export default function UsersPanelPage() {
   const [users, setUsers] = useState<AdminUserProfile[]>([]);
@@ -18,6 +19,8 @@ export default function UsersPanelPage() {
     null,
   );
 
+  const { t, i18n } = useTranslation();
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -28,7 +31,7 @@ export default function UsersPanelPage() {
       const data = await adminService.getAllUsers();
       setUsers(data);
     } catch (err: any) {
-      setError("Error al cargar la lista de usuarios.");
+      setError(t('ADMIN_USERS_PANEL.PAGE.ERROR_LOADING'));
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -61,10 +64,10 @@ export default function UsersPanelPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground">
-            Gestión de Usuarios
+            {t('ADMIN_USERS_PANEL.PAGE.TITLE')}
           </h1>
           <p className="text-muted-foreground mt-1">
-            Administra todos los usuarios registrados en la plataforma (excepto los administradores).
+            {t('ADMIN_USERS_PANEL.PAGE.DESCRIPTION')}
           </p>
         </div>
 
@@ -73,7 +76,7 @@ export default function UsersPanelPage() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por Nombre o Correo..."
+            placeholder={t('ADMIN_USERS_PANEL.PAGE.SEARCH_PLACEHOLDER')}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -86,10 +89,10 @@ export default function UsersPanelPage() {
           <table className="w-full text-sm text-left">
             <thead className="bg-muted text-muted-foreground text-xs uppercase">
               <tr>
-                <th className="px-6 py-4 font-medium">Usuario</th>
-                <th className="px-6 py-4 font-medium">Contacto</th>
-                <th className="px-6 py-4 font-medium">Fecha de Registro</th>
-                <th className="px-6 py-4 font-medium text-center">Rol</th>
+                <th className="px-6 py-4 font-medium">{t('ADMIN_USERS_PANEL.PAGE.TABLE_HEADERS.USER')}</th>
+                <th className="px-6 py-4 font-medium">{t('ADMIN_USERS_PANEL.PAGE.TABLE_HEADERS.CONTACT')}</th>
+                <th className="px-6 py-4 font-medium">{t('ADMIN_USERS_PANEL.PAGE.TABLE_HEADERS.REGISTRATION_DATE')}</th>
+                <th className="px-6 py-4 font-medium text-center">{t('ADMIN_USERS_PANEL.PAGE.TABLE_HEADERS.ROLE')}</th>
               </tr>
             </thead>
             <tbody className="divide-y border-t">
@@ -99,18 +102,18 @@ export default function UsersPanelPage() {
 
                 const roleConfig = isAdmin
                   ? {
-                    label: "Admin",
+                    label: t('ADMIN_USERS_PANEL.PAGE.ROLES.ADMIN'),
                     icon: <Shield className="w-3.5 h-3.5" />,
                     var: "admin",
                   }
                   : isPremium
                     ? {
-                      label: "Premium",
+                      label: t('ADMIN_USERS_PANEL.PAGE.ROLES.PREMIUM'),
                       icon: <Star className="w-3.5 h-3.5" />,
                       var: "premium",
                     }
                     : {
-                      label: "Usuario",
+                      label: t('ADMIN_USERS_PANEL.PAGE.ROLES.USER'),
                       icon: <UserIcon className="w-3.5 h-3.5" />,
                       var: "user",
                     };
@@ -130,7 +133,7 @@ export default function UsersPanelPage() {
                       <div className="font-medium text-foreground">
                         {user.first_name || user.last_name
                           ? `${user.first_name || ""} ${user.last_name || ""}`.trim()
-                          : "Usuario sin nombre"}
+                          : t('ADMIN_USERS_PANEL.PAGE.EMPTY_STATES.NO_NAME')}
                       </div>
                       <div className="text-xs text-muted-foreground truncate w-48 mt-0.5">
                         ID: {user.id}
@@ -142,13 +145,13 @@ export default function UsersPanelPage() {
                         {user.email}
                       </div>
                       <div className="text-xs">
-                        {user.phone || "Sin teléfono"}
+                        {user.phone || t('ADMIN_USERS_PANEL.PAGE.EMPTY_STATES.NO_PHONE')}
                       </div>
                     </td>
 
                     <td className="px-6 py-4 text-muted-foreground">
                       {format(new Date(user.created_at), "d MMM yyyy", {
-                        locale: es,
+                        locale: i18n.language === "en" ? enUS : es,
                       })}
                     </td>
 

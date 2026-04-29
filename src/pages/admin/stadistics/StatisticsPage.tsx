@@ -16,11 +16,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { DateNavigator } from "@/components/app/DateNavigator";
+import { useTranslation } from "react-i18next";
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<GlobalStatistics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [loginData, setLoginData] = useState<DailyStat[]>([]);
@@ -35,14 +37,14 @@ export default function StatisticsPage() {
         const data = await adminService.getGlobalStatistics();
         setStats(data);
       } catch (err: unknown) {
-        setError("Error al cargar las estadísticas globales.");
+        setError(t('ADMIN_STATISTICS_PAGE.ERRORS.LOAD_GLOBAL'));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchStats();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -84,7 +86,7 @@ export default function StatisticsPage() {
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         <div className="text-center text-red-600 p-4 bg-red-50 rounded-lg border border-red-200">
-          {error || "Datos no disponibles."}
+          {error || t('ADMIN_STATISTICS_PAGE.ERRORS.NO_DATA')}
         </div>
       </div>
     );
@@ -94,10 +96,10 @@ export default function StatisticsPage() {
     <div className="max-w-6xl mx-auto py-8 px-4 space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">
-          Estadísticas Globales
+          {t('ADMIN_STATISTICS_PAGE.TITLE')}
         </h1>
         <p className="text-muted-foreground mt-1 mb-6">
-          Visión general del rendimiento y uso de la plataforma MyPocket.
+          {t('ADMIN_STATISTICS_PAGE.DESCRIPTION')}
         </p>
         <DateNavigator
           currentDate={currentDate}
@@ -117,7 +119,7 @@ export default function StatisticsPage() {
             <Users className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Total</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('ADMIN_STATISTICS_PAGE.CARDS.TOTAL')}</p>
             <h3 className="text-3xl font-bold text-foreground">
               {stats.totalUsers}
             </h3>
@@ -129,7 +131,7 @@ export default function StatisticsPage() {
             <Users className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Normal</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('ADMIN_STATISTICS_PAGE.CARDS.NORMAL')}</p>
             <h3 className="text-3xl font-bold text-foreground">
               {stats.totalNormalUsers}
             </h3>
@@ -140,7 +142,7 @@ export default function StatisticsPage() {
             <Users className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Premium</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('ADMIN_STATISTICS_PAGE.CARDS.PREMIUM')}</p>
             <h3 className="text-3xl font-bold text-foreground">
               {stats.totalPremiumUsers}
             </h3>
@@ -151,8 +153,8 @@ export default function StatisticsPage() {
             <Users className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Administradores
+            <p className="text-sm font-medium text-muted-foreground text-wrap">
+              {t('ADMIN_STATISTICS_PAGE.CARDS.ADMINS')}
             </p>
             <h3 className="text-3xl font-bold text-foreground">
               {stats.totalAdminUsers}
@@ -164,7 +166,7 @@ export default function StatisticsPage() {
       {/* Unique Logins Graph Panel */}
       <div className="bg-card border rounded-xl p-6 shadow-sm">
         <h2 className="text-xl font-semibold mb-6">
-          Inicios de Sesión Únicos por Día
+          {t('ADMIN_STATISTICS_PAGE.GRAPHS.LOGINS.TITLE')}
         </h2>
 
         {isLoading ? (
@@ -173,7 +175,7 @@ export default function StatisticsPage() {
           </div>
         ) : loginData.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No hay datos registrados para este mes.
+            {t('ADMIN_STATISTICS_PAGE.GRAPHS.EMPTY_STATE')}
           </div>
         ) : (
           <div className="h-[300px] w-full">
@@ -211,12 +213,12 @@ export default function StatisticsPage() {
                     border: "none",
                     boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                   }}
-                  labelFormatter={(label) => `Fecha: ${label}`}
+                  labelFormatter={(label) => `${t('ADMIN_STATISTICS_PAGE.GRAPHS.TOOLTIP_DATE')}: ${label}`}
                 />
                 <Line
                   type="monotone"
                   dataKey="unique_logins"
-                  name="Usuarios Únicos"
+                  name={t('ADMIN_STATISTICS_PAGE.GRAPHS.LOGINS.LEGEND')}
                   stroke="var(--admin)" // A nice violet color matching your admin badges
                   strokeWidth={3}
                   dot={{ r: 4, strokeWidth: 2 }}
@@ -231,7 +233,7 @@ export default function StatisticsPage() {
       {/* Signups Graph Panel */}
       <div className="bg-card border rounded-xl p-6 shadow-sm">
         <h2 className="text-xl font-semibold mb-6">
-          Registros de Usuarios por Día
+          {t('ADMIN_STATISTICS_PAGE.GRAPHS.SIGNUPS.TITLE')}
         </h2>
         {isLoading ? (
           <div className="h-[300px] flex items-center justify-center">
@@ -239,7 +241,7 @@ export default function StatisticsPage() {
           </div>
         ) : signupData.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No hay datos registrados para este mes.
+            {t('ADMIN_STATISTICS_PAGE.GRAPHS.EMPTY_STATE')}
           </div>
         ) : (
           <div className="h-[300px] w-full">
@@ -277,12 +279,12 @@ export default function StatisticsPage() {
                     border: "none",
                     boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                   }}
-                  labelFormatter={(label) => `Fecha: ${label}`}
+                  labelFormatter={(label) => `${t('ADMIN_STATISTICS_PAGE.GRAPHS.TOOLTIP_DATE')}: ${label}`}
                 />
                 <Line
                   type="monotone"
                   dataKey="new_signups"
-                  name="Registros"
+                  name={t('ADMIN_STATISTICS_PAGE.GRAPHS.SIGNUPS.LEGEND')}
                   stroke="var(--admin)" // A nice violet color matching your admin badges
                   strokeWidth={3}
                   dot={{ r: 4, strokeWidth: 2 }}

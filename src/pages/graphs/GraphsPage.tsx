@@ -32,10 +32,12 @@ import type {
 import { FloatingAddButton } from "../transactions/components/FloatingAddButton";
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
 import { DataBox } from "@/components/app/DataBox";
+import { useTranslation } from "react-i18next";
 
 export default function GraphsPage() {
   const { period } = useParams();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   // 1. Restrict viewMode to ONLY month or year
   const viewMode = period === "year" ? "year" : "month";
@@ -91,12 +93,12 @@ export default function GraphsPage() {
     let totalExp = 0;
     let totalInc = 0;
 
-    activeTransactions.forEach((t) => {
-      const amount = Number(t.amount);
-      const catName = t.categories?.name || "Otros";
-      const color = t.categories?.color || "#8884d8"; // Fallback color
+    activeTransactions.forEach((tx) => {
+      const amount = Number(tx.amount);
+      const catName = tx.categories?.name || t('GRAPHS_PAGE.CATEGORIES.OTHERS');
+      const color = tx.categories?.color || "#8884d8"; // Fallback color
 
-      if (t.type === "expense") {
+      if (tx.type === "expense") {
         totalExp += amount;
         if (!expenses[catName])
           expenses[catName] = { name: catName, value: 0, color: color };
@@ -113,18 +115,18 @@ export default function GraphsPage() {
       expensesData: Object.values(expenses),
       incomesData: Object.values(incomes),
       totalsData: [
-        { name: "Gastos", value: totalExp, color: "#ef4444" }, // Tailwind red-500
-        { name: "Ingresos", value: totalInc, color: "#22c55e" }, // Tailwind green-500
+        { name: t('GRAPHS_PAGE.CATEGORIES.EXPENSES'), value: totalExp, color: "#ef4444" }, // Tailwind red-500
+        { name: t('GRAPHS_PAGE.CATEGORIES.INCOMES'), value: totalInc, color: "#22c55e" }, // Tailwind green-500
       ],
     };
-  }, [activeTransactions]);
+  }, [activeTransactions, t]);
 
   // Custom Formatter for the Tooltip
   const formatCurrency: Formatter<ValueType, NameType> = (value, name) => {
     const numericValue = typeof value === "number" ? value : Number(value) || 0;
 
     return [
-      new Intl.NumberFormat("es-ES", {
+      new Intl.NumberFormat(i18n.language === "en" ? "en-US" : "es-ES", {
         style: "currency",
         currency: "EUR",
       }).format(numericValue),
@@ -147,13 +149,13 @@ export default function GraphsPage() {
           variant={viewMode === "month" ? "default" : "outline"}
           onClick={() => handleViewChange("month")}
         >
-          Mensual
+          {t('GRAPHS_PAGE.TABS.MONTH')}
         </Button>
         <Button
           variant={viewMode === "year" ? "default" : "outline"}
           onClick={() => handleViewChange("year")}
         >
-          Anual
+          {t('GRAPHS_PAGE.TABS.YEAR')}
         </Button>
       </div>
 
@@ -171,14 +173,14 @@ export default function GraphsPage() {
       {activeTransactions.length === 0 ? (
         <div className="text-center py-10 bg-card border rounded-lg border-dashed">
           <p className="text-muted-foreground">
-            No hay datos para mostrar en este periodo.
+            {t('GRAPHS_PAGE.EMPTY_STATE')}
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* 2. Incomes by Category */}
           <div className="bg-card border rounded-lg shadow-sm p-4 flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">Ingresos por Categoría</h3>
+            <h3 className="text-lg font-bold mb-4">{t('GRAPHS_PAGE.HEADERS.INCOMES_BY_CATEGORY')}</h3>
             <div className="w-full h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -208,7 +210,7 @@ export default function GraphsPage() {
 
           {/* 1. Expenses by Category */}
           <div className="bg-card border rounded-lg shadow-sm p-4 flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">Gastos por Categoría</h3>
+            <h3 className="text-lg font-bold mb-4">{t('GRAPHS_PAGE.HEADERS.EXPENSES_BY_CATEGORY')}</h3>
             <div className="w-full h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -238,7 +240,7 @@ export default function GraphsPage() {
 
           {/* 3. Total Expenses vs Total Incomes */}
           <div className="bg-card border rounded-lg shadow-sm p-4 flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">Balance Total</h3>
+            <h3 className="text-lg font-bold mb-4">{t('GRAPHS_PAGE.HEADERS.TOTAL_BALANCE')}</h3>
             <div className="w-full h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

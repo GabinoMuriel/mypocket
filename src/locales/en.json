@@ -115,5 +115,127 @@
     },
     "TRANSACTION_CARD": {
         "UNCATEGORIZED": "Uncategorized"
+    },
+    "GRAPHS_PAGE": {
+        "TABS": {
+            "MONTH": "Monthly",
+            "YEAR": "Yearly"
+        },
+        "CATEGORIES": {
+            "OTHERS": "Others",
+            "EXPENSES": "Expenses",
+            "INCOMES": "Incomes"
+        },
+        "HEADERS": {
+            "INCOMES_BY_CATEGORY": "Incomes by Category",
+            "EXPENSES_BY_CATEGORY": "Expenses by Category",
+            "TOTAL_BALANCE": "Total Balance"
+        },
+        "EMPTY_STATE": "No data to display for this period."
+    }
+,
+    "EDIT_PROFILE_PAGE": {
+        "TITLE": "Profile Configuration",
+        "TABS": {
+            "BASIC_INFO": "Basic Information",
+            "PASSWORD": "Password",
+            "AVATAR": "Avatar"
+        },
+        "BASIC_INFO_SECTION": {
+            "TITLE": "Your Personal Data",
+            "DESC": "Update your personal and contact information."
+        },
+        "PASSWORD_SECTION": {
+            "TITLE": "Change Password",
+            "DESC": "Make sure to use a strong password of at least 6 characters."
+        },
+        "AVATAR_SECTION": {
+            "TITLE": "Profile Picture",
+            "DESC": "Upload a new image for your avatar."
+        }
+    }
+,
+    "ADMIN_USERS_PANEL": {
+        "PAGE": {
+            "TITLE": "Manage Users",
+            "DESCRIPTION": "Manage all registered users on the platform (except administrators).",
+            "SEARCH_PLACEHOLDER": "Search by Name or Email...",
+            "TABLE_HEADERS": {
+                "USER": "User",
+                "CONTACT": "Contact",
+                "REGISTRATION_DATE": "Registration Date",
+                "ROLE": "Role"
+            },
+            "ROLES": {
+                "ADMIN": "Admin",
+                "PREMIUM": "Premium",
+                "USER": "User"
+            },
+            "EMPTY_STATES": {
+                "NO_NAME": "Unnamed user",
+                "NO_PHONE": "No phone"
+            },
+            "ERROR_LOADING": "Error loading user list."
+        },
+        "DELETE_DIALOG": {
+            "TRIGGER_BUTTON": "Delete User",
+            "TITLE": "Are you completely sure?",
+            "DESC_PART_1": "This action cannot be undone. This will permanently delete the user ",
+            "DESC_PART_2": ", their profile, and all associated transactions.",
+            "CONFIRM": "Yes, delete user",
+            "DELETING": "Deleting..."
+        },
+        "USER_VIEW": {
+            "TITLE": "User Details",
+            "LABELS": {
+                "EMAIL": "Email:",
+                "ROLE": "Role:",
+                "ID": "ID:",
+                "REGISTRATION_DATE": "Registration Date:"
+            },
+            "FORM": {
+                "FIRST_NAME": "First Name",
+                "LAST_NAME": "Last Name",
+                "PHONE": "Phone",
+                "BIRTHDATE": "Birthdate",
+                "ADDRESS": "Address",
+                "CITY": "City",
+                "POSTAL_CODE": "Postal Code",
+                "SYSTEM_ROLE": "System Role",
+                "ROLE_OPTIONS": {
+                    "BASIC": "Basic User",
+                    "PREMIUM": "Premium User"
+                },
+                "SAVING": "Saving...",
+                "SAVE_CHANGES": "Save Changes"
+            },
+            "DANGER_ZONE": "Danger Zone"
+        }
+    },
+    "ADMIN_STATISTICS_PAGE": {
+        "TITLE": "Global Statistics",
+        "DESCRIPTION": "Overview of MyPocket platform performance and usage.",
+        "ERRORS": {
+            "LOAD_GLOBAL": "Error loading global statistics.",
+            "NO_DATA": "Data not available."
+        },
+        "CARDS": {
+            "TOTAL": "Total",
+            "NORMAL": "Normal",
+            "PREMIUM": "Premium",
+            "ADMINS": "Admins"
+        },
+        "GRAPHS": {
+            "EMPTY_STATE": "No data recorded for this month.",
+            "TOOLTIP_DATE": "Date",
+            "LOGINS": {
+                "TITLE": "Unique Logins per Day",
+                "LEGEND": "Unique Users"
+            },
+            "SIGNUPS": {
+                "TITLE": "User Signups per Day",
+                "LEGEND": "Signups"
+            }
+        }
     }
 }

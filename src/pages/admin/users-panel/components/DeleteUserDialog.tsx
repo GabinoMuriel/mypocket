@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react"; // Using lucide-react as specified in your stack [1]
 import { adminService } from "@/services/admin.service";
+import { useTranslation } from "react-i18next";
 
 interface DeleteUserDialogProps {
     userId: string;
@@ -22,6 +23,7 @@ interface DeleteUserDialogProps {
 
 export function DeleteUserDialog({ userId, userEmail, onSuccess }: DeleteUserDialogProps) {
     const [isDeleting, setIsDeleting] = useState(false);
+    const { t } = useTranslation();
 
     const handleDelete = async () => {
         setIsDeleting(true);
@@ -41,20 +43,20 @@ export function DeleteUserDialog({ userId, userEmail, onSuccess }: DeleteUserDia
             <AlertDialogTrigger asChild>
                 <Button variant="destructive" className="w-full sm:w-auto ">
                     <Trash2 className="w-4 h-4 mr-2" />
-                    Eliminar Usuario
+                    {t('ADMIN_USERS_PANEL.DELETE_DIALOG.TRIGGER_BUTTON')}
                 </Button>
             </AlertDialogTrigger>
 
             {/* 2nd Confirmation: The Modal Dialog */}
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>¿Estás completamente seguro?</AlertDialogTitle>
+                    <AlertDialogTitle>{t('ADMIN_USERS_PANEL.DELETE_DIALOG.TITLE')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Esta acción no se puede deshacer. Esto eliminará permanentemente al usuario <strong>{userEmail}</strong>, su perfil y todas sus transacciones asociadas.
+                        {t('ADMIN_USERS_PANEL.DELETE_DIALOG.DESC_PART_1')}<strong>{userEmail}</strong>{t('ADMIN_USERS_PANEL.DELETE_DIALOG.DESC_PART_2')}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+                    <AlertDialogCancel disabled={isDeleting}>{t('COMMON.CANCEL')}</AlertDialogCancel>
                     <AlertDialogAction
                         onClick={(e) => {
                             e.preventDefault();
@@ -63,7 +65,7 @@ export function DeleteUserDialog({ userId, userEmail, onSuccess }: DeleteUserDia
                         className="bg-red-600 hover:bg-red-700 text-white"
                         disabled={isDeleting}
                     >
-                        {isDeleting ? "Eliminando..." : "Sí, eliminar usuario"}
+                        {isDeleting ? t('ADMIN_USERS_PANEL.DELETE_DIALOG.DELETING') : t('ADMIN_USERS_PANEL.DELETE_DIALOG.CONFIRM')}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

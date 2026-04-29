@@ -16,6 +16,7 @@ import {
   type RoleName,
 } from "@/types/profile.schema";
 import { DeleteUserDialog } from "./DeleteUserDialog"; // Import the dialog we created earlier
+import { useTranslation } from "react-i18next";
 
 interface AdminUserPanelProps {
   userData: AdminUserProfile;
@@ -30,6 +31,7 @@ export function UserView({
 }: AdminUserPanelProps) {
   const [open, setOpen] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
 
   const {
     register,
@@ -77,23 +79,23 @@ export function UserView({
       <SheetContent className="sm:max-w-[450px] overflow-y-auto flex flex-col p-3">
         <SheetHeader>
           <SheetTitle className="text-2xl font-bold">
-            Detalles del Usuario
+            {t('ADMIN_USERS_PANEL.USER_VIEW.TITLE')}
           </SheetTitle>
         </SheetHeader>
 
         {/* Read-only Data */}
         <div className="mt-6 space-y-2 text-sm text-muted-foreground mb-6 border-b pb-4">
           <p>
-            <strong>Email:</strong> {userData.email}
+            <strong>{t('ADMIN_USERS_PANEL.USER_VIEW.LABELS.EMAIL')}</strong> {userData.email}
           </p>
           <p>
-            <strong>Rol:</strong> {userData.role_name}
+            <strong>{t('ADMIN_USERS_PANEL.USER_VIEW.LABELS.ROLE')}</strong> {userData.role_name}
           </p>
           <p>
-            <strong>ID:</strong> <span className="text-xs">{userData.id}</span>
+            <strong>{t('ADMIN_USERS_PANEL.USER_VIEW.LABELS.ID')}</strong> <span className="text-xs">{userData.id}</span>
           </p>
           <p>
-            <strong>Fecha de Registro:</strong>{" "}
+            <strong>{t('ADMIN_USERS_PANEL.USER_VIEW.LABELS.REGISTRATION_DATE')}</strong>{" "}
             <span className="text-xs">{userData.created_at}</span>
           </p>
         </div>
@@ -101,51 +103,51 @@ export function UserView({
         {/* Editable Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex-1">
           <FormInput
-            label="Nombre"
+            label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.FIRST_NAME')}
             type="text"
             error={errors.first_name?.message}
             {...register("first_name")}
           />
           <FormInput
-            label="Apellidos"
+            label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.LAST_NAME')}
             type="text"
             error={errors.last_name?.message}
             {...register("last_name")}
           />
           <FormInput
-            label="Teléfono"
+            label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.PHONE')}
             type="text"
             error={errors.phone?.message}
             {...register("phone")}
           />
           <FormInput
-            label="Fecha de Nacimiento"
+            label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.BIRTHDATE')}
             type="date"
             error={errors.birthdate?.message}
             {...register("birthdate")}
           />
           <FormInput
-            label="Dirección"
+            label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.ADDRESS')}
             type="text"
             error={errors.address?.message}
             {...register("address")}
           />
           <div className="flex gap-4">
             <FormInput
-              label="Ciudad"
+              label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.CITY')}
               type="text"
               error={errors.city?.message}
               {...register("city")}
             />
             <FormInput
-              label="Código Postal"
+              label={t('ADMIN_USERS_PANEL.USER_VIEW.FORM.POSTAL_CODE')}
               type="text"
               error={errors.postal_code?.message}
               {...register("postal_code")}
             />
           </div>
           <div className="space-y-2 mb-4">
-            <label className="text-sm font-medium">Rol del Sistema</label>
+            <label className="text-sm font-medium">{t('ADMIN_USERS_PANEL.USER_VIEW.FORM.SYSTEM_ROLE')}</label>
             <Controller
               name="role_name"
               control={control}
@@ -154,8 +156,8 @@ export function UserView({
                   {...field}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <option value="user">Usuario Básico</option>
-                  <option value="premium">Usuario Premium</option>
+                  <option value="user">{t('ADMIN_USERS_PANEL.USER_VIEW.FORM.ROLE_OPTIONS.BASIC')}</option>
+                  <option value="premium">{t('ADMIN_USERS_PANEL.USER_VIEW.FORM.ROLE_OPTIONS.PREMIUM')}</option>
                 </select>
               )}
             />
@@ -167,14 +169,14 @@ export function UserView({
           </div>
 
           <Button type="submit" className="w-full mt-6" disabled={isSubmitting}>
-            {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+            {isSubmitting ? t('ADMIN_USERS_PANEL.USER_VIEW.FORM.SAVING') : t('ADMIN_USERS_PANEL.USER_VIEW.FORM.SAVE_CHANGES')}
           </Button>
         </form>
 
         {/* Danger Zone: Double Confirmation Delete */}
         <div className="mt-8 pt-6 border-t border-destructive/20">
           <h4 className="text-sm font-semibold text-destructive mb-4">
-            Zona de Peligro
+            {t('ADMIN_USERS_PANEL.USER_VIEW.DANGER_ZONE')}
           </h4>
           <DeleteUserDialog
             userId={userData.id}

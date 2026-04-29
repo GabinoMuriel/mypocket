@@ -115,5 +115,127 @@
     },
     "TRANSACTION_CARD": {
         "UNCATEGORIZED": "Sin Categoría"
+    },
+    "GRAPHS_PAGE": {
+        "TABS": {
+            "MONTH": "Mensual",
+            "YEAR": "Anual"
+        },
+        "CATEGORIES": {
+            "OTHERS": "Otros",
+            "EXPENSES": "Gastos",
+            "INCOMES": "Ingresos"
+        },
+        "HEADERS": {
+            "INCOMES_BY_CATEGORY": "Ingresos por Categoría",
+            "EXPENSES_BY_CATEGORY": "Gastos por Categoría",
+            "TOTAL_BALANCE": "Balance Total"
+        },
+        "EMPTY_STATE": "No hay datos para mostrar en este periodo."
+    }
+,
+    "EDIT_PROFILE_PAGE": {
+        "TITLE": "Configuración de Perfil",
+        "TABS": {
+            "BASIC_INFO": "Información Básica",
+            "PASSWORD": "Contraseña",
+            "AVATAR": "Avatar"
+        },
+        "BASIC_INFO_SECTION": {
+            "TITLE": "Tus Datos Personales",
+            "DESC": "Actualiza tu información personal y de contacto."
+        },
+        "PASSWORD_SECTION": {
+            "TITLE": "Cambiar Contraseña",
+            "DESC": "Asegúrate de usar una contraseña segura de al menos 6 caracteres."
+        },
+        "AVATAR_SECTION": {
+            "TITLE": "Foto de Perfil",
+            "DESC": "Sube una nueva imagen para tu avatar."
+        }
+    }
+,
+    "ADMIN_USERS_PANEL": {
+        "PAGE": {
+            "TITLE": "Gestión de Usuarios",
+            "DESCRIPTION": "Administra todos los usuarios registrados en la plataforma (excepto los administradores).",
+            "SEARCH_PLACEHOLDER": "Buscar por Nombre o Correo...",
+            "TABLE_HEADERS": {
+                "USER": "Usuario",
+                "CONTACT": "Contacto",
+                "REGISTRATION_DATE": "Fecha de Registro",
+                "ROLE": "Rol"
+            },
+            "ROLES": {
+                "ADMIN": "Admin",
+                "PREMIUM": "Premium",
+                "USER": "Usuario"
+            },
+            "EMPTY_STATES": {
+                "NO_NAME": "Usuario sin nombre",
+                "NO_PHONE": "Sin teléfono"
+            },
+            "ERROR_LOADING": "Error al cargar la lista de usuarios."
+        },
+        "DELETE_DIALOG": {
+            "TRIGGER_BUTTON": "Eliminar Usuario",
+            "TITLE": "¿Estás completamente seguro?",
+            "DESC_PART_1": "Esta acción no se puede deshacer. Esto eliminará permanentemente al usuario ",
+            "DESC_PART_2": ", su perfil y todas sus transacciones asociadas.",
+            "CONFIRM": "Sí, eliminar usuario",
+            "DELETING": "Eliminando..."
+        },
+        "USER_VIEW": {
+            "TITLE": "Detalles del Usuario",
+            "LABELS": {
+                "EMAIL": "Email:",
+                "ROLE": "Rol:",
+                "ID": "ID:",
+                "REGISTRATION_DATE": "Fecha de Registro:"
+            },
+            "FORM": {
+                "FIRST_NAME": "Nombre",
+                "LAST_NAME": "Apellidos",
+                "PHONE": "Teléfono",
+                "BIRTHDATE": "Fecha de Nacimiento",
+                "ADDRESS": "Dirección",
+                "CITY": "Ciudad",
+                "POSTAL_CODE": "Código Postal",
+                "SYSTEM_ROLE": "Rol del Sistema",
+                "ROLE_OPTIONS": {
+                    "BASIC": "Usuario Básico",
+                    "PREMIUM": "Usuario Premium"
+                },
+                "SAVING": "Guardando...",
+                "SAVE_CHANGES": "Guardar Cambios"
+            },
+            "DANGER_ZONE": "Zona de Peligro"
+        }
+    },
+    "ADMIN_STATISTICS_PAGE": {
+        "TITLE": "Estadísticas Globales",
+        "DESCRIPTION": "Visión general del rendimiento y uso de la plataforma MyPocket.",
+        "ERRORS": {
+            "LOAD_GLOBAL": "Error al cargar las estadísticas globales.",
+            "NO_DATA": "Datos no disponibles."
+        },
+        "CARDS": {
+            "TOTAL": "Total",
+            "NORMAL": "Normal",
+            "PREMIUM": "Premium",
+            "ADMINS": "Administradores"
+        },
+        "GRAPHS": {
+            "EMPTY_STATE": "No hay datos registrados para este mes.",
+            "TOOLTIP_DATE": "Fecha",
+            "LOGINS": {
+                "TITLE": "Inicios de Sesión Únicos por Día",
+                "LEGEND": "Usuarios Únicos"
+            },
+            "SIGNUPS": {
+                "TITLE": "Registros de Usuarios por Día",
+                "LEGEND": "Registros"
+            }
+        }
     }
 }
