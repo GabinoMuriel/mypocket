@@ -6,12 +6,19 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 interface LanguageToggleProps {
     description?: boolean;
 }
 
 export function LanguageToggle({ description = false }: LanguageToggleProps) {
+
+    const { t, i18n } = useTranslation();
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -21,29 +28,29 @@ export function LanguageToggle({ description = false }: LanguageToggleProps) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => console.log("Changing language to Spanish")}>
+                <DropdownMenuItem onClick={() => changeLanguage("es")}>
                     <img
                         src="/assets/flags/es.svg"
                         alt="Spanish"
                         className="w-4 h-3"
                     />
-                    <span>Español</span>
+                    <span>{t('NAVBAR.LANGUAGES.SPANISH')}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => console.log("Changing language to English")}>
+                <DropdownMenuItem onClick={() => changeLanguage("en")}>
                     <img
                         src="/assets/flags/gb.svg"
-                        alt="Spanish"
+                        alt="English"
                         className="w-4 h-3"
                     />
-                    <span>English</span>
+                    <span>{t('NAVBAR.LANGUAGES.ENGLISH')}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => console.log("Changing language to Chinese")}>
+                <DropdownMenuItem onClick={() => changeLanguage("zh")}>
                     <img
                         src="/assets/flags/cn.svg"
-                        alt="Spanish"
+                        alt="Chinese"
                         className="w-4 h-3"
                     />
-                    <span>Chinese</span>
+                    <span>{t('NAVBAR.LANGUAGES.CHINESE')}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

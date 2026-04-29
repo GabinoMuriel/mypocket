@@ -25,6 +25,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function UserAccountMenu() {
   const navigate = useNavigate();
@@ -39,6 +40,11 @@ export function UserAccountMenu() {
 
 
   const { setTheme } = useTheme();
+
+  const { t, i18n } = useTranslation();
+      const changeLanguage = (lng: string) => {
+          i18n.changeLanguage(lng);
+      };
 
   return (
     <DropdownMenu>
@@ -103,29 +109,29 @@ export function UserAccountMenu() {
               <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground">
                 Idioma
               </DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => console.log("Changing language to Spanish")}>
+              <DropdownMenuItem onClick={() => changeLanguage("es")}>
                 <img
                   src="/assets/flags/es.svg"
                   alt="Spanish"
                   className="w-4 h-3"
                 />
-                <span>Español</span>
+                <span>{t('NAVBAR.LANGUAGES.SPANISH')}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => console.log("Changing language to English")}>
+              <DropdownMenuItem onClick={() => changeLanguage("en")}>
                 <img
                   src="/assets/flags/gb.svg"
-                  alt="Spanish"
+                  alt="English"
                   className="w-4 h-3"
                 />
-                <span>English</span>
+                <span>{t('NAVBAR.LANGUAGES.ENGLISH')}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => console.log("Changing language to Chinese")}>
+              <DropdownMenuItem onClick={() => changeLanguage("zh")}>
                 <img
                   src="/assets/flags/cn.svg"
-                  alt="Spanish"
+                  alt="Chinese"
                   className="w-4 h-3"
                 />
-                <span>Chinese</span>
+                <span>{t('NAVBAR.LANGUAGES.CHINESE')}</span>
               </DropdownMenuItem>
 
               {/* Tema */}

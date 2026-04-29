@@ -16,6 +16,7 @@ import {
 import { TransactionModal } from "../forms/TransactionModal";
 
 export function NavUser() {
+      
   return (
     <NavigationMenu viewport={false} className="relative">
       <NavigationMenuList>

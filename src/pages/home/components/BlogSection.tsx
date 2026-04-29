@@ -32,11 +32,11 @@ export default function BlogSection() {
         </div>
         <div className="mx-auto grid gap-6 py-12 lg:grid-cols-3">
           {posts.map((post, i) => (
-            <Card key={i} className="hover:bg-muted/50 pt-0 shadow-none">
+            <Card key={i} className="group hover:bg-muted/50 pt-0 shadow-none overflow-hidden">
               <figure className="relative aspect-video overflow-hidden rounded-t-lg">
                 <img
-                  alt="blog post cover"
-                  className="overflow-hidden object-cover transition-transform group-hover:scale-110"
+                  alt={post.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   src={post.imageSrc}
                 />
               </figure>

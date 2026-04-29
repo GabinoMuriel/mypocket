@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function FooterSection() {
   const [copied, setCopied] = useState(false);
-  const email = "hola@mypocket.com"; // Cambia esto por tu correo real
+  const email = "contact@mypocket.com";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(email);
@@ -41,15 +41,15 @@ export default function FooterSection() {
             >
               <Mail size={16} />
               <span>{email}</span>
-              <div className="w-12 flex items-center justify-start">
-    {copied ? (
-      <Check size={20} className="text-[var(--primary)]" />
-    ) : (
-      <span className="text-[10px] opacity-0 group-hover:opacity-100 bg-[var(--primary)] text-[var(--background)] px-2 py-0.5 rounded transition-opacity">
-        Copiar
-      </span>
-    )}
-  </div>
+              <div className="w-7 flex items-center justify-start">
+                {copied ? (
+                  <Check size={20} className="text-[var(--primary)]" />
+                ) : (
+                  <span className="text-[10px] opacity-0 group-hover:opacity-100 bg-[var(--primary)] text-[var(--background)] px-2 py-0.5 rounded transition-opacity">
+                    Copiar
+                  </span>
+                )}
+              </div>
             </button>
 
             {/* Dirección */}

@@ -51,7 +51,7 @@ export default function HeroSection() {
           </header>
           <img
             src="/assets/landing/mobile_pc.png"
-            alt="Dashboard interface of the SaaS platform"
+            alt="hero_img"
             className="aspect-square w-full rounded-2xl object-cover"
           />
         </div>
