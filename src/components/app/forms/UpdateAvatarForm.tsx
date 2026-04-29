@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
 import { User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function UpdateAvatarForm() {
   const { user, profile, setProfile } = useAuthStore();
@@ -13,6 +14,8 @@ export default function UpdateAvatarForm() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     profile?.avatar_url || null,
   );
+
+  const { t } = useTranslation();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -38,7 +41,7 @@ export default function UpdateAvatarForm() {
 
     // Optional client-side size validation (e.g., max 2MB)
     if (file.size > 2 * 1024 * 1024) {
-      setError("La imagen no debe superar los 2MB.");
+      setError(t('EDIT_PROFILE_PAGE.UPDATE_AVATAR_FORM.ERROR_SIZE'));
       return;
     }
 
@@ -54,11 +57,11 @@ export default function UpdateAvatarForm() {
         setProfile(updatedProfile);
         setSuccess(true);
       } else {
-        setError("No se pudo actualizar el avatar. Inténtalo de nuevo.");
+        setError(t('EDIT_PROFILE_PAGE.UPDATE_AVATAR_FORM.ERROR_UPDATE'));
       }
     } catch (err) {
       console.error(err);
-      setError("Error al subir la imagen. Asegúrate de tener conexión.");
+      setError(t('EDIT_PROFILE_PAGE.UPDATE_AVATAR_FORM.ERROR_UPLOAD'));
     } finally {
       setIsUploading(false);
     }
@@ -92,7 +95,7 @@ export default function UpdateAvatarForm() {
             disabled={!file || isUploading}
             className="w-full sm:w-auto"
           >
-            {isUploading ? "Subiendo..." : "Guardar Imagen"}
+            {isUploading ? t('EDIT_PROFILE_PAGE.UPDATE_AVATAR_FORM.SUBMITTING') : t('EDIT_PROFILE_PAGE.UPDATE_AVATAR_FORM.SUBMIT')}
           </Button>
         </div>
       </div>
@@ -101,7 +104,7 @@ export default function UpdateAvatarForm() {
       {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
       {success && (
         <p className="text-sm text-green-500 mt-2">
-          ¡Avatar actualizado con éxito!
+          {t('EDIT_PROFILE_PAGE.UPDATE_AVATAR_FORM.SUCCESS')}
         </p>
       )}
     </>

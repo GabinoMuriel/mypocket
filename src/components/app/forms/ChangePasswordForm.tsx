@@ -5,24 +5,26 @@ import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
+import i18n from "@/locales/i18n";
+import { useTranslation } from "react-i18next";
 
 const passwordSchema = z
   .object({
-    oldPassword: z.string().min(1, "La contraseña actual es obligatoria"),
+    oldPassword: z.string().min(1, i18n.t("VALIDATION.AUTH.OLD_PASSWORD_REQUIRED")),
     password: z
       .string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres")
-      .regex(/[A-Z]/, "Debe contener al menos una letra mayúscula")
-      .regex(/[a-z]/, "Debe contener al menos una letra minúscula")
-      .regex(/[^A-Za-z0-9]/, "Debe contener al menos un símbolo especial"),
+      .min(8, i18n.t("VALIDATION.AUTH.PASSWORD_MIN"))
+      .regex(/[A-Z]/, i18n.t("VALIDATION.AUTH.PASSWORD_UPPERCASE"))
+      .regex(/[a-z]/, i18n.t("VALIDATION.AUTH.PASSWORD_LOWERCASE"))
+      .regex(/[^A-Za-z0-9]/, i18n.t("VALIDATION.AUTH.PASSWORD_SPECIAL")),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Las contraseñas no coinciden",
+    message: i18n.t("VALIDATION.AUTH.PASSWORDS_DONT_MATCH"),
     path: ["confirmPassword"],
   })
   .refine((data) => data.oldPassword !== data.password, {
-    message: "La nueva contraseña debe ser diferente a la actual",
+    message: i18n.t("VALIDATION.AUTH.NEW_PASSWORD_DIFFERENT"),
     path: ["password"],
   });
 
@@ -30,6 +32,7 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export default function ChangePasswordForm() {
   const user = useAuthStore((state) => state.user);
+  const { t } = useTranslation();
 
   const {
     register,
@@ -56,8 +59,7 @@ export default function ChangePasswordForm() {
       console.error(error);
       setError("root", {
         type: "manual",
-        message:
-          "Hubo un error al actualizar la contraseña. Inténtalo de nuevo.",
+        message: t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.ERROR_UPDATE'),
       });
     }
   };
@@ -65,24 +67,24 @@ export default function ChangePasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
       <FormInput
-        label="Contraseña Actual"
+        label={t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.OLD_PASSWORD_LABEL')}
         type="password"
-        placeholder="********"
+        placeholder={t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.OLD_PASSWORD_PLACEHOLDER')}
         error={errors.oldPassword?.message}
         {...register("oldPassword")}
       />
 
       <FormInput
-        label="Nueva Contraseña"
+        label={t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.NEW_PASSWORD_LABEL')}
         type="password"
-        placeholder="********"
+        placeholder={t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.NEW_PASSWORD_PLACEHOLDER')}
         error={errors.password?.message}
         {...register("password")}
       />
       <FormInput
-        label="Confirmar Contraseña"
+        label={t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.CONFIRM_PASSWORD_LABEL')}
         type="password"
-        placeholder="********"
+        placeholder={t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.CONFIRM_PASSWORD_PLACEHOLDER')}
         error={errors.confirmPassword?.message}
         {...register("confirmPassword")}
       />
@@ -94,12 +96,12 @@ export default function ChangePasswordForm() {
       )}
       {isSubmitSuccessful && !errors.root && !errors.oldPassword && (
         <div className="text-sm font-medium text-green-500">
-          ¡Contraseña actualizada con éxito!
+          {t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.SUCCESS')}
         </div>
       )}
 
       <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
-        {isSubmitting ? "Guardando..." : "Actualizar contraseña"}
+        {isSubmitting ? t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.SUBMITTING') : t('EDIT_PROFILE_PAGE.CHANGE_PASSWORD_FORM.SUBMIT')}
       </Button>
     </form>
   );

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import type { Category } from "@/services/transaction.service";
+import { useTranslation } from "react-i18next";
 
 /**
  * We map the string names from your categories.ts to the actual Lucide components.
@@ -57,11 +58,13 @@ export function CategorySelect({
 }: CategorySelectProps) {
   // Filter the DB categories based on the active transaction type
   const activeCategories = categories.filter((c) => c.type === type);
+  
+  const { t } = useTranslation();
 
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Selecciona una categoría (Opcional)" />
+        <SelectValue placeholder={t('CATEGORY_SELECT.PLACEHOLDER')} />
       </SelectTrigger>
       <SelectContent>
         {activeCategories.map((cat) => {

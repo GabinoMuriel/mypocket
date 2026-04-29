@@ -1,9 +1,375 @@
 {
+    "COMMON": {
+        "ACCEPT": "接受",
+        "OK": "确定",
+        "CANCEL": "取消",
+        "LOADING": "加载中...",
+        "LOGO_ALT": "MyPocket 标志",
+        "SHOW_PASSWORD": "显示密码",
+        "HIDE_PASSWORD": "隐藏密码"
+    },
     "NAVBAR": {
         "LANGUAGES": {
-            "SPANISH": "x",
-            "ENGLISH": "xx",
-            "CHINESE": "xxx"
+            "SPANISH": "西班牙语",
+            "ENGLISH": "英语",
+            "CHINESE": "中文"
+        },
+        "CHANGE_LANGUAGE": "更改语言",
+        "ROLES": {
+            "PREMIUM": "高级",
+            "ADMIN": "管理员"
+        },
+        "MOBILE_NAV": {
+            "HOME": "首页",
+            "LOGIN": "登录",
+            "REGISTER": "注册",
+            "ADMIN_PANEL": "管理面板",
+            "MANAGE_USERS": "管理用户",
+            "STATISTICS": "统计",
+            "ADD_TRANSACTION": "添加交易",
+            "TRANSACTIONS": "交易",
+            "DAILY": "每日",
+            "MONTHLY": "每月",
+            "YEARLY": "每年",
+            "GRAPHS": "图表"
+        },
+        "NAV_USER": {
+            "MY_TRANSACTIONS": "我的交易"
+        },
+        "THEME_TOGGLE": {
+            "CHANGE_THEME": "更改主题",
+            "LIGHT": "浅色",
+            "DARK": "深色",
+            "SYSTEM": "系统"
+        },
+        "USER_MENU": {
+            "DEFAULT_USER": "用户",
+            "MY_ACCOUNT": "我的账户",
+            "MY_PROFILE": "我的个人资料",
+            "SETTINGS": "设置",
+            "LANGUAGE": "语言",
+            "THEME": "主题",
+            "LOGOUT": "退出登录"
         }
+    },
+    "HOME_PAGE": {
+        "HERO_SECTION": {
+            "BADGE": "💸 开始存钱",
+            "TITLE": "轻松控制您的财务。",
+            "DESCRIPTION": "使用 MyPocket 管理您的收入和支出。简单、直观，并且可从任何设备访问。",
+            "LOGIN": "登录",
+            "REGISTER": "注册"
+        },
+        "BLOG_SECTION": {
+            "HEADER_TITLE": "您的财务状况，全方位解析",
+            "HEADER_DESCRIPTION": "从桌面的详细分析到移动端的速度。您了解消费习惯所需的一切。",
+            "POST_1_TITLE": "即时财务清晰度",
+            "POST_1_DESC": "通过直观的界面管理您的收入和支出。在日期之间轻松导航，并通过高级过滤器找到您要查找的内容。",
+            "POST_2_TITLE": "您的资金，您的做主",
+            "POST_2_DESC": "让 MyPocket 始终伴随您。自定义浅色或深色主题，支持多语言，并可随时随地查看支出图表。",
+            "POST_3_TITLE": "可视化您的习惯",
+            "POST_3_DESC": "使用详细的图表分析您的总额和各类别百分比。通过简洁专业的界面控制您的用户面板并调整预算。"
+        },
+        "FOOTER_SECTION": {
+            "SLOGAN": "随时随地轻松控制您的资金。",
+            "COPY_HOVER": "点击复制",
+            "COPY": "复制",
+            "LOCATION": "西班牙，埃斯特雷马杜拉，梅里达",
+            "RIGHTS": "保留所有权利。"
+        }
+    },
+    "VALIDATION": {
+        "PROFILE": {
+            "FIRST_NAME_MIN": "名字至少需要 2 个字符",
+            "FIRST_NAME_MAX": "名字太长",
+            "FIRST_NAME_REGEX": "名字只能包含字母",
+            "LAST_NAME_MIN": "姓氏至少需要 2 个字符",
+            "LAST_NAME_MAX": "姓氏太长",
+            "LAST_NAME_REGEX": "姓氏只能包含字母",
+            "BIRTHDATE_INVALID": "无效的出生日期",
+            "PHONE_INVALID": "无效的电话号码 (例如：+1234567890)",
+            "ADDRESS_MIN": "地址必须更具体",
+            "ADDRESS_MAX": "地址太长",
+            "ADDRESS_LETTERS": "地址必须至少包含一个字母",
+            "CITY_MIN": "城市名称太短",
+            "CITY_REGEX": "城市只能包含字母",
+            "POSTAL_CODE_INVALID": "邮政编码必须是 5 位数字"
+        },
+        "TRANSACTION": {
+            "TYPE_REQUIRED": "请选择是收入还是支出",
+            "AMOUNT_POSITIVE": "金额必须大于 0",
+            "AMOUNT_DECIMALS": "最多允许 2 位小数",
+            "CATEGORY_REQUIRED": "您必须选择一个类别",
+            "CATEGORY_INVALID": "无效的类别",
+            "DESCRIPTION_MAX": "描述太长",
+            "DATE_INVALID": "无效的日期",
+            "REQUIRED": "必填"
+        },
+        "AUTH": {
+            "EMAIL_INVALID": "请输入有效的电子邮件",
+            "PASSWORD_REQUIRED": "密码是必填项",
+            "PASSWORD_MIN": "密码必须至少有 8 个字符",
+            "PASSWORD_UPPERCASE": "必须至少包含一个大写字母",
+            "PASSWORD_LOWERCASE": "必须至少包含一个小写字母",
+            "PASSWORD_SPECIAL": "必须至少包含一个特殊字符",
+            "CONFIRM_REQUIRED": "必须确认密码",
+            "PASSWORDS_DONT_MATCH": "密码不匹配",
+            "OLD_PASSWORD_REQUIRED": "当前密码是必填项",
+            "NEW_PASSWORD_DIFFERENT": "新密码必须与当前密码不同"
+        }
+    },
+    "TRANSACTIONS_PAGE": {
+        "TABS": {
+            "DAY": "日",
+            "MONTH": "月",
+            "YEAR": "年"
+        },
+        "HEADERS": {
+            "DAY": "今日交易",
+            "MONTH": "本月交易",
+            "YEAR": "本年交易"
+        },
+        "SEARCH_PLACEHOLDER": "按类别或描述搜索...",
+        "EMPTY_STATE": "该日期没有交易记录。"
+    },
+    "PREMIUM_PDF_GENERATOR": {
+        "TITLE_YEARLY": "年度 PDF 报告",
+        "TITLE_MONTHLY": "月度 PDF 报告",
+        "EXCLUSIVE_REPORT": "独家报告",
+        "UPGRADE_PROMPT": "升级至高级版以生成并下载您的报告。",
+        "LOCKED": "已锁定",
+        "HIDE_PREVIEW": "隐藏预览",
+        "SHOW_PREVIEW": "预览 PDF",
+        "GENERATING": "生成中...",
+        "DOWNLOAD_FILE": "下载文件"
+    },
+    "PREMIUM_PDF_REPORT": {
+        "FINANCIAL_REPORT": "财务报告",
+        "TOTAL_INCOME": "总收入",
+        "TOTAL_EXPENSE": "总支出",
+        "NET_BALANCE": "净余额",
+        "INCOME_BREAKDOWN": "按类别划分的收入",
+        "EXPENSE_BREAKDOWN": "按类别划分的支出",
+        "GENERATED_ON": "生成于："
+    },
+    "TRANSACTION_CARD": {
+        "UNCATEGORIZED": "未分类"
+    },
+    "GRAPHS_PAGE": {
+        "TABS": {
+            "MONTH": "每月",
+            "YEAR": "每年"
+        },
+        "CATEGORIES": {
+            "OTHERS": "其他",
+            "EXPENSES": "支出",
+            "INCOMES": "收入"
+        },
+        "HEADERS": {
+            "INCOMES_BY_CATEGORY": "按类别划分的收入",
+            "EXPENSES_BY_CATEGORY": "按类别划分的支出",
+            "TOTAL_BALANCE": "总余额"
+        },
+        "EMPTY_STATE": "该期间没有可显示的数据。"
+    },
+    "EDIT_PROFILE_PAGE": {
+        "TITLE": "个人资料配置",
+        "TABS": {
+            "BASIC_INFO": "基本信息",
+            "PASSWORD": "密码",
+            "AVATAR": "头像"
+        },
+        "BASIC_INFO_SECTION": {
+            "TITLE": "您的个人数据",
+            "DESC": "更新您的个人和联系信息。"
+        },
+        "PASSWORD_SECTION": {
+            "TITLE": "更改密码",
+            "DESC": "确保使用至少 6 个字符的强密码。"
+        },
+        "AVATAR_SECTION": {
+            "TITLE": "个人资料图片",
+            "DESC": "为您的头像上传新图片。"
+        },
+        "BASIC_INFO_FORM": {
+            "NO_CHANGES": "未进行任何更改。",
+            "SUCCESS": "个人资料更新成功！",
+            "ERROR": "更新个人资料时出错。请重试。",
+            "FIRST_NAME": "名字",
+            "LAST_NAME": "姓氏",
+            "PHONE": "电话",
+            "BIRTHDATE": "出生日期",
+            "ADDRESS": "地址",
+            "CITY": "城市",
+            "POSTAL_CODE": "邮政编码",
+            "SAVING": "保存中...",
+            "SAVE_CHANGES": "保存更改"
+        },
+        "CHANGE_PASSWORD_FORM": {
+            "OLD_PASSWORD_LABEL": "当前密码",
+            "OLD_PASSWORD_PLACEHOLDER": "••••••••",
+            "NEW_PASSWORD_LABEL": "新密码",
+            "NEW_PASSWORD_PLACEHOLDER": "••••••••",
+            "CONFIRM_PASSWORD_LABEL": "确认密码",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "••••••••",
+            "SUCCESS": "密码更新成功！",
+            "ERROR_UPDATE": "更新密码时出错。请重试。",
+            "SUBMITTING": "保存中...",
+            "SUBMIT": "更新密码"
+        },
+        "UPDATE_AVATAR_FORM": {
+            "ERROR_SIZE": "图片不得超过 2MB。",
+            "ERROR_UPDATE": "无法更新头像。请重试。",
+            "ERROR_UPLOAD": "上传图片时出错。请确保您已连接网络。",
+            "SUCCESS": "头像更新成功！",
+            "SUBMITTING": "上传中...",
+            "SUBMIT": "保存图片"
+        }
+    },
+    "ADMIN_USERS_PANEL": {
+        "PAGE": {
+            "TITLE": "管理用户",
+            "DESCRIPTION": "管理平台上的所有注册用户（管理员除外）。",
+            "SEARCH_PLACEHOLDER": "按姓名或电子邮件搜索...",
+            "TABLE_HEADERS": {
+                "USER": "用户",
+                "CONTACT": "联系方式",
+                "REGISTRATION_DATE": "注册日期",
+                "ROLE": "角色"
+            },
+            "ROLES": {
+                "ADMIN": "管理员",
+                "PREMIUM": "高级",
+                "USER": "用户"
+            },
+            "EMPTY_STATES": {
+                "NO_NAME": "未命名用户",
+                "NO_PHONE": "无电话"
+            },
+            "ERROR_LOADING": "加载用户列表时出错。"
+        },
+        "DELETE_DIALOG": {
+            "TRIGGER_BUTTON": "删除用户",
+            "TITLE": "您完全确定吗？",
+            "DESC_PART_1": "此操作无法撤消。这将永久删除用户 ",
+            "DESC_PART_2": "，他们的个人资料，以及所有相关的交易。",
+            "CONFIRM": "是的，删除用户",
+            "DELETING": "删除中..."
+        },
+        "USER_VIEW": {
+            "TITLE": "用户详细信息",
+            "LABELS": {
+                "EMAIL": "电子邮件:",
+                "ROLE": "角色:",
+                "ID": "ID:",
+                "REGISTRATION_DATE": "注册日期:"
+            },
+            "FORM": {
+                "FIRST_NAME": "名字",
+                "LAST_NAME": "姓氏",
+                "PHONE": "电话",
+                "BIRTHDATE": "出生日期",
+                "ADDRESS": "地址",
+                "CITY": "城市",
+                "POSTAL_CODE": "邮政编码",
+                "SYSTEM_ROLE": "系统角色",
+                "ROLE_OPTIONS": {
+                    "BASIC": "普通用户",
+                    "PREMIUM": "高级用户"
+                },
+                "SAVING": "保存中...",
+                "SAVE_CHANGES": "保存更改"
+            },
+            "DANGER_ZONE": "危险区域"
+        }
+    },
+    "ADMIN_STATISTICS_PAGE": {
+        "TITLE": "全局统计",
+        "DESCRIPTION": "MyPocket 平台性能和使用情况概述。",
+        "ERRORS": {
+            "LOAD_GLOBAL": "加载全局统计信息时出错。",
+            "NO_DATA": "没有可用数据。"
+        },
+        "CARDS": {
+            "TOTAL": "总计",
+            "NORMAL": "普通",
+            "PREMIUM": "高级",
+            "ADMINS": "管理员"
+        },
+        "GRAPHS": {
+            "EMPTY_STATE": "本月没有记录的数据。",
+            "TOOLTIP_DATE": "日期",
+            "LOGINS": {
+                "TITLE": "每日独立登录数",
+                "LEGEND": "独立用户"
+            },
+            "SIGNUPS": {
+                "TITLE": "每日用户注册数",
+                "LEGEND": "注册数"
+            }
+        }
+    },
+    "DATE_NAVIGATOR": {
+        "BACK_TO_TODAY": "返回今天"
+    },
+    "DATA_BOX": {
+        "INCOMES": "收入",
+        "EXPENSES": "支出",
+        "TOTAL": "总计"
+    },
+    "AUTH_FORMS": {
+        "LOGIN": {
+            "EMAIL_LABEL": "电子邮件",
+            "EMAIL_PLACEHOLDER": "email@example.com",
+            "PASSWORD_LABEL": "密码",
+            "PASSWORD_PLACEHOLDER": "••••••••",
+            "ERROR_INVALID_CREDENTIALS": "电子邮件或密码不正确。",
+            "ERROR_UNEXPECTED": "登录时发生意外错误。",
+            "SUBMITTING": "登录中...",
+            "SUBMIT": "登录"
+        },
+        "SIGNUP": {
+            "EMAIL_LABEL": "电子邮件",
+            "EMAIL_PLACEHOLDER": "example@email.com",
+            "PASSWORD_LABEL": "密码",
+            "PASSWORD_PLACEHOLDER": "••••••••",
+            "CONFIRM_PASSWORD_LABEL": "确认密码",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "••••••••",
+            "ERROR_ALREADY_REGISTERED": "该电子邮件已被注册。",
+            "ERROR_CREATION_PROBLEM": "创建帐户时出现问题：",
+            "ERROR_UNEXPECTED": "注册时发生意外错误。",
+            "SUBMITTING": "创建帐户中...",
+            "SUBMIT": "注册"
+        },
+        "CHECK_EMAIL": {
+            "TITLE": "检查您的电子邮件！",
+            "DESC": "在登录前，请检查您的收件箱以验证您的帐户。",
+            "BACK_TO_LOGIN": "返回登录"
+        }
+    },
+    "TRANSACTION_MODAL": {
+        "EDIT_TITLE": "编辑交易",
+        "NEW_TITLE": "新交易",
+        "EXPENSE": "支出",
+        "INCOME": "收入",
+        "DESCRIPTION_LABEL": "描述",
+        "DESCRIPTION_PLACEHOLDER": "例如：杂货",
+        "AMOUNT_LABEL": "金额",
+        "DATE_LABEL": "日期",
+        "CATEGORY_LABEL": "类别",
+        "SUBMITTING": "保存中...",
+        "SUBMIT": "保存交易"
+    },
+    "AUTH_MODAL": {
+        "LOGIN_TITLE": "登录",
+        "SIGNUP_TITLE": "创建帐户",
+        "CHECK_EMAIL_TITLE": "需要验证",
+        "NO_ACCOUNT": "没有帐户？",
+        "SIGN_UP": "注册",
+        "HAVE_ACCOUNT": "已有帐户？",
+        "SIGN_IN": "登录"
+    },
+    "CATEGORY_SELECT": {
+        "PLACEHOLDER": "选择一个类别（可选）"
     }
 }

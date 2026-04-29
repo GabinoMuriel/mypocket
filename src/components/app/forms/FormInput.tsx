@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -13,6 +14,8 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 // forwardRef is required for react-hook-form to connect to the input
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ label, error, description, className, id: externalId, ...props }, ref) => {
+    const { t } = useTranslation();
+
     const internalId = useId();
     const id = externalId || internalId;
     const errorId = `${id}-error`;
@@ -45,7 +48,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               type="button"
               onClick={() => setIsVisible(!isVisible)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
-              aria-label={isVisible ? "Ocultar contraseña" : "Mostrar contraseña"}
+              aria-label={isVisible ? t('COMMON.HIDE_PASSWORD') : t('COMMON.SHOW_PASSWORD')}
             >
               {isVisible ? (
                 <EyeOff className="h-4 w-4" />

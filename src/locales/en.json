@@ -4,7 +4,9 @@
         "OK": "OK",
         "CANCEL": "Cancel",
         "LOADING": "Loading...",
-        "LOGO_ALT": "MyPocket Logo"
+        "LOGO_ALT": "MyPocket Logo",
+        "SHOW_PASSWORD": "Show password",
+        "HIDE_PASSWORD": "Hide password"
     },
     "NAVBAR" : {
         "LANGUAGES" : {
@@ -100,7 +102,20 @@
             "CATEGORY_REQUIRED": "You must select a category",
             "CATEGORY_INVALID": "Invalid category",
             "DESCRIPTION_MAX": "Description is too long",
-            "DATE_INVALID": "Invalid date"
+            "DATE_INVALID": "Invalid date",
+            "REQUIRED": "Required"
+        },
+        "AUTH": {
+            "EMAIL_INVALID": "Enter a valid email",
+            "PASSWORD_REQUIRED": "Password is required",
+            "PASSWORD_MIN": "Password must be at least 8 characters",
+            "PASSWORD_UPPERCASE": "Must contain at least one uppercase letter",
+            "PASSWORD_LOWERCASE": "Must contain at least one lowercase letter",
+            "PASSWORD_SPECIAL": "Must contain at least one special character",
+            "CONFIRM_REQUIRED": "Confirmation is required",
+            "PASSWORDS_DONT_MATCH": "Passwords do not match",
+            "OLD_PASSWORD_REQUIRED": "Current password is required",
+            "NEW_PASSWORD_DIFFERENT": "The new password must be different from the current one"
         }
     },
     "TRANSACTIONS_PAGE": {
@@ -176,6 +191,40 @@
         "AVATAR_SECTION": {
             "TITLE": "Profile Picture",
             "DESC": "Upload a new image for your avatar."
+        },
+        "BASIC_INFO_FORM": {
+            "NO_CHANGES": "No changes have been made.",
+            "SUCCESS": "Profile updated successfully!",
+            "ERROR": "Error updating profile. Please try again.",
+            "FIRST_NAME": "First Name",
+            "LAST_NAME": "Last Name",
+            "PHONE": "Phone",
+            "BIRTHDATE": "Birthdate",
+            "ADDRESS": "Address",
+            "CITY": "City",
+            "POSTAL_CODE": "Postal Code",
+            "SAVING": "Saving...",
+            "SAVE_CHANGES": "Save Changes"
+        },
+        "CHANGE_PASSWORD_FORM": {
+            "OLD_PASSWORD_LABEL": "Current Password",
+            "OLD_PASSWORD_PLACEHOLDER": "••••••••",
+            "NEW_PASSWORD_LABEL": "New Password",
+            "NEW_PASSWORD_PLACEHOLDER": "••••••••",
+            "CONFIRM_PASSWORD_LABEL": "Confirm Password",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "••••••••",
+            "SUCCESS": "Password updated successfully!",
+            "ERROR_UPDATE": "There was an error updating the password. Please try again.",
+            "SUBMITTING": "Saving...",
+            "SUBMIT": "Update password"
+        },
+        "UPDATE_AVATAR_FORM": {
+            "ERROR_SIZE": "The image must not exceed 2MB.",
+            "ERROR_UPDATE": "Could not update the avatar. Please try again.",
+            "ERROR_UPLOAD": "Error uploading the image. Make sure you have a connection.",
+            "SUCCESS": "Avatar updated successfully!",
+            "SUBMITTING": "Uploading...",
+            "SUBMIT": "Save Image"
         }
     }
 ,
@@ -269,5 +318,60 @@
         "INCOMES": "Incomes",
         "EXPENSES": "Expenses",
         "TOTAL": "Total"
+    },
+    "AUTH_FORMS": {
+        "LOGIN": {
+            "EMAIL_LABEL": "Email",
+            "EMAIL_PLACEHOLDER": "email@example.com",
+            "PASSWORD_LABEL": "Password",
+            "PASSWORD_PLACEHOLDER": "••••••••",
+            "ERROR_INVALID_CREDENTIALS": "The email or password is incorrect.",
+            "ERROR_UNEXPECTED": "An unexpected error occurred while signing in.",
+            "SUBMITTING": "Signing in...",
+            "SUBMIT": "Sign in"
+        },
+        "SIGNUP": {
+            "EMAIL_LABEL": "Email",
+            "EMAIL_PLACEHOLDER": "example@email.com",
+            "PASSWORD_LABEL": "Password",
+            "PASSWORD_PLACEHOLDER": "••••••••",
+            "CONFIRM_PASSWORD_LABEL": "Confirm password",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "••••••••",
+            "ERROR_ALREADY_REGISTERED": "This email is already registered.",
+            "ERROR_CREATION_PROBLEM": "There was a problem creating the account: ",
+            "ERROR_UNEXPECTED": "An unexpected error occurred while signing up.",
+            "SUBMITTING": "Creating account...",
+            "SUBMIT": "Sign up"
+        },
+        "CHECK_EMAIL": {
+            "TITLE": "Check your email!",
+            "DESC": "Please check your inbox to verify your account before signing in.",
+            "BACK_TO_LOGIN": "Back to login"
+        }
+    },
+    "TRANSACTION_MODAL": {
+        "EDIT_TITLE": "Edit Transaction",
+        "NEW_TITLE": "New Transaction",
+        "EXPENSE": "Expense",
+        "INCOME": "Income",
+        "DESCRIPTION_LABEL": "Description",
+        "DESCRIPTION_PLACEHOLDER": "E.g. Groceries",
+        "AMOUNT_LABEL": "Amount",
+        "DATE_LABEL": "Date",
+        "CATEGORY_LABEL": "Category",
+        "SUBMITTING": "Saving...",
+        "SUBMIT": "Save Transaction"
+    },
+    "AUTH_MODAL": {
+        "LOGIN_TITLE": "Sign In",
+        "SIGNUP_TITLE": "Create Account",
+        "CHECK_EMAIL_TITLE": "Verification Required",
+        "NO_ACCOUNT": "Don't have an account?",
+        "SIGN_UP": "Sign up",
+        "HAVE_ACCOUNT": "Already have an account?",
+        "SIGN_IN": "Sign in"
+    },
+    "CATEGORY_SELECT": {
+        "PLACEHOLDER": "Select a category (Optional)"
     }
 }

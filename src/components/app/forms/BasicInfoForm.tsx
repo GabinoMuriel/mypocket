@@ -5,11 +5,13 @@ import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useTranslation } from "react-i18next";
 
 export default function BasicInfoForm() {
     const profile = useAuthStore((state) => state.profile);
     const user = useAuthStore((state) => state.user);
     const setProfile = useAuthStore((state) => state.setProfile);
+    const { t } = useTranslation();
 
     const {
         register,
@@ -36,7 +38,7 @@ export default function BasicInfoForm() {
         if (!isDirty) {
             setError("root", {
                 type: "manual",
-                message: "No se han realizado cambios."
+                message: t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.NO_CHANGES')
             });
             return;
         }
@@ -70,7 +72,7 @@ export default function BasicInfoForm() {
             console.error(error);
             setError("root", {
                 type: "manual",
-                message: "Error al actualizar el perfil. Inténtalo de nuevo."
+                message: t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.ERROR')
             });
         }
     };
@@ -78,27 +80,27 @@ export default function BasicInfoForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
-                <FormInput label="Nombre" type="text" error={errors.first_name?.message} {...register("first_name")} />
-                <FormInput label="Apellido" type="text" error={errors.last_name?.message} {...register("last_name")} />
+                <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.FIRST_NAME')} type="text" error={errors.first_name?.message} {...register("first_name")} />
+                <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.LAST_NAME')} type="text" error={errors.last_name?.message} {...register("last_name")} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <FormInput label="Teléfono" type="text" error={errors.phone?.message} {...register("phone")} />
-                <FormInput label="Fecha de nacimiento" type="date" error={errors.birthdate?.message} {...register("birthdate")} />
+                <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.PHONE')} type="text" error={errors.phone?.message} {...register("phone")} />
+                <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.BIRTHDATE')} type="date" error={errors.birthdate?.message} {...register("birthdate")} />
             </div>
 
-            <FormInput label="Dirección" type="text" error={errors.address?.message} {...register("address")} />
+            <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.ADDRESS')} type="text" error={errors.address?.message} {...register("address")} />
 
             <div className="grid grid-cols-2 gap-4">
-                <FormInput label="Ciudad" type="text" error={errors.city?.message} {...register("city")} />
-                <FormInput label="Código Postal" type="text" error={errors.postal_code?.message} {...register("postal_code")} />
+                <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.CITY')} type="text" error={errors.city?.message} {...register("city")} />
+                <FormInput label={t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.POSTAL_CODE')} type="text" error={errors.postal_code?.message} {...register("postal_code")} />
             </div>
 
             {errors.root && <div className="text-sm font-medium text-red-500">{errors.root.message}</div>}
-            {isSubmitSuccessful && !errors.root && !isDirty && <div className="text-sm font-medium text-green-500">¡Perfil actualizado con éxito!</div>}
+            {isSubmitSuccessful && !errors.root && !isDirty && <div className="text-sm font-medium text-green-500">{t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.SUCCESS')}</div>}
 
             <Button type="submit" disabled={isSubmitting} className="w-full mt-4">
-                {isSubmitting ? "Guardando..." : "Guardar cambios"}
+                {isSubmitting ? t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.SAVING') : t('EDIT_PROFILE_PAGE.BASIC_INFO_FORM.SAVE_CHANGES')}
             </Button>
         </form>
     );

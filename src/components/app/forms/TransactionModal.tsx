@@ -15,23 +15,25 @@ import { CategorySelect } from "./CategorySelect";
 import { useAuthStore } from "@/store/useAuthStore";
 import { transactionService, type Transaction } from "@/services/transaction.service";
 import { useTransactionStore } from "@/store/useTransactionStore";
+import i18n from "@/locales/i18n";
+import { useTranslation } from "react-i18next";
 
 const transactionSchema = z.object({
   type: z.enum(["income", "expense"]),
   description: z
     .string()
-    .min(1, "Obligatorio")
-    .max(100, "La descripción es demasiado larga")
+    .min(1, i18n.t("VALIDATION.TRANSACTION.REQUIRED"))
+    .max(100, i18n.t("VALIDATION.TRANSACTION.DESCRIPTION_MAX"))
     .optional(),
-  amount: z.number().positive("Debe ser mayor a 0"),
+  amount: z.number().positive(i18n.t("VALIDATION.TRANSACTION.AMOUNT_POSITIVE")),
   date: z
     .string()
     .refine((date) => !isNaN(Date.parse(date)), {
-      message: "Fecha inválida",
+      message: i18n.t("VALIDATION.TRANSACTION.DATE_INVALID"),
     })
     .or(z.literal(""))
     .optional(),
-  category_id: z.string().uuid("Categoría inválida"),
+  category_id: z.string().uuid(i18n.t("VALIDATION.TRANSACTION.CATEGORY_INVALID")),
 });
 
 type TransactionFormValues = z.infer<typeof transactionSchema>;
@@ -44,6 +46,7 @@ interface TransactionModalProps {
 export function TransactionModal({ trigger, initialData }: TransactionModalProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
 
   const categories = useTransactionStore((state) => state.categories);
 
@@ -136,7 +139,7 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
-            {initialData ? "Editar Transacción" : "Nueva Transacción"}
+            {initialData ? t('TRANSACTION_MODAL.EDIT_TITLE') : t('TRANSACTION_MODAL.NEW_TITLE')}
           </DialogTitle>
         </DialogHeader>
 
@@ -147,7 +150,7 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
             className="flex-1"
             onClick={() => setValue("type", "expense")}
           >
-            Gasto
+            {t('TRANSACTION_MODAL.EXPENSE')}
           </Button>
           <Button
             type="button"
@@ -155,20 +158,20 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
             className="flex-1"
             onClick={() => setValue("type", "income")}
           >
-            Ingreso
+            {t('TRANSACTION_MODAL.INCOME')}
           </Button>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
-            label="Descripción"
-            placeholder="Ej: Compra supermercado"
+            label={t('TRANSACTION_MODAL.DESCRIPTION_LABEL')}
+            placeholder={t('TRANSACTION_MODAL.DESCRIPTION_PLACEHOLDER')}
             {...register("description")}
             error={errors.description?.message}
           />
 
           <FormInput
-            label="Monto"
+            label={t('TRANSACTION_MODAL.AMOUNT_LABEL')}
             type="number"
             step="0.01"
             placeholder="0.00"
@@ -177,14 +180,14 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
           />
 
           <FormInput
-            label="Fecha"
+            label={t('TRANSACTION_MODAL.DATE_LABEL')}
             type="date"
             {...register("date")}
             error={errors.date?.message}
           />
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Categoría</label>
+            <label className="text-sm font-medium">{t('TRANSACTION_MODAL.CATEGORY_LABEL')}</label>
             <Controller
               name="category_id"
               control={control}
@@ -205,7 +208,7 @@ export function TransactionModal({ trigger, initialData }: TransactionModalProps
           </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Guardando..." : "Guardar Transacción"}
+            {isSubmitting ? t('TRANSACTION_MODAL.SUBMITTING') : t('TRANSACTION_MODAL.SUBMIT')}
           </Button>
         </form>
       </DialogContent>

@@ -4,21 +4,23 @@ import { z } from "zod";
 import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
+import i18n from "@/locales/i18n";
+import { useTranslation } from "react-i18next";
 
 // 1. SCHEMA: Now only requires email and password for the production flow
 const signupSchema = z
   .object({
-    email: z.string().email("Introduce un email válido"),
+    email: z.string().email(i18n.t("VALIDATION.AUTH.EMAIL_INVALID")),
     password: z
       .string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres")
-      .regex(/[A-Z]/, "Debe contener al menos una letra mayúscula")
-      .regex(/[a-z]/, "Debe contener al menos una letra minúscula")
-      .regex(/[^A-Za-z0-9]/, "Debe contener al menos un símbolo especial"),
-    confirmPassword: z.string().min(1, "La confirmación es obligatoria"),
+      .min(8, i18n.t("VALIDATION.AUTH.PASSWORD_MIN"))
+      .regex(/[A-Z]/, i18n.t("VALIDATION.AUTH.PASSWORD_UPPERCASE"))
+      .regex(/[a-z]/, i18n.t("VALIDATION.AUTH.PASSWORD_LOWERCASE"))
+      .regex(/[^A-Za-z0-9]/, i18n.t("VALIDATION.AUTH.PASSWORD_SPECIAL")),
+    confirmPassword: z.string().min(1, i18n.t("VALIDATION.AUTH.CONFIRM_REQUIRED")),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Las contraseñas no coinciden",
+    message: i18n.t("VALIDATION.AUTH.PASSWORDS_DONT_MATCH"),
     path: ["confirmPassword"],
   });
 
@@ -29,6 +31,8 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ onSuccess }: SignupFormProps) {
+  const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
@@ -53,18 +57,18 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
         ) {
           setError("root", {
             type: "manual",
-            message: "Este correo electrónico ya está registrado.",
+            message: t('AUTH_FORMS.SIGNUP.ERROR_ALREADY_REGISTERED'),
           });
         } else {
           setError("root", {
             type: "manual",
-            message: "Hubo un problema al crear la cuenta: " + error.message,
+            message: t('AUTH_FORMS.SIGNUP.ERROR_CREATION_PROBLEM') + error.message,
           });
         }
       } else {
         setError("root", {
           type: "manual",
-          message: "Ocurrió un error inesperado al registrarse.",
+          message: t('AUTH_FORMS.SIGNUP.ERROR_UNEXPECTED'),
         });
       }
     }
@@ -73,25 +77,25 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <FormInput
-        label="Correo electrónico"
+        label={t('AUTH_FORMS.SIGNUP.EMAIL_LABEL')}
         type="email"
-        placeholder="ejemplo@correo.com"
+        placeholder={t('AUTH_FORMS.SIGNUP.EMAIL_PLACEHOLDER')}
         error={errors.email?.message}
         {...register("email")}
       />
 
       <FormInput
-        label="Contraseña"
+        label={t('AUTH_FORMS.SIGNUP.PASSWORD_LABEL')}
         type="password"
-        placeholder="********"
+        placeholder={t('AUTH_FORMS.SIGNUP.PASSWORD_PLACEHOLDER')}
         error={errors.password?.message}
         {...register("password")}
       />
 
       <FormInput
-        label="Confirmar contraseña"
+        label={t('AUTH_FORMS.SIGNUP.CONFIRM_PASSWORD_LABEL')}
         type="password"
-        placeholder="********"
+        placeholder={t('AUTH_FORMS.SIGNUP.CONFIRM_PASSWORD_PLACEHOLDER')}
         error={errors.confirmPassword?.message}
         {...register("confirmPassword")}
       />
@@ -104,7 +108,7 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
       )}
 
       <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting ? "Creando cuenta..." : "Registrarse"}
+        {isSubmitting ? t('AUTH_FORMS.SIGNUP.SUBMITTING') : t('AUTH_FORMS.SIGNUP.SUBMIT')}
       </Button>
     </form>
   );

@@ -5,16 +5,19 @@ import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/services/auth.service";
 import { useNavigate } from "react-router-dom";
+import i18n from "@/locales/i18n";
+import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
-  email: z.string().email("Introduce un email válido"),
-  password: z.string().min(1, "La contraseña es obligatoria"),
+  email: z.string().email(i18n.t("VALIDATION.AUTH.EMAIL_INVALID")),
+  password: z.string().min(1, i18n.t("VALIDATION.AUTH.PASSWORD_REQUIRED")),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const {
     register,
@@ -39,12 +42,12 @@ export default function LoginForm() {
       ) {
         setError("root", {
           type: "manual",
-          message: "El correo electrónico o la contraseña son incorrectos.",
+          message: t('AUTH_FORMS.LOGIN.ERROR_INVALID_CREDENTIALS'),
         });
       } else {
         setError("root", {
           type: "manual",
-          message: "Ocurrió un error inesperado al iniciar sesión.",
+          message: t('AUTH_FORMS.LOGIN.ERROR_UNEXPECTED'),
         });
       }
     }
@@ -57,17 +60,17 @@ export default function LoginForm() {
       className="space-y-4 w-full max-w-sm mx-auto"
     >
       <FormInput
-        label="Correo Electrónico"
+        label={t('AUTH_FORMS.LOGIN.EMAIL_LABEL')}
         type="email"
-        placeholder="correo@ejemplo.com"
+        placeholder={t('AUTH_FORMS.LOGIN.EMAIL_PLACEHOLDER')}
         {...register("email")}
         error={errors.email?.message}
       />
 
       <FormInput
-        label="Contraseña"
+        label={t('AUTH_FORMS.LOGIN.PASSWORD_LABEL')}
         type="password"
-        placeholder="••••••••"
+        placeholder={t('AUTH_FORMS.LOGIN.PASSWORD_PLACEHOLDER')}
         {...register("password")}
         error={errors.password?.message}
       />
@@ -79,7 +82,7 @@ export default function LoginForm() {
       )}
 
       <Button type="submit" className="w-full mt-6" disabled={isSubmitting}>
-        {isSubmitting ? "Iniciando sesión..." : "Entrar"}
+        {isSubmitting ? t('AUTH_FORMS.LOGIN.SUBMITTING') : t('AUTH_FORMS.LOGIN.SUBMIT')}
       </Button>
     </form>
   );
