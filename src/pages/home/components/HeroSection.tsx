@@ -50,11 +50,13 @@ export default function HeroSection() {
               </div>
             )}
           </header>
-          <img
-            src="/assets/landing/mobile_pc.png"
-            alt="hero_img"
-            className="aspect-square w-full rounded-2xl object-cover"
-          />
+          <div className="overflow-hidden rounded-2xl"> 
+    <img
+      src="/assets/landing/hero.png"
+      alt="hero_img"
+      className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-105"
+    />
+  </div>
         </div>
       </div>
     </section>

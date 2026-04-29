@@ -8,17 +8,17 @@ export default function BlogSection() {
     {
       title: t('HOME_PAGE.BLOG_SECTION.POST_1_TITLE'),
       description: t('HOME_PAGE.BLOG_SECTION.POST_1_DESC'),
-      imageSrc: "/assets/landing/pc_dark.png"
+      imageSrc: "/assets/landing/blog_1.png"
     },
     {
       title: t('HOME_PAGE.BLOG_SECTION.POST_2_TITLE'),
       description: t('HOME_PAGE.BLOG_SECTION.POST_2_DESC'),
-      imageSrc: "/assets/landing/mobile.png"
+      imageSrc: "/assets/landing/blog_2.png"
     },
     {
       title: t('HOME_PAGE.BLOG_SECTION.POST_3_TITLE'),
       description: t('HOME_PAGE.BLOG_SECTION.POST_3_DESC'),
-      imageSrc: "/assets/landing/pc_light.png"
+      imageSrc: "/assets/landing/blog_3.png"
     }
   ];
 
