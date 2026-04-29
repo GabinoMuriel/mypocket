@@ -8,12 +8,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SendIcon } from "lucide-react";
 
-const Link = ({ href, children, className, ...props }: any) => (
-  <a href={href} className={className} {...props}>
-    {children}
-  </a>
-);
-
 export default function FooterSection() {
   return (
     <footer className="py-12">
@@ -29,16 +23,16 @@ export default function FooterSection() {
             <h3 className="text-lg font-semibold">Programs</h3>
             <ul className="[&_li_a]:text-muted-foreground [&_li_a]:hover:text-foreground space-y-2 [&_li_a]:block [&_li_a]:text-sm [&_li_a]:transition-colors [&_li_a]:hover:underline">
               <li>
-                <Link href="/programs">Strength Training</Link>
+                <a href="/programs">Strength Training</a>
               </li>
               <li>
-                <Link href="/programs">HIIT Classes</Link>
+                <a href="/programs">HIIT Classes</a>
               </li>
               <li>
-                <Link href="/programs">Yoga & Wellness</Link>
+                <a href="/programs">Yoga & Wellness</a>
               </li>
               <li>
-                <Link href="/programs">Personal Training</Link>
+                <a href="/programs">Personal Training</a>
               </li>
             </ul>
           </div>
@@ -46,16 +40,16 @@ export default function FooterSection() {
             <h3 className="text-lg font-semibold">Company</h3>
             <ul className="[&_li_a]:text-muted-foreground [&_li_a]:hover:text-foreground space-y-2 [&_li_a]:block [&_li_a]:text-sm [&_li_a]:transition-colors [&_li_a]:hover:underline">
               <li>
-                <Link href="/about">About Us</Link>
+                <a href="/about">About Us</a>
               </li>
               <li>
-                <Link href="/trainers">Our Trainers</Link>
+                <a href="/trainers">Our Trainers</a>
               </li>
               <li>
-                <Link href="/membership">Membership</Link>
+                <a href="/membership">Membership</a>
               </li>
               <li>
-                <Link href="/contact">Contact</Link>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </div>

@@ -5,6 +5,7 @@ import { es } from "date-fns/locale";
 import { Shield, User as UserIcon, Loader2, Search, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { UserView } from "./components/UserView";
+import LogoLoader from "@/components/app/LogoLoader";
 
 export default function UsersPanelPage() {
   const [users, setUsers] = useState<AdminUserProfile[]>([]);
@@ -51,9 +52,7 @@ export default function UsersPanelPage() {
 
   if (isLoading)
     return (
-      <div className="flex justify-center py-10">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      <LogoLoader />
     );
   if (error) return <div className="text-center text-red-600 p-4">{error}</div>;
 

@@ -31,7 +31,7 @@ import { es } from "date-fns/locale";
 export default function TransactionsPage() {
   const { period } = useParams();
   const navigate = useNavigate();
-  const viewMode = period === "month" || period === "year" ? period : "day";
+  const viewMode = period === "day" || period === "year" ? period : "month";
   const [currentDate, setCurrentDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState("");
 

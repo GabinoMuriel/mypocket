@@ -1,47 +1,45 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
+import LogoLoader from "@/components/app/LogoLoader";
 
 interface ProtectedRouteProps {
+  isLogged?: boolean;
+  userOnly?: boolean;
   adminOnly?: boolean;
-  allowAll?: boolean;
 }
 
-export const ProtectedRoute = ({ adminOnly = false, allowAll = false }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({
+  isLogged = false,
+  userOnly = false,
+  adminOnly = false,
+}: ProtectedRouteProps) => {
   const user = useAuthStore((state) => state.user);
-  const profile = useAuthStore((state) => state.profile);
   const role = useAuthStore((state) => state.role);
   const isLoading = useAuthStore((state) => state.isLoading);
-  const location = useLocation();
 
-  // 1. Wait for Supabase to finish checking auth state
   if (isLoading) {
-    return (
-      <div >
-        Cargando...
-      </div>
-    );
+    return <LogoLoader />;
   }
 
-  // 2. Unauthenticated users are kicked to the login screen
-  if (!user) {
+  if (!isLogged && user) {
+    if (role === "admin") {
+      return <Navigate to="/admin/statistics" replace />;
+    } else {
+      return <Navigate to="/transactions/month" replace />;
+    }
+  }
+
+  if ((isLogged || userOnly || adminOnly) && !user) {
     return <Navigate to="/" replace />;
   }
 
-  if (profile && !profile.first_name && location.pathname !== "/profile") {
-    return <Navigate to="/profile" replace />;
+  if (userOnly && role === "admin") {
+    return <Navigate to="/admin/statistics" replace />;
   }
 
-  if (allowAll) return <Outlet />;
-
-  // 3. Protect Admin-only routes by checking the explicit 'admin' string
   if (adminOnly && role !== "admin") {
     return <Navigate to="/transactions/month" replace />;
   }
 
-  if (!adminOnly && role === "admin") {
-    return <Navigate to="/admin/statistics" replace />;
-  }
-
-  // 4. Authorized users get to see the requested route
   return <Outlet />;
 };

@@ -2,26 +2,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BasicInfoForm from "@/components/app/forms/BasicInfoForm";
 import ChangePasswordForm from "@/components/app/forms/ChangePasswordForm";
 import UpdateAvatarForm from "@/components/app/forms/UpdateAvatarForm";
-import { AlertCircle } from "lucide-react"; 
-import { useAuthStore } from "@/store/useAuthStore";
 
 export default function EditProfilePage() {
-
-  const profile = useAuthStore((state) => state.profile);
-  const isMissingName = profile && !profile.first_name;
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-6">Configuración de Perfil</h1>
-
-      {isMissingName && (
-        <div className="flex items-center gap-3 bg-yellow-100 border border-yellow-400 text-yellow-800 p-4 rounded-md mb-6">
-          <AlertCircle className="w-6 h-6" />
-          <p className="text-sm">
-            <strong>¡Atención!</strong> Debes rellenar tu <strong>Nombre</strong> para poder acceder a las transacciones y los gráficos. El resto de los campos son opcionales.
-          </p>
-        </div>
-      )}
 
       <Tabs defaultValue="basic" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
