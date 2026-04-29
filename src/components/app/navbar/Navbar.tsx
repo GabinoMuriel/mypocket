@@ -8,8 +8,10 @@ import { Logo } from "@/components/app/Logo";
 import { useAuthStore } from "@/store/useAuthStore";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
+  const { t } = useTranslation();
   // Pull user and role from the Zustand store
   const { user, role } = useAuthStore();
 
@@ -31,11 +33,11 @@ export default function Navbar() {
           </nav>
           {isPremium && (
             <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--premium-background)] text-[var(--premium)] border border-[var(--premium)] text-[10px] font-bold uppercase tracking-wider">
-              Premium
+              {t('NAVBAR.ROLES.PREMIUM')}
             </div>)}
           {isAdmin && (
             <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--admin-background)] text-[var(--admin)] border border-[var(--admin)] text-[10px] font-bold uppercase tracking-wider">
-              Admin
+              {t('NAVBAR.ROLES.ADMIN')}
             </div>)}
         </div>
 
@@ -54,13 +56,13 @@ export default function Navbar() {
               {/* MODAL PARA LOGIN */}
               <AuthModal
                 defaultView="login"
-                trigger={<Button variant="ghost" size="sm">Entrar</Button>}
+                trigger={<Button variant="ghost" size="sm">{t('NAVBAR.MOBILE_NAV.LOGIN')}</Button>}
               />
 
               {/* MODAL PARA REGISTRO */}
               <AuthModal
                 defaultView="signup"
-                trigger={<Button size="sm">Registro</Button>}
+                trigger={<Button size="sm">{t('NAVBAR.MOBILE_NAV.REGISTER')}</Button>}
               />
             </div>
           )}

@@ -1,11 +1,14 @@
 import type { Transaction } from "@/services/transaction.service";
 import { TrendingUp, TrendingDown, Wallet } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface DataBoxProps {
   transactions: Transaction[];
 }
 
 export function DataBox({ transactions }: DataBoxProps) {
+  const { t, i18n } = useTranslation();
+
   // 1. Calculate Income (Sum of all 'income' transactions)
   const totalIncome = transactions
     .filter((t) => t.type === "income")
@@ -21,7 +24,7 @@ export function DataBox({ transactions }: DataBoxProps) {
 
   // Formatting helper for euros
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("es-ES", {
+    new Intl.NumberFormat(i18n.language === "en" ? "en-US" : "es-ES", {
       style: "currency",
       currency: "EUR",
     }).format(amount);
@@ -34,7 +37,7 @@ export function DataBox({ transactions }: DataBoxProps) {
           <TrendingUp className="w-6 h-6" />
         </div>
         <div>
-          <p className="text-sm font-medium text-muted-foreground">Ingresos</p>
+          <p className="text-sm font-medium text-muted-foreground">{t('DATA_BOX.INCOMES')}</p>
           <h3 className="text-2xl font-bold text-[var(--secondary)]">
             {formatCurrency(totalIncome)}
           </h3>
@@ -47,7 +50,7 @@ export function DataBox({ transactions }: DataBoxProps) {
           <TrendingDown className="w-6 h-6" />
         </div>
         <div>
-          <p className="text-sm font-medium text-muted-foreground">Gastos</p>
+          <p className="text-sm font-medium text-muted-foreground">{t('DATA_BOX.EXPENSES')}</p>
           <h3 className="text-2xl font-bold text-[var(--destructive)]">
             {formatCurrency(totalExpenses)}
           </h3>
@@ -60,7 +63,7 @@ export function DataBox({ transactions }: DataBoxProps) {
           <Wallet className="w-6 h-6" />
         </div>
         <div>
-          <p className="text-sm font-medium text-muted-foreground">Total</p>
+          <p className="text-sm font-medium text-muted-foreground">{t('DATA_BOX.TOTAL')}</p>
           <h3
             className={`text-2xl font-bold ${netTotal >= 0 ? "text-[var(--secondary)]" : "text-[var(--destructive)]"}`}
           >

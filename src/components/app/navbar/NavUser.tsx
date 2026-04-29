@@ -14,8 +14,10 @@ import {
   NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
 import { TransactionModal } from "../forms/TransactionModal";
+import { useTranslation } from "react-i18next";
 
 export function NavUser() {
+  const { t } = useTranslation();
       
   return (
     <NavigationMenu viewport={false} className="relative">
@@ -31,7 +33,7 @@ export function NavUser() {
               >
                 <div role="button">
                   <PlusCircle className="mr-2 h-4 w-4 text-primary" />
-                  Añadir transacción
+                  {t('NAVBAR.MOBILE_NAV.ADD_TRANSACTION')}
                 </div>
               </NavigationMenuLink>
             }
@@ -40,22 +42,22 @@ export function NavUser() {
 
         {/* Dropdown: Mis Transacciones */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Mis Transacciones</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t('NAVBAR.NAV_USER.MY_TRANSACTIONS')}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[200px] gap-1 p-2">
               <ListItem
                 href="/transactions/day"
-                title="Diarias"
+                title={t('NAVBAR.MOBILE_NAV.DAILY')}
                 icon={<CalendarCheck className="size-4" />}
               />
               <ListItem
                 href="/transactions/month"
-                title="Mensuales"
+                title={t('NAVBAR.MOBILE_NAV.MONTHLY')}
                 icon={<CalendarDays className="size-4" />}
               />
               <ListItem
                 href="/transactions/year"
-                title="Anuales"
+                title={t('NAVBAR.MOBILE_NAV.YEARLY')}
                 icon={<CalendarRange className="size-4" />}
               />
             </ul>
@@ -64,17 +66,17 @@ export function NavUser() {
 
         {/* Dropdown: Gráficas */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Gráficas</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t('NAVBAR.MOBILE_NAV.GRAPHS')}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[200px] gap-1 p-2">
               <ListItem
                 href="/graphs/month"
-                title="Mensuales"
+                title={t('NAVBAR.MOBILE_NAV.MONTHLY')}
                 icon={<BarChart3 className="size-4" />}
               />
               <ListItem
                 href="/graphs/year"
-                title="Anuales"
+                title={t('NAVBAR.MOBILE_NAV.YEARLY')}
                 icon={<BarChart3 className="size-4" />}
               />
             </ul>

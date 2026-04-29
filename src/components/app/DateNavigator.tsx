@@ -1,7 +1,8 @@
 import { ChevronLeft, ChevronRight, CalendarSync } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 interface DateNavigatorProps {
   currentDate: Date;
@@ -12,10 +13,13 @@ interface DateNavigatorProps {
 }
 
 export function DateNavigator({ currentDate, viewMode, onPrev, onNext, onReset }: DateNavigatorProps) {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "en" ? enUS : es;
+
   const getFormattedDate = () => {
-    if (viewMode === 'day') return format(currentDate, "d 'de' MMMM yyyy", { locale: es });
-    if (viewMode === 'month') return format(currentDate, "MMMM yyyy", { locale: es });
-    return format(currentDate, "yyyy", { locale: es });
+    if (viewMode === 'day') return format(currentDate, i18n.language === "en" ? "MMMM do, yyyy" : "d 'de' MMMM yyyy", { locale: dateLocale });
+    if (viewMode === 'month') return format(currentDate, "MMMM yyyy", { locale: dateLocale });
+    return format(currentDate, "yyyy", { locale: dateLocale });
   };
 
   return (
@@ -32,7 +36,7 @@ export function DateNavigator({ currentDate, viewMode, onPrev, onNext, onReset }
           size="icon"
           className="h-8 w-8 text-muted-foreground hover:text-primary"
           onClick={onReset}
-          title="Volver a la fecha actual"
+          title={t('DATE_NAVIGATOR.BACK_TO_TODAY')}
         >
           <CalendarSync className="w-4 h-4" />
         </Button>

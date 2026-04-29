@@ -33,15 +33,15 @@ export function UserAccountMenu() {
 
   const user = useAuthStore((state) => state.user);
   const profile = useAuthStore((state) => state.profile);
+  const { t, i18n } = useTranslation();
 
-  const firstName = profile?.first_name || "Usuario";
+  const firstName = profile?.first_name || t('NAVBAR.USER_MENU.DEFAULT_USER');
   const email = user?.email || "usuario@email.com";
   const avatarUrl = profile?.avatar_url || "/assets/default_avatar.png";
 
 
   const { setTheme } = useTheme();
 
-  const { t, i18n } = useTranslation();
       const changeLanguage = (lng: string) => {
           i18n.changeLanguage(lng);
       };
@@ -69,7 +69,7 @@ export function UserAccountMenu() {
         {/* Header Section */}
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Mi Cuenta</p>
+            <p className="text-sm font-medium leading-none">{t('NAVBAR.USER_MENU.MY_ACCOUNT')}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {email}
             </p>
@@ -81,7 +81,7 @@ export function UserAccountMenu() {
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
-            <span>Mi Perfil</span>
+            <span>{t('NAVBAR.USER_MENU.MY_PROFILE')}</span>
           </DropdownMenuItem>
           {/* Expandable Configuration Trigger */}
           <DropdownMenuItem
@@ -93,7 +93,7 @@ export function UserAccountMenu() {
           >
 
             <Settings className="mr-2 h-4 w-4" />
-            <span>Configuración</span>
+            <span>{t('NAVBAR.USER_MENU.SETTINGS')}</span>
 
             {showConfig ? (
               <ChevronUp className="h-4 w-4 text-muted-foreground" />
@@ -107,7 +107,7 @@ export function UserAccountMenu() {
             <div className="bg-muted/30 rounded-md p-2 mt-1 mx-1 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
               {/* Idioma */}
               <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground">
-                Idioma
+                {t('NAVBAR.USER_MENU.LANGUAGE')}
               </DropdownMenuLabel>
               <DropdownMenuItem onClick={() => changeLanguage("es")}>
                 <img
@@ -136,19 +136,19 @@ export function UserAccountMenu() {
 
               {/* Tema */}
               <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground mt-2">
-                Tema
+                {t('NAVBAR.USER_MENU.THEME')}
               </DropdownMenuLabel>
               <DropdownMenuItem onClick={() => setTheme("light")}>
                 <Sun className="h-4 w-4" />
-                <span>Claro</span>
+                <span>{t('NAVBAR.THEME_TOGGLE.LIGHT')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
                 <Moon className="h-4 w-4" />
-                <span>Oscuro</span>
+                <span>{t('NAVBAR.THEME_TOGGLE.DARK')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
                 <Monitor className="h-4 w-4" />
-                <span>Sistema</span>
+                <span>{t('NAVBAR.THEME_TOGGLE.SYSTEM')}</span>
               </DropdownMenuItem>
             </div>
           )}
@@ -168,7 +168,7 @@ export function UserAccountMenu() {
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Cerrar Sesión</span>
+          <span>{t('NAVBAR.USER_MENU.LOGOUT')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

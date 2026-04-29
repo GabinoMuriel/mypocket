@@ -2,7 +2,9 @@
     "COMMON": {
         "ACCEPT": "Aceptar",
         "OK": "OK",
-        "CANCEL": "Cancelar"
+        "CANCEL": "Cancelar",
+        "LOADING": "Cargando...",
+        "LOGO_ALT": "Logo de MyPocket"
     },
     "NAVBAR" : {
         "LANGUAGES" : {
@@ -11,6 +13,10 @@
             "CHINESE" : "Chino"
         },
         "CHANGE_LANGUAGE": "Cambiar Idioma",
+        "ROLES": {
+            "PREMIUM": "Premium",
+            "ADMIN": "Admin"
+        },
         "MOBILE_NAV": {
             "HOME": "Inicio",
             "LOGIN": "Entrar",
@@ -24,6 +30,24 @@
             "MONTHLY": "Mensuales",
             "YEARLY": "Anuales",
             "GRAPHS": "Gráficas"
+        },
+        "NAV_USER": {
+            "MY_TRANSACTIONS": "Mis Transacciones"
+        },
+        "THEME_TOGGLE": {
+            "CHANGE_THEME": "Cambiar Tema",
+            "LIGHT": "Claro",
+            "DARK": "Oscuro",
+            "SYSTEM": "Sistema"
+        },
+        "USER_MENU": {
+            "DEFAULT_USER": "Usuario",
+            "MY_ACCOUNT": "Mi Cuenta",
+            "MY_PROFILE": "Mi Perfil",
+            "SETTINGS": "Configuración",
+            "LANGUAGE": "Idioma",
+            "THEME": "Tema",
+            "LOGOUT": "Cerrar Sesión"
         }
     },
     "HOME_PAGE": {
@@ -237,5 +261,13 @@
                 "LEGEND": "Registros"
             }
         }
+    },
+    "DATE_NAVIGATOR": {
+        "BACK_TO_TODAY": "Volver a la fecha actual"
+    },
+    "DATA_BOX": {
+        "INCOMES": "Ingresos",
+        "EXPENSES": "Gastos",
+        "TOTAL": "Total"
     }
 }

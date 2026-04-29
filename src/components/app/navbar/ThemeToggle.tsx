@@ -9,6 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ThemeToggleProps {
     description?: boolean;
@@ -17,6 +18,7 @@ interface ThemeToggleProps {
 export function ThemeToggle({ description = false }: ThemeToggleProps) {
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
+    const { t } = useTranslation();
 
     useEffect(() => {
         setMounted(true)
@@ -31,21 +33,21 @@ export function ThemeToggle({ description = false }: ThemeToggleProps) {
                     {theme === "light" && <Sun />}
                     {theme === "dark" && <Moon />}
                     {theme === "system" && <Monitor />}
-                    {description && <span className="ml-3">Cambiar Tema</span>}
+                    {description && <span className="ml-3">{t('NAVBAR.THEME_TOGGLE.CHANGE_THEME')}</span>}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                     <Sun className="h-4 w-4" />
-                    <span>Claro</span>
+                    <span>{t('NAVBAR.THEME_TOGGLE.LIGHT')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")}>
                     <Moon className="h-4 w-4" />
-                    <span>Oscuro</span>
+                    <span>{t('NAVBAR.THEME_TOGGLE.DARK')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("system")}>
                     <Monitor className="h-4 w-4" />
-                    <span>Sistema</span>
+                    <span>{t('NAVBAR.THEME_TOGGLE.SYSTEM')}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

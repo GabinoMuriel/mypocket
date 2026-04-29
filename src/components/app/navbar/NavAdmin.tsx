@@ -10,8 +10,11 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export function NavAdmin() {
+    const { t } = useTranslation();
+
     return (
         <NavigationMenu>
             <NavigationMenuList className="gap-1">
@@ -23,7 +26,7 @@ export function NavAdmin() {
                         className={cn(navigationMenuTriggerStyle(), "gap-2")}
                     >
                         <UsersIcon className="size-4" />
-                        <span>Gestión Usuarios</span>
+                        <span>{t('NAVBAR.MOBILE_NAV.MANAGE_USERS')}</span>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
@@ -34,7 +37,7 @@ export function NavAdmin() {
                         className={cn(navigationMenuTriggerStyle(), "gap-2")}
                     >
                         <LineChartIcon className="size-4" />
-                        <span>Estadísticas</span>
+                        <span>{t('NAVBAR.MOBILE_NAV.STATISTICS')}</span>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
