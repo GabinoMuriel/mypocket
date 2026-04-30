@@ -22,7 +22,7 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
         <Sheet>
             <SheetTrigger asChild>
                 {/* Este es el botón que ahora sí verás en móvil */}
-                <Button variant="ghost" size="icon" className="lg:hidden">
+                <Button variant="ghost" size="icon-xs" className="lg:hidden">
                     <Menu className="size-6" />
                 </Button>
             </SheetTrigger>

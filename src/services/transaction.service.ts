@@ -40,7 +40,7 @@ export const transactionService = {
     const { data, error } = await supabase
       .from("categories")
       .select("*")
-      .eq("is_active", true); // Only fetch active categories
+      .eq("is_active", true);
 
     if (error) {
       console.error("Error fetching categories:", error.message);

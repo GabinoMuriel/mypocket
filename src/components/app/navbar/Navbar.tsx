@@ -24,7 +24,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4">
         {/* GRUPO IZQUIERDA: Móvil + Logo + Nav Desktop */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <MobileNav isLogged={isLogged} isAdmin={isAdmin} />
           <Logo />
 
