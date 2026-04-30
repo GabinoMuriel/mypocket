@@ -20,7 +20,6 @@ import {
   endOfMonth,
   startOfYear,
   endOfYear,
-  format,
   isSameMonth,
   isSameYear,
 } from "date-fns";
@@ -33,6 +32,8 @@ import { FloatingAddButton } from "../transactions/components/FloatingAddButton"
 import { TransactionModal } from "@/components/app/forms/TransactionModal";
 import { DataBox } from "@/components/app/DataBox";
 import { useTranslation } from "react-i18next";
+import LogoLoader from "@/components/app/LogoLoader";
+import { set } from "zod";
 
 export default function GraphsPage() {
   const { period } = useParams();
@@ -42,6 +43,8 @@ export default function GraphsPage() {
   // 1. Restrict viewMode to ONLY month or year
   const viewMode = period === "year" ? "year" : "month";
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchTransactions = useTransactionStore(
     (state) => state.fetchTransactions,
@@ -73,7 +76,18 @@ export default function GraphsPage() {
         : startOfMonth(currentDate);
     const end =
       viewMode === "year" ? endOfYear(currentDate) : endOfMonth(currentDate);
-    fetchTransactions(start.toISOString(), end.toISOString());
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        await fetchTransactions(start.toISOString(), end.toISOString());
+      } catch (error) {
+        console.error("Error fetching graph data:", error);
+      } finally {
+        setIsLoading(false); // Now this only runs AFTER the fetch completes
+      }
+    };
+
+    loadData();
   }, [viewMode, fetchTransactions, currentDate]);
 
   // 4. Local Filtering
@@ -148,6 +162,10 @@ export default function GraphsPage() {
     }
     return `${(percent * 100).toFixed(1)}%`;
   };
+
+  if (isLoading) {
+    return <LogoLoader />;
+  }
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 space-y-8">
@@ -306,7 +324,7 @@ export default function GraphsPage() {
                     ))}
                   </Pie>
                   <Tooltip formatter={formatCurrency} />
-                 <Legend
+                  <Legend
                     verticalAlign="bottom"
                     align="center"
                     layout="horizontal"

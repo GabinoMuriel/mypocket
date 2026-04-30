@@ -1,52 +1,46 @@
+import { UsersIcon, LineChartIcon } from "lucide-react";
 import {
-    UsersIcon,
-    LineChartIcon,
-} from "lucide-react";
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export function NavAdmin() {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <NavigationMenu>
-            <NavigationMenuList className="gap-1">
+  return (
+    <NavigationMenu>
+      <NavigationMenuList className="gap-1">
+  
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            className={cn(navigationMenuTriggerStyle(), "gap-2")}
+          >
+            <Link to="/admin/users">
+              <UsersIcon className="size-4" />
+              <span>{t("NAVBAR.MOBILE_NAV.MANAGE_USERS")}</span>
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
 
-                {/* Gestión de Usuarios */}
-                <NavigationMenuItem>
-                    <NavigationMenuLink
-                        href="/admin/users"
-                        className={cn(navigationMenuTriggerStyle(), "gap-2")}
-                    >
-                        <UsersIcon className="size-4" />
-                        <span>{t('NAVBAR.MOBILE_NAV.MANAGE_USERS')}</span>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                {/* Estadísticas Globales */}
-                <NavigationMenuItem>
-                    <NavigationMenuLink
-                        href="/admin/statistics"
-                        className={cn(navigationMenuTriggerStyle(), "gap-2")}
-                    >
-                        <LineChartIcon className="size-4" />
-                        <span>{t('NAVBAR.MOBILE_NAV.STATISTICS')}</span>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                {/* Badge visual de Admin */}
-                {/* <div className="ml-2 px-2 py-0.5 rounded-full bg-[var(--admin-background)] text-[var(--admin)] border border-[var(--admin)] text-[10px] font-bold uppercase tracking-wider">
-                    Admin
-                </div> */}
-
-            </NavigationMenuList>
-        </NavigationMenu>
-    );
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            className={cn(navigationMenuTriggerStyle(), "gap-2")}
+          >
+            <Link to="/admin/statistics">
+              <LineChartIcon className="size-4" />
+              <span>{t("NAVBAR.MOBILE_NAV.STATISTICS")}</span>
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
 }

@@ -10,9 +10,9 @@
     },
     "NAVBAR" : {
         "LANGUAGES" : {
-            "SPANISH" : "Español",
-            "ENGLISH" : "Inglés",
-            "CHINESE" : "Chino"
+            "SPANISH" : "Español - €",
+            "ENGLISH" : "Inglés - £",
+            "CHINESE" : "Chino - ¥"
         },
         "CHANGE_LANGUAGE": "Cambiar Idioma",
         "ROLES": {

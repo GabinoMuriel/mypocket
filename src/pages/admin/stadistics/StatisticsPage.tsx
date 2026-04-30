@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import { DateNavigator } from "@/components/app/DateNavigator";
 import { useTranslation } from "react-i18next";
+import LogoLoader from "@/components/app/LogoLoader";
 
 export default function StatisticsPage() {
   const [stats, setStats] = useState<GlobalStatistics | null>(null);
@@ -76,9 +77,7 @@ export default function StatisticsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      <LogoLoader />
     );
   }
 

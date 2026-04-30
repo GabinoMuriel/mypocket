@@ -7,7 +7,7 @@ export const RootRedirect = () => {
   const role = useAuthStore((state) => state.role);
   const isLoading = useAuthStore((state) => state.isLoading);
 
-  if (isLoading) return <LogoLoader />;
+  if (isLoading || (user && !role)) return <LogoLoader />;
 
   if (!user) {
     return <Navigate to="/" replace />;

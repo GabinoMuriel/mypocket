@@ -15,6 +15,7 @@ import {
 } from "../../ui/navigation-menu";
 import { TransactionModal } from "../forms/TransactionModal";
 import { useTranslation } from "react-i18next";
+import ListItem from "@/components/ui/ListItem";
 
 export function NavUser() {
   const { t } = useTranslation();
@@ -87,7 +88,7 @@ export function NavUser() {
   );
 }
 
-// Componente auxiliar para los items del menú
+/* // Componente auxiliar para los items del menú
 const ListItem = ({
   title,
   href,
@@ -108,4 +109,4 @@ const ListItem = ({
       </a>
     </NavigationMenuLink>
   </li>
-);
+); */

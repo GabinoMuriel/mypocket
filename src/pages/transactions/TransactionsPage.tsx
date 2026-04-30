@@ -31,6 +31,7 @@ import { PremiumPDFReportGenerator } from "./components/PremiumPDFReportGenerato
 import { es, enUS } from "date-fns/locale";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useTranslation } from "react-i18next";
+import LogoLoader from "@/components/app/LogoLoader";
 
 export default function TransactionsPage() {
   const { period } = useParams();
@@ -38,6 +39,7 @@ export default function TransactionsPage() {
   const viewMode = period === "day" || period === "year" ? period : "month";
   const [currentDate, setCurrentDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const userEmail = useAuthStore((state) => state.user?.email);
   const userEmailForPDF = userEmail
@@ -74,18 +76,28 @@ export default function TransactionsPage() {
     let end: Date;
 
     if (viewMode === "day") {
-        start = startOfDay(currentDate); // Starts exactly at 00:00:00
-        end = endOfDay(currentDate);     // Ends exactly at 23:59:59.999
+      start = startOfDay(currentDate);
+      end = endOfDay(currentDate);
     } else if (viewMode === "month") {
-        start = startOfMonth(currentDate); // 1st day at 00:00:00
-        end = endOfMonth(currentDate);     // Last day at 23:59:59.999
+      start = startOfMonth(currentDate);
+      end = endOfMonth(currentDate);
     } else {
-        start = startOfYear(currentDate); // Jan 1st at 00:00:00
-        end = endOfYear(currentDate);     // Dec 31st at 23:59:59.999
+      start = startOfYear(currentDate);
+      end = endOfYear(currentDate);
     }
 
-    // Pass the formatted YYYY-MM-DD strings to the store
-    fetchTransactions(start.toISOString(), end.toISOString());
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        await fetchTransactions(start.toISOString(), end.toISOString());
+      } catch (error) {
+        console.error("Error fetching graph data:", error);
+      } finally {
+        setIsLoading(false); // Now this only runs AFTER the fetch completes
+      }
+    };
+
+    loadData();
   }, [viewMode, fetchTransactions, currentDate]);
 
   const activeTransactions = useMemo(() => {
@@ -154,8 +166,9 @@ export default function TransactionsPage() {
     // 4. Create a dynamic label for the PDF subtitle ("Mayo 2026" vs "2026")
     const periodLabel =
       viewMode === "month"
-        ? format(currentDate, "MMMM yyyy", { locale: dateLocale }).replace(/^\w/, (c) =>
-            c.toUpperCase(),
+        ? format(currentDate, "MMMM yyyy", { locale: dateLocale }).replace(
+            /^\w/,
+            (c) => c.toUpperCase(),
           )
         : format(currentDate, "yyyy");
 
@@ -179,12 +192,28 @@ export default function TransactionsPage() {
       })),
       logoUrl: "/assets/logos/logo_small_ts.png",
       userEmail: userEmailForPDF || "user@mypocket.app",
-      generationDate: format(new Date(), 
-        i18n.language === 'en' ? "MMMM do, yyyy - HH:mm" : "dd 'de' MMMM, yyyy - HH:mm", {
-        locale: dateLocale,
-      }),
+      generationDate: format(
+        new Date(),
+        i18n.language === "en"
+          ? "MMMM do, yyyy - HH:mm"
+          : "dd 'de' MMMM, yyyy - HH:mm",
+        {
+          locale: dateLocale,
+        },
+      ),
     };
-  }, [allTransactions, currentDate, viewMode, userEmailForPDF, i18n.language, dateLocale]);
+  }, [
+    allTransactions,
+    currentDate,
+    viewMode,
+    userEmailForPDF,
+    i18n.language,
+    dateLocale,
+  ]);
+
+  if (isLoading) {
+    return <LogoLoader />;
+  }
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
@@ -194,19 +223,19 @@ export default function TransactionsPage() {
           variant={viewMode === "day" ? "default" : "outline"}
           onClick={() => handleViewChange("day")}
         >
-          {t('TRANSACTIONS_PAGE.TABS.DAY')}
+          {t("TRANSACTIONS_PAGE.TABS.DAY")}
         </Button>
         <Button
           variant={viewMode === "month" ? "default" : "outline"}
           onClick={() => handleViewChange("month")}
         >
-          {t('TRANSACTIONS_PAGE.TABS.MONTH')}
+          {t("TRANSACTIONS_PAGE.TABS.MONTH")}
         </Button>
         <Button
           variant={viewMode === "year" ? "default" : "outline"}
           onClick={() => handleViewChange("year")}
         >
-          {t('TRANSACTIONS_PAGE.TABS.YEAR')}
+          {t("TRANSACTIONS_PAGE.TABS.YEAR")}
         </Button>
       </div>
 
@@ -224,9 +253,9 @@ export default function TransactionsPage() {
       {/* Transactions List Area */}
       <div className="pt-6 space-y-4">
         <h3 className="text-lg font-bold text-foreground ">
-          {viewMode === "day" && t('TRANSACTIONS_PAGE.HEADERS.DAY')}
-          {viewMode === "month" && t('TRANSACTIONS_PAGE.HEADERS.MONTH')}
-          {viewMode === "year" && t('TRANSACTIONS_PAGE.HEADERS.YEAR')}
+          {viewMode === "day" && t("TRANSACTIONS_PAGE.HEADERS.DAY")}
+          {viewMode === "month" && t("TRANSACTIONS_PAGE.HEADERS.MONTH")}
+          {viewMode === "year" && t("TRANSACTIONS_PAGE.HEADERS.YEAR")}
         </h3>
         {premiumReportData && (
           <div className="mt-6">
@@ -243,7 +272,7 @@ export default function TransactionsPage() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder={t('TRANSACTIONS_PAGE.SEARCH_PLACEHOLDER')}
+            placeholder={t("TRANSACTIONS_PAGE.SEARCH_PLACEHOLDER")}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -253,7 +282,7 @@ export default function TransactionsPage() {
         {activeTransactions.length === 0 ? (
           <div className="text-center py-10 bg-card border rounded-lg border-dashed">
             <p className="text-muted-foreground">
-              {t('TRANSACTIONS_PAGE.EMPTY_STATE')}
+              {t("TRANSACTIONS_PAGE.EMPTY_STATE")}
             </p>
           </div>
         ) : (

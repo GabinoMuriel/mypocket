@@ -14,6 +14,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { AuthModal } from "../forms/AuthModal";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom"; 
 
 export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: boolean }) {
     const { t } = useTranslation();
@@ -35,7 +36,9 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                     {/* Lógica de links según el estado */}
                     {!isLogged ? (
                         <>
-                            <a href="#" className="text-lg font-semibold pl-8">{t('NAVBAR.MOBILE_NAV.HOME')}</a>
+                            <Link to="/" className="text-lg font-semibold pl-8">
+                                {t('NAVBAR.MOBILE_NAV.HOME')}
+                            </Link>
                             <Separator />
                             <ThemeToggle description={true} />
                             <LanguageToggle description={true} />
@@ -55,8 +58,12 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                     ) : isAdmin ? (
                         <>
                             <div className="text-xs font-bold text-primary uppercase pl-8">{t('NAVBAR.MOBILE_NAV.ADMIN_PANEL')}</div>
-                            <a href="/admin/users" className="text-lg font-medium pl-8">{t('NAVBAR.MOBILE_NAV.MANAGE_USERS')}</a>
-                            <a href="/admin/statistics" className="text-lg font-medium pl-8">{t('NAVBAR.MOBILE_NAV.STATISTICS')}</a>
+                            <Link to="/admin/users" className="text-lg font-medium pl-8">
+                                {t('NAVBAR.MOBILE_NAV.MANAGE_USERS')}
+                            </Link>
+                            <Link to="/admin/statistics" className="text-lg font-medium pl-8">
+                                {t('NAVBAR.MOBILE_NAV.STATISTICS')}
+                            </Link>
                         </>
                     ) : (
                         <>
@@ -71,13 +78,23 @@ export function MobileNav({ isLogged, isAdmin }: { isLogged: boolean; isAdmin: b
                             />
                             <Separator />
                             <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">{t('NAVBAR.MOBILE_NAV.TRANSACTIONS')}</div>
-                            <a href="/transactions/day" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.DAILY')}</a>
-                            <a href="/transactions/month" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.MONTHLY')}</a>
-                            <a href="/transactions/year" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.YEARLY')}</a>
+                            <Link to="/transactions/day" className="pl-8 text-md">
+                                {t('NAVBAR.MOBILE_NAV.DAILY')}
+                            </Link>
+                            <Link to="/transactions/month" className="pl-8 text-md">
+                                {t('NAVBAR.MOBILE_NAV.MONTHLY')}
+                            </Link>
+                            <Link to="/transactions/year" className="pl-8 text-md">
+                                {t('NAVBAR.MOBILE_NAV.YEARLY')}
+                            </Link>
                             <Separator />
                             <div className="text-sm font-bold text-muted-foreground uppercase  pl-4">{t('NAVBAR.MOBILE_NAV.GRAPHS')}</div>
-                            <a href="/graphs/month" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.MONTHLY')}</a>
-                            <a href="/graphs/year" className="pl-8 text-md">{t('NAVBAR.MOBILE_NAV.YEARLY')}</a>
+                            <Link to="/graphs/month" className="pl-8 text-md">
+                                {t('NAVBAR.MOBILE_NAV.MONTHLY')}
+                            </Link>
+                            <Link to="/graphs/year" className="pl-8 text-md">
+                                {t('NAVBAR.MOBILE_NAV.YEARLY')}
+                            </Link>
                         </>
                     )}
                 </div>
