@@ -19,17 +19,17 @@ export default function HeroSection() {
               defaultView="login"
               trigger={
                 <Badge variant="outline" className="cursor-pointer">
-                  {t('HOME_PAGE.HERO_SECTION.BADGE')}
+                  {t("HOME_PAGE.HERO_SECTION.BADGE")}
                   <ArrowUpRight />
                 </Badge>
               }
             />
 
             <h1 className="font-heading my-4 text-4xl text-balance md:text-5xl lg:leading-14">
-              {t('HOME_PAGE.HERO_SECTION.TITLE')}
+              {t("HOME_PAGE.HERO_SECTION.TITLE")}
             </h1>
             <p className="text-muted-foreground mb-8 text-balance lg:text-lg">
-              {t('HOME_PAGE.HERO_SECTION.DESCRIPTION')}
+              {t("HOME_PAGE.HERO_SECTION.DESCRIPTION")}
             </p>
             {isLogged ? (
               ""
@@ -39,24 +39,28 @@ export default function HeroSection() {
                   defaultView="login"
                   trigger={
                     <Button variant="ghost" size="sm">
-                      {t('HOME_PAGE.HERO_SECTION.LOGIN')}
+                      {t("HOME_PAGE.HERO_SECTION.LOGIN")}
                     </Button>
                   }
                 />
                 <AuthModal
                   defaultView="signup"
-                  trigger={<Button size="sm">{t('HOME_PAGE.HERO_SECTION.REGISTER')}</Button>}
+                  trigger={
+                    <Button size="sm">
+                      {t("HOME_PAGE.HERO_SECTION.REGISTER")}
+                    </Button>
+                  }
                 />
               </div>
             )}
           </header>
-          <div className="overflow-hidden rounded-2xl"> 
-    <img
-      src="/assets/landing/hero.png"
-      alt="hero_img"
-      className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-105"
-    />
-  </div>
+          <div className="overflow-hidden rounded-2xl">
+            <img
+              src="/assets/landing/hero.png"
+              alt="hero_img"
+              className="aspect-square w-full object-cover " /* transition-transform duration-500 hover:scale-105 */
+            />
+          </div>
         </div>
       </div>
     </section>

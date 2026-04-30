@@ -73,7 +73,7 @@ export default function GraphsPage() {
         : startOfMonth(currentDate);
     const end =
       viewMode === "year" ? endOfYear(currentDate) : endOfMonth(currentDate);
-    fetchTransactions(format(start, "yyyy-MM-dd"), format(end, "yyyy-MM-dd"));
+    fetchTransactions(start.toISOString(), end.toISOString());
   }, [viewMode, fetchTransactions, currentDate]);
 
   // 4. Local Filtering
@@ -95,7 +95,7 @@ export default function GraphsPage() {
 
     activeTransactions.forEach((tx) => {
       const amount = Number(tx.amount);
-      const catName = tx.categories?.name || t('GRAPHS_PAGE.CATEGORIES.OTHERS');
+      const catName = tx.categories?.name || t("GRAPHS_PAGE.CATEGORIES.OTHERS");
       const color = tx.categories?.color || "#8884d8"; // Fallback color
 
       if (tx.type === "expense") {
@@ -115,8 +115,16 @@ export default function GraphsPage() {
       expensesData: Object.values(expenses),
       incomesData: Object.values(incomes),
       totalsData: [
-        { name: t('GRAPHS_PAGE.CATEGORIES.EXPENSES'), value: totalExp, color: "#ef4444" }, // Tailwind red-500
-        { name: t('GRAPHS_PAGE.CATEGORIES.INCOMES'), value: totalInc, color: "#22c55e" }, // Tailwind green-500
+        {
+          name: t("GRAPHS_PAGE.CATEGORIES.EXPENSES"),
+          value: totalExp,
+          color: "#ef4444",
+        }, // Tailwind red-500
+        {
+          name: t("GRAPHS_PAGE.CATEGORIES.INCOMES"),
+          value: totalInc,
+          color: "#22c55e",
+        }, // Tailwind green-500
       ],
     };
   }, [activeTransactions, t]);
@@ -149,13 +157,13 @@ export default function GraphsPage() {
           variant={viewMode === "month" ? "default" : "outline"}
           onClick={() => handleViewChange("month")}
         >
-          {t('GRAPHS_PAGE.TABS.MONTH')}
+          {t("GRAPHS_PAGE.TABS.MONTH")}
         </Button>
         <Button
           variant={viewMode === "year" ? "default" : "outline"}
           onClick={() => handleViewChange("year")}
         >
-          {t('GRAPHS_PAGE.TABS.YEAR')}
+          {t("GRAPHS_PAGE.TABS.YEAR")}
         </Button>
       </div>
 
@@ -173,15 +181,17 @@ export default function GraphsPage() {
       {activeTransactions.length === 0 ? (
         <div className="text-center py-10 bg-card border rounded-lg border-dashed">
           <p className="text-muted-foreground">
-            {t('GRAPHS_PAGE.EMPTY_STATE')}
+            {t("GRAPHS_PAGE.EMPTY_STATE")}
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* 2. Incomes by Category */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 1. Incomes by Category */}
           <div className="bg-card border rounded-lg shadow-sm p-4 flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">{t('GRAPHS_PAGE.HEADERS.INCOMES_BY_CATEGORY')}</h3>
-            <div className="w-full h-64">
+            <h3 className="text-lg font-bol">
+              {t("GRAPHS_PAGE.HEADERS.INCOMES_BY_CATEGORY")}
+            </h3>
+            <div className="w-full h-90">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -202,16 +212,33 @@ export default function GraphsPage() {
                     ))}
                   </Pie>
                   <Tooltip formatter={formatCurrency} />
-                  <Legend />
+                  <Legend
+                    verticalAlign="bottom"
+                    align="center"
+                    layout="horizontal"
+                    iconType="rect"
+                    height={100}
+                    wrapperStyle={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-end",
+                      bottom: 0,
+                      left: 10,
+                      right: 10,
+                      paddingBottom: "5px",
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          {/* 1. Expenses by Category */}
+          {/* 2. Expenses by Category */}
           <div className="bg-card border rounded-lg shadow-sm p-4 flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">{t('GRAPHS_PAGE.HEADERS.EXPENSES_BY_CATEGORY')}</h3>
-            <div className="w-full h-64">
+            <h3 className="text-lg font-bold">
+              {t("GRAPHS_PAGE.HEADERS.EXPENSES_BY_CATEGORY")}
+            </h3>
+            <div className="w-full h-90">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -232,7 +259,22 @@ export default function GraphsPage() {
                     ))}
                   </Pie>
                   <Tooltip formatter={formatCurrency} />
-                  <Legend />
+                  <Legend
+                    verticalAlign="bottom"
+                    align="center"
+                    layout="horizontal"
+                    iconType="rect"
+                    height={100}
+                    wrapperStyle={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-end",
+                      bottom: 0,
+                      left: 10,
+                      right: 10,
+                      paddingBottom: "5px",
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -240,8 +282,10 @@ export default function GraphsPage() {
 
           {/* 3. Total Expenses vs Total Incomes */}
           <div className="bg-card border rounded-lg shadow-sm p-4 flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">{t('GRAPHS_PAGE.HEADERS.TOTAL_BALANCE')}</h3>
-            <div className="w-full h-64">
+            <h3 className="text-lg font-bold">
+              {t("GRAPHS_PAGE.HEADERS.TOTAL_BALANCE")}
+            </h3>
+            <div className="w-full h-90">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -262,7 +306,22 @@ export default function GraphsPage() {
                     ))}
                   </Pie>
                   <Tooltip formatter={formatCurrency} />
-                  <Legend />
+                 <Legend
+                    verticalAlign="bottom"
+                    align="center"
+                    layout="horizontal"
+                    iconType="rect"
+                    height={100}
+                    wrapperStyle={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-end",
+                      bottom: 0,
+                      left: 10,
+                      right: 10,
+                      paddingBottom: "5px",
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>

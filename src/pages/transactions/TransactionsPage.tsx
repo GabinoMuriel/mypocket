@@ -17,6 +17,8 @@ import {
   isSameDay,
   isSameMonth,
   isSameYear,
+  startOfDay,
+  endOfDay,
 } from "date-fns";
 import { DataBox } from "@/components/app/DataBox";
 import { TransactionCard } from "./components/TransactionCard";
@@ -71,18 +73,19 @@ export default function TransactionsPage() {
     let start: Date;
     let end: Date;
 
-    // Determine the boundaries based on the view mode
-    if (viewMode === "year") {
-      start = startOfYear(currentDate);
-      end = endOfYear(currentDate);
+    if (viewMode === "day") {
+        start = startOfDay(currentDate); // Starts exactly at 00:00:00
+        end = endOfDay(currentDate);     // Ends exactly at 23:59:59.999
+    } else if (viewMode === "month") {
+        start = startOfMonth(currentDate); // 1st day at 00:00:00
+        end = endOfMonth(currentDate);     // Last day at 23:59:59.999
     } else {
-      // Both 'day' and 'month' modes download the whole month for local caching!
-      start = startOfMonth(currentDate);
-      end = endOfMonth(currentDate);
+        start = startOfYear(currentDate); // Jan 1st at 00:00:00
+        end = endOfYear(currentDate);     // Dec 31st at 23:59:59.999
     }
 
     // Pass the formatted YYYY-MM-DD strings to the store
-    fetchTransactions(format(start, "yyyy-MM-dd"), format(end, "yyyy-MM-dd"));
+    fetchTransactions(start.toISOString(), end.toISOString());
   }, [viewMode, fetchTransactions, currentDate]);
 
   const activeTransactions = useMemo(() => {

@@ -39,7 +39,7 @@ export default function BlogSection() {
               <figure className="relative aspect-video overflow-hidden rounded-t-lg">
                 <img
                   alt={post.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover " /* transition-transform duration-500 group-hover:scale-105 */
                   src={post.imageSrc}
                 />
               </figure>
